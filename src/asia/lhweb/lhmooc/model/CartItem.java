@@ -6,7 +6,7 @@ import java.math.BigDecimal;
  * 购物项
  *
  * @author 罗汉
- * @date 2023/04/07
+ * @date 2024/03/13
  */
 public class CartItem {
     private String pimage;
@@ -21,7 +21,7 @@ public class CartItem {
     private Integer id;
     private String name;
     private BigDecimal price;
-    private Integer count;//家具数量
+    private Integer count;//课程数量
     private BigDecimal totalPrice;//总价格
 
     public CartItem() {

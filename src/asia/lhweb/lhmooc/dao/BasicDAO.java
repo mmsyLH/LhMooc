@@ -4,8 +4,10 @@ import asia.lhweb.lhmooc.annotation.Id;
 import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.utils.JDBCUtils;
 
+import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
@@ -35,23 +37,30 @@ public class BasicDAO<T> {
         Class clazz = t.getClass();
         String tableName = getTableName(clazz);
         // 拼接SQL语句
-        sql += tableName.toLowerCase();// 全部转小写
-        System.out.println(sql);
-        try {
-            // 获取数据库连接
-            conn = JDBCUtils.getConnection();
-        } catch (SQLException e1) {
-            e1.printStackTrace();
+        sql += tableName.toLowerCase(); // 全部转小写
+
+        // 动态的查询语句
+        String whereClause = generateWhereClause(t);
+        if (!whereClause.isEmpty()) {
+            sql += " where " + whereClause;
         }
+        System.out.println(sql);
         // 定义结果集合
         List<T> list = new ArrayList<T>();
         // 获取实体类中的所有属性
         Field[] field = clazz.getDeclaredFields();
         try {
+            // 获取数据库连接
+            conn = JDBCUtils.getConnection();
             // 创建PreparedStatement对象
             pstat = conn.prepareStatement(sql);
+
+            // 设置动态生成的where子句中的参数值
+            setWhereClauseParameters(pstat, t);
+
             // 执行SQL语句，获取ResultSet对象
             res = pstat.executeQuery();
+
             // 遍历ResultSet对象
             while (res.next()) {
                 // 创建实体类对象
@@ -64,7 +73,7 @@ public class BasicDAO<T> {
                     PropertyDescriptor pd = new PropertyDescriptor(field1.getName(), clazz);
                     // 获取属性的setter方法
                     Method setMethod = pd.getWriteMethod();
-                    System.out.println(setMethod);
+                    // System.out.println(setMethod);
                     // 根据属性类型设置属性值
                     if (field1.getType() == String.class) {
                         setMethod.invoke(e, res.getString(j));
@@ -85,6 +94,7 @@ public class BasicDAO<T> {
         }
         return list;
     }
+
 
 
     /**
@@ -109,7 +119,7 @@ public class BasicDAO<T> {
             if (primaryKeyField != null) {
                 primaryKeyField.setAccessible(true);
                 String name = primaryKeyField.getName();
-                Object o = primaryKeyField.get(t);//这个坑！！！注意不是传claszz而是传t
+                Object o = primaryKeyField.get(t);// 这个坑！！！注意不是传claszz而是传t
                 stringBuilder.append(name).append(" = ").append(o.toString());
             } else {
                 return -1;
@@ -142,7 +152,7 @@ public class BasicDAO<T> {
             if (primaryKeyField != null) {
                 primaryKeyField.setAccessible(true);
                 String name = primaryKeyField.getName();
-                Object o = primaryKeyField.get(t);//这个坑！！！注意不是传claszz而是传t
+                Object o = primaryKeyField.get(t);// 这个坑！！！注意不是传claszz而是传t
                 stringBuilder.append(name).append(" = ").append(o.toString());
             } else {
                 return -1;
@@ -217,39 +227,24 @@ public class BasicDAO<T> {
      * @param t 需要保存的类型
      * @return int
      */
-    // public int save(T t) {
-    //     Class clazz = t.getClass();
-    //     conn = null;
-    //     pstat = null;
-    //     res = null;
-    //     // 获取表名
-    //     String tableName = getTableName(clazz);
-    //     // 构建更新语句
-    //     StringBuilder sqlBuilder = new StringBuilder("insert into ");
-    //     sqlBuilder.append(tableName).append("(");
-    //     // 获取实体类中的所有属性
-    //     Field[] fields = clazz.getDeclaredFields();
-    //     List<Object> params = new ArrayList<>();
-    //     //todo 拼接各种参数 和?
-    //     //
-    //     return -1;
-    // }
-
-    /**
-     * 获取主键字段
-     *
-     * @param clazz clazz
-     * @return {@link Field}
-     */
-    private Field getPrimaryKeyField(Class clazz) {
+    public int save(T t) {
+        Class clazz = t.getClass();
+        conn = null;
+        pstat = null;
+        res = null;
+        // 获取表名
+        String tableName = getTableName(clazz);
+        // 构建更新语句
+        StringBuilder sqlBuilder = new StringBuilder("insert into ");
+        sqlBuilder.append(tableName).append("(");
+        // 获取实体类中的所有属性
         Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Id.class)) { //@Id 注解标记主键字段
-                return field;
-            }
-        }
-        return null;
+        List<Object> params = new ArrayList<>();
+        // todo 拼接各种参数 和?
+        //
+        return -1;
     }
+
 
     /**
      * 获取总行
@@ -369,6 +364,66 @@ public class BasicDAO<T> {
     }
 
     /**
+     * 通过id去查询单个记录
+     *
+     * @param t t
+     * @return {@link T}
+     */
+    public <T> T selectOneById(T t) {
+
+        Class clazz = t.getClass();
+        // 获取表名
+        String tableName = getTableName(clazz);
+        StringBuilder stringBuilder = new StringBuilder("SELECT * from ");
+        // 拼接查询语句
+        stringBuilder.append(tableName).append(" where ");
+        Field[] fields = clazz.getDeclaredFields();
+        try {
+            // 获取主键
+            Field primaryKeyField = getPrimaryKeyField(clazz);
+            // 拼接主键和值
+            if (primaryKeyField != null) {
+                primaryKeyField.setAccessible(true);
+                String name = primaryKeyField.getName();
+                Object o = primaryKeyField.get(t);// 这个坑！！！注意不是传claszz而是传t
+                stringBuilder.append(name).append(" = ").append(o.toString());
+            } else {
+                return null;
+            }
+            String sql = stringBuilder.toString();
+            conn = JDBCUtils.getConnection();
+            pstat = conn.prepareStatement(sql);
+            res = pstat.executeQuery();
+            // 遍历结果集
+            if (res.next()) {
+                // 创建实体类对象
+                T e = (T) clazz.newInstance();
+                for (int j = 1; j <= fields.length; j++) {
+                    Field field1 = fields[j - 1];
+                    // 获取属性对应的setter方法
+                    PropertyDescriptor pd = new PropertyDescriptor(field1.getName(), clazz);
+                    Method setMethod = pd.getWriteMethod();
+                    // 根据属性的类型，调用setter方法设置属性的值
+                    if (field1.getType() == String.class) {
+                        setMethod.invoke(e, res.getString(j));
+                    } else if (field1.getType() == Integer.class) {
+                        setMethod.invoke(e, res.getInt(j));
+                    } else if (field1.getType() == Double.class) {
+                        setMethod.invoke(e, res.getDouble(j));
+                    } else if (field1.getType() == Date.class) {
+                        setMethod.invoke(e, res.getDate(j));
+                    }
+                }
+                return e;
+            }
+        } catch (IllegalAccessException | SQLException | InstantiationException | IntrospectionException |
+                 InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    /**
      * 查询单个
      *
      * @param clazz clazz
@@ -480,4 +535,68 @@ public class BasicDAO<T> {
         return tableName;
     }
 
+    /**
+     * 生成动态的where子句
+     *
+     * @param t t
+     * @return {@link String}
+     */
+    private String generateWhereClause(T t) {
+        StringBuilder whereClause = new StringBuilder();
+        Field[] fields = t.getClass().getDeclaredFields();
+        try {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object value = field.get(t);
+                if (value != null) {
+                    if (whereClause.length() > 0) {
+                        whereClause.append(" and ");
+                    }
+                    whereClause.append(field.getName()).append(" = ?");
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return whereClause.toString();
+    }
+
+    /**
+     * 设置where子句参数
+     *
+     * @param pstat pstat
+     * @param t     t
+     * @throws SQLException sqlexception异常
+     */
+    private void setWhereClauseParameters(PreparedStatement pstat, T t) throws SQLException {
+        Field[] fields = t.getClass().getDeclaredFields();
+        int parameterIndex = 1;
+        try {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object value = field.get(t);
+                if (value != null) {
+                    pstat.setObject(parameterIndex++, value);
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取主键字段
+     *
+     * @param clazz clazz
+     * @return {@link Field}
+     */
+    private Field getPrimaryKeyField(Class clazz) {
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Id.class)) { //@Id 注解标记主键字段
+                return field;
+            }
+        }
+        return null;
+    }
 }

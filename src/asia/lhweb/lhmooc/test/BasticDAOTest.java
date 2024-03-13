@@ -1,9 +1,7 @@
 package asia.lhweb.lhmooc.test;
 
-import asia.lhweb.lhmooc.dao.impl.CommentVideoDAOImpl;
-import asia.lhweb.lhmooc.dao.impl.CourseCategoryDAOImpl;
-import asia.lhweb.lhmooc.model.bean.CommentVideo;
-import asia.lhweb.lhmooc.model.bean.CourseCategory;
+import asia.lhweb.lhmooc.dao.impl.CourseDAOImpl;
+import asia.lhweb.lhmooc.model.bean.Course;
 
 import java.util.List;
 
@@ -17,11 +15,11 @@ public class BasticDAOTest {
         // CommentVideoDAO courseCategoryDAO = new CommentVideoDAOImpl();
         // courseCategoryDAO.selectAll();
         //
-        CommentVideoDAOImpl courseCategoryDAO2 = new CommentVideoDAOImpl();
-
-        List<CommentVideo> commentVideoList = courseCategoryDAO2.selectAll(new CommentVideo());
-        System.out.println(commentVideoList);
-        courseCategoryDAO2.page(new CommentVideo(),1,1);
+        // CommentVideoDAOImpl courseCategoryDAO2 = new CommentVideoDAOImpl();
+        //
+        // List<CommentVideo> commentVideoList = courseCategoryDAO2.selectAll(new CommentVideo());
+        // System.out.println(commentVideoList);
+        // courseCategoryDAO2.page(new CommentVideo(),1,1);
 
 
         // TestDao t = new Test();
@@ -45,17 +43,33 @@ public class BasticDAOTest {
         // CourseCategoryDAOImpl courseCategoryDAO1 = new CourseCategoryDAOImpl();
         // int i = courseCategoryDAO1.deleteOne(courseCategory);
 
-        // 4 逻辑删除
-        CourseCategory courseCategory = new CourseCategory();
-        courseCategory.setCategoryid(7);
-        CourseCategoryDAOImpl courseCategoryDAO1 = new CourseCategoryDAOImpl();
-        int i = courseCategoryDAO1.delete(courseCategory);
-        if (i > 0) {
-            System.out.println("删除成功");
-        }
+        // 4 逻辑删除 ok
+        // CourseCategory courseCategory = new CourseCategory();
+        // courseCategory.setCategoryid(7);
+        // CourseCategoryDAOImpl courseCategoryDAO1 = new CourseCategoryDAOImpl();
+        // int i = courseCategoryDAO1.delete(courseCategory);
+        // if (i > 0) {
+        //     System.out.println("删除成功");
+        // }
 
         // 5 添加语句
 
+        // 6 通过主键去查询单条记录 ok
+        // Course course = new Course();
+        // course.setCourseid(1);
+        //
+        // CourseDAOImpl courseDAO = new CourseDAOImpl();
+        // Course course1 = courseDAO.selectOneById(course);
+        // System.out.println(course1);
 
+        // 7 测试动态sql语句查询所有
+        Course course = new Course();
+        // course.setCourseid(1);
+        course.setPrice(143);
+        course.setImgurl("img1.jpg");
+
+        CourseDAOImpl courseDAO = new CourseDAOImpl();
+        List<Course> courseList = courseDAO.selectAll(course);
+        System.out.println(courseList);
     }
 }

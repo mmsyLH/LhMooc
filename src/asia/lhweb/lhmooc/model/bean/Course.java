@@ -46,6 +46,7 @@ public class Course {
      * 0表示还没删除 1表示删除
      */
     private Integer isdelete;
+
     /**
      * 0表示还没删除 1表示删除
      */
