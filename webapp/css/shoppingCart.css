@@ -1,0 +1,302 @@
+body{
+    font: 16px "PingFang SC","微软雅黑","Microsoft YaHei",Helvetica,"Helvetica Neue",Tahoma,Arial,sans-serif;
+}
+
+header{
+    height: 64px;
+    line-height: 64px;
+}
+.navbar{
+    width: 1152px;
+    margin: 0 auto;
+}
+.cartHeader{
+    height: 160px;
+    background: url(../img/cart-header-bg.jpg);
+}
+
+.logo,.search,.nav1{
+    height: 64px;
+}
+
+.nav1{
+    justify-content: space-between;
+}
+
+.tips,.cart-box{
+    top: 64px;
+}
+
+.inputBox{
+    display: none;
+}
+
+#originBtn{
+    position: absolute;
+    right: 20px;
+    top: 12px;
+    font-size: 21px;
+    z-index: 1;
+}
+
+.search{
+    position: relative;
+}
+
+.show_search{
+    position: absolute;
+    top: 0; 
+    left: 10px;
+    z-index: 0;
+    opacity: 0;
+}
+
+.show_search>input{
+    width: 260px;
+}
+
+.cart-li:hover .cart-box{
+    display: none;
+}
+
+.nav2{
+    width: 320px;
+}
+
+.myCart{
+    width: 1102px;
+    height: 160px;
+    margin: 0 auto;
+    overflow: hidden;
+    line-height: 114px;
+}
+
+.myCart h1{
+    margin: 0;
+    font-weight: 300;
+    font-size: 32px;
+    line-height: 114px;
+    float: left;
+}
+
+.myCart>p{
+    float: right;
+}
+
+.myCart a{
+    color: #5e5e5e;
+}
+
+.myCart>p>a:hover{
+    color: #f01414;
+}
+
+.selectNum{
+    float: left;
+    margin-left: 30px;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.mainBGC{
+    background-color: #f8fafc;
+    min-height: 750px;
+}
+
+.cartBody{
+    width: 1152px;
+    /* height: 500px; */
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 30px;
+    position: relative;
+    top: -40px;
+    box-shadow: 0 8px 16px 0 rgb(7 17 27 / 10%);
+}
+
+.noData{
+    line-height: 400px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    display: none;
+}
+
+.rightAside li:hover span{
+    display: block;
+    color: #f01414;
+}
+
+/* .haveData{
+    padding: 30px;
+} */
+
+.allSelect{
+    color: #93999f;
+}
+
+.allSelect>i{
+    font-size: 30px;
+    vertical-align: middle;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.cartheader{
+    overflow: hidden;
+    /* height: 45px; */
+    line-height: 45px;
+    border-bottom: 1px solid #b7bbbf;
+    padding-bottom: 20px;
+}
+
+.cartheader>div{
+    float: left;
+}
+
+.cartheader>div:nth-child(2){
+    margin-left: 60px;
+}
+
+.cartheader>div:nth-child(3){
+    margin-left: 600px;
+}
+
+.cartheader>div:last-child{
+    float: right;
+    margin-right: 70px;
+}
+
+.cartItem{
+    overflow: hidden;
+    /* height: 88px; */
+    padding: 24px 0;
+    border-bottom: 1px solid #93999f;
+}
+
+.itemUl{
+    height: 88px;
+}
+
+.itemUl>li{
+    float: left;
+}
+
+.itemUl>li:first-child{
+    /* vertical-align: middle; */
+    line-height: 88px;
+    margin-right: 80px;
+}
+
+.itemUl>li:first-child>i{
+    font-size: 30px;
+    color: #93999f;
+}
+
+.itemA{
+    display: block;
+    color: #07111b;
+    line-height: 24px;
+}
+
+.itemImg{
+    float: left;
+    height: 88px;
+    width: auto;
+    margin-right: 20px;
+}
+
+.itemInfo{
+    float: left;
+    width: 400px;
+}
+
+.itemTag{
+    line-height: 24px;
+    font-size: 12px;
+    color: rgba(240,20,20,.6);
+    background-color: rgba(240,20,20,.08);
+    display: inline-block;
+    padding: 0 12px;
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.itemUl>li:nth-child(3),.itemUl>li:last-child{
+    line-height: 88px;
+    color: #222;
+    font-weight: bolder;
+}
+
+.itemUl>li:nth-child(3){
+    margin-left: 60px;
+    margin-right: 200px;
+}
+
+.itemUl>li>i{
+    cursor: pointer;
+}
+
+.cartFooter{
+    height: 80px;
+    padding: 10px;
+    line-height: 80px;
+    overflow: hidden;
+}
+
+.rightSum{
+    float: right;
+}
+
+.labelSum{
+    font-size: 12px;
+}
+
+.price{
+    font-weight: bold;
+    color: #f01414;
+    margin-left: 10px;
+    margin-right: 30px;
+    font-size: 18px;
+}
+
+.pay{
+    background-color: #f01414;
+    color: #fff;
+    display: inline-block;
+    width: 120px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+#popBox{
+    width: 320px;
+}
+
+.ok{
+    font-weight: normal;
+    margin: 10px;
+    margin-bottom: 30px;
+    width: 80px;
+    text-align: center;
+    height: 40px;
+    font-size: 16px;
+    line-height: 40px;
+    background-color: rgba(0,0,0, 0.8);
+    color: #fff;
+    display: block;
+    float: right;
+    border-radius: 20px;
+    transition: all 0.5s;
+}
+
+.ok:hover{
+    color: #fff;
+    text-decoration: none;
+    background-color: rgba(0,0,0,1);
+}

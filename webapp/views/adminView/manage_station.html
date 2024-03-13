@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>123</title>
+    <link rel="stylesheet" href="../../css/manage_station.css">
+</head>
+
+<body>
+    <div class="container" style="padding-right: 10px;">
+        <!-- 内容区域 -->
+        <div class="main hadmin">
+            <div class="select">
+                车站 <input type="text" id="stationName" placeholder="请输入车站名称">
+                <input type="button" value="查询" class="baseButton" onclick="searchStation()">
+                <input type="button" value="添加" class="baseButton" onclick="openAddModal()">
+            </div>
+            <!-- 查询结果区域开始 -->
+            <div id="resultContainer">
+                <table id="stationTable" style="min-height: 100px;">
+                    <thead>
+                        <tr>
+                            <th>站点名</th>
+                            <th>车站名称的拼音</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stationList">
+
+                    </tbody>
+                </table>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination content will be added here -->
+                </div>
+            </div>
+            <!-- 查询结果区域结束 -->
+        </div>
+        <!-- 弹窗 -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>编辑信息~</h2>
+                <form id="editForm">
+                    <label for="stationId">站点名:</label>
+                    <input type="text" id="stationId"><br><br>
+                    <label for="stationPy">站点拼音:</label>
+                    <input type="text" id="stationPy"><br><br>
+                    <label for="stationInfo">备注:</label>
+                    <input type="text" id="stationInfo"><br><br>
+                    <input type="button" value="确定" onclick="sumbit()">
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/jquery-3.6.0.js"></script>
+    <script>
+        var pageSize = 3;
+        var stationList = {}
+        var pageNo = 1;
+        window.onload = function () {
+            searchStation(pageNo); // 在页面加载时查询第一页的车站数据
+        };
+
+        // 更新导航条内容
+        function updatePagination(pageNo1, totalPages, totalRecords) {
+            var pagination = document.getElementById("pagination");
+            pagination.innerHTML = ""; // 清空之前的内容
+            var ul = document.createElement("ul");
+
+            for (var i = 1; i <= totalPages; i++) {
+                var li = document.createElement("li");
+                var a = document.createElement("a");
+                a.href = "#";
+                a.innerText = i;
+                a.onclick = function () {
+                    searchStation(this.innerText);
+                };
+                // 是当前页码
+                if (i == pageNo1) {
+                    a.classList.add("active");
+                }
+                li.appendChild(a);
+                ul.appendChild(li);
+            }
+
+            //导航条
+            var totalPageLi = document.createElement("li");
+            totalPageLi.innerHTML = "<a>共" + totalPages + "页</a>";
+            ul.appendChild(totalPageLi);
+            var totalRecordLi = document.createElement("li");
+            totalRecordLi.innerHTML = "<a>共" + totalRecords + "记录</a>";
+            ul.appendChild(totalRecordLi);
+
+            pagination.appendChild(ul);
+        }
+
+        //根据车站进行模糊查询
+        function searchStation(pageNo) {
+            if (pageNo == null) {
+                pageNo = 1;
+            }
+            var stationName = document.getElementById("stationName").value.trim();
+            $.ajax({
+                url: 'LhTomCat/trainServlet',
+                type: 'get',
+                data: {
+                    action: "pageByName",
+                    pageNo: pageNo,
+                    pageSize: pageSize,
+                    pageName: stationName
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    console.log("返回的res", res);
+                    if (res.code === 200) {
+                        //显示内容
+                        stationList = res.data.items;
+                        displayStationList(res.data.items);
+                        //显示导航条
+                        pageNo = res.data.pageNo;
+                        updatePagination(res.data.pageNo, res.data.pageTotalCount, res.data.totalRow);
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 展示模糊查询车站的数据
+        function displayStationList(data) {
+            var stationList = document.getElementById("stationList");
+            stationList.innerHTML = ""; // 清空之前的数据
+            for (var i = 0; i < data.length; i++) {
+                var station = data[i];
+                var tr = document.createElement("tr");
+                tr.innerHTML = "<td>" + station.stationid + "</td>" +
+                    "<td>" + station.stationpy + "</td>" +
+                    "<td>" + station.stationinfo + "</td>" +
+                    "<td><button class='baseButton' onclick='editStation(" + i + ")'>编辑</button></td>" +
+                    "<td><button class='baseButton' onclick='deleteStation(" + i + ")'>删除</button></td>";
+                stationList.appendChild(tr);
+            }
+        }
+        // 在全局定义一个变量来判断当前操作是添加还是编辑
+        var isAdding = false;
+        var currentIndex; // 当前编辑的索引
+
+        // 添加
+        function openAddModal() {
+            // 设置添加标志为true
+            isAdding = true;
+            // 清空输入框
+            document.getElementById("stationId").value = "";
+            document.getElementById("stationPy").value = "";
+            document.getElementById("stationInfo").value = "";
+            // 显示弹窗
+            document.getElementById("editModal").style.display = "block";
+            document.getElementById("stationName").disabled = false;
+            document.getElementById("stationId").readOnly = false; // 可编辑
+        }
+
+        // 编辑车站
+        function editStation(index) {
+            // 设置添加标志为false
+            isAdding = false;
+            currentIndex = index; // 设置当前编辑的索引
+            // 设置ID输入框为只读状态
+            document.getElementById("stationId").readOnly = true;
+            openModal(index); // 打开弹窗
+        }
+
+        // 更新车站信息
+        function sumbit() {
+            var action;
+            var newStationPy = document.getElementById("stationPy").value;
+            var newStationInfo = document.getElementById("stationInfo").value;
+            // 判断是添加还是修改操作
+            if (isAdding) {
+                // alert("是添加");
+                action = "add"; // 添加操作
+            } else {
+                // alert("是修改");
+                action = "update"; // 修改操作
+            }
+            if (action === "update") {//是修改操作
+                // 发送Ajax请求进行修改
+                $.ajax({
+                    method: "post", // 修改为POST请求
+                    url: "LhTomCat/trainServlet",
+                    dataType: "json",
+                    data: {
+                        action: "update",
+                        stationid: stationList[currentIndex].stationid,
+                        stationpy: newStationPy,
+                        stationinfo: newStationInfo
+                    },
+                    success: function (res) {
+                        if (res.code === 200) {
+                            searchStation(pageNo);
+                            closeModal(); // 修改成功后关闭弹窗
+                        } else {
+                            closeModal();
+                            alert("修改失败:" + res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log("error", err);
+                    }
+                });
+            } else if (action === "add") {//是添加操作
+                var stationId = document.getElementById("stationId").value;
+                // 发送Ajax请求进行修改
+                $.ajax({
+                    method: "post", // 修改为POST请求
+                    url: "LhTomCat/trainServlet",
+                    dataType: "json",
+                    data: {
+                        action: "add",
+                        stationid: stationId,
+                        stationpy: newStationPy,
+                        stationinfo: newStationInfo
+                    },
+                    success: function (res) {
+                        if (res.code === 200) {
+                            searchStation(pageNo);
+                            closeModal(); // 添加成功后关闭弹窗
+                        } else {
+                            closeModal();
+                            alert("添加失败:" + res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log("error", err);
+                    }
+                });
+
+            }
+        }
+
+        //删除
+        function deleteStation(index) {
+            const { stationid } = stationList[index];
+            $.ajax({
+                method: "get",
+                url: "LhTomCat/trainServlet",
+                dataType: "json",
+                data: {
+                    action: "delete",
+                    stationid: stationid
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        searchStation(pageNo);
+                    } else {
+                        console.log("删除失败", res.msg)
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err)
+                }
+            })
+        }
+        // 打开弹窗并填充数据
+        function openModal(index) {
+            currentIndex = index; // 设置当前编辑的索引
+            var { stationid, stationpy, stationinfo } = stationList[index];
+            document.getElementById("stationId").value = stationid;
+            document.getElementById("stationPy").value = stationpy;
+            document.getElementById("stationInfo").value = stationinfo;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
+
+        // 其余函数和全局变量保持不变
+
+    </script>
+
+    <style>
+        .main {
+            width: 100%;
+            /* background-color: aquamarine; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hadmin {
+            width: 100%;
+            height: 880px;
+        }
+
+        #trainTable th,
+        #stationTable th {
+            min-width: 100px;
+        }
+
+        #trainTable td,
+        #stationTable td {
+            text-align: center;
+        }
+
+        /* 分页 */
+        .pagination {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .pagination ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pagination ul li {
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .pagination ul li a {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            color: #333;
+        }
+
+        .pagination ul li a.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination ul li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .pagination ul li a.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            /* 默认隐藏 */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+
+</body>
+
+</html>

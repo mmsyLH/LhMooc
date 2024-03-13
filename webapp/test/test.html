@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <input id="cai"> <button onclick="add()">添加菜品</button>
+    <ul id="ulCai">
+        <li>香蕉</li>
+    </ul>
+
+    <script>
+        function add() {
+            var cai = $("#cai").val();
+            var foodExists = false;
+            var $li=$("#ulCai").children("li");
+            for (let index = 0; index < $li.length; index++) {
+                const element = array[index];
+                
+            }
+
+            if (foodExists) {
+                alert("菜品已经存在，请重新输入");
+            } else {
+                $("#ulCai").append("<li>" + cai + "</li>");
+            }
+        }
+    </script>
+</body>
+
+</html>

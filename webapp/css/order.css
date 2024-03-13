@@ -1,0 +1,237 @@
+.spxx{
+    float: left;
+    margin-left: 20px;
+}
+.yiwen{
+    float: right;
+    font-size: 12px;
+    color: #939993;
+    margin-right: 0 !important;
+}
+
+.haveData{
+    background-color: #f3f5f7;
+    width: 100%;
+}
+
+.haveData>ul{
+    width: 100%;
+    overflow: hidden;
+    padding: 24px 0;
+}
+
+.haveData>ul>li{
+    float: left;
+    margin: 0 24px;
+}
+
+.haveData>ul>li:nth-child(2){
+    margin-right: 90px;
+    width: 462px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.haveData>ul>li:nth-child(3){
+    margin-top: 35px;
+    color: #f01414;
+}
+
+.cartheader{
+    border-bottom: 0;
+    padding-bottom: 10px;
+}
+
+.cartFooter{
+    height: auto;
+    border-top: 1px solid #d9ddd9; 
+    border-bottom: 1px solid #d9ddd9; 
+    margin-top: 30px;
+    line-height: normal;
+    padding: 30px 0;
+}
+
+.quan>p>span{
+    margin-left: 20px;
+    color: #93999f;
+}
+
+.footerTop{
+    display: flex;
+    justify-content: space-between;
+}
+
+.hidContent{
+    margin: 10px 0;
+}
+
+.quanA{
+    display: inline-block;
+    width: 150px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    border-radius: 10px;
+    border: 1px solid #939993;
+    margin-right: 20px;
+    position: relative;
+}
+
+.activeQuan{
+    border: 2px solid #f01414;
+    position: relative;
+}
+
+.activeQuan::after{
+    content: '';
+    width: 0px;
+    height: 0px;
+    border: 10px;
+    border-style: solid;
+    border-color: transparent;
+    border-bottom-color: #f3f5f7;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.whatQ>a{
+    font-size: 12px;
+    color: #93999f;
+}
+
+.hidContent{
+    padding: 0 18px;
+}
+
+.hidCon{
+    display: none;
+}
+
+.containerYH{
+    margin-top: 16px;
+    padding: 30px;
+    background-color: #f3f5f7;
+    border-radius: 8px;
+}
+
+.activeQuan em{
+    position: absolute;
+    bottom: 0;
+    right: -1px;
+    width: 0;
+    height: 0;
+    line-height: 54px;
+    border-left-width: 20px;
+    border-left-style: solid;
+    border-left-color: transparent;
+    border-bottom-width: 20px;
+    border-bottom-style: solid;
+    border-bottom-color: #f01414;
+}
+
+.quanA em i{
+    color: #fff;
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    font-size: 12px;
+    top: auto;
+}
+
+.hidYH{
+    display: none;
+}
+
+.yhm input{
+    height: 50px;
+    border-radius: 4px;
+    outline: none;
+    width: 350px;
+    border: 1px solid #939993;
+    padding-left: 18px;
+    margin-right: 28px;
+    vertical-align: middle;
+
+}
+
+.yhm a{
+    width: 120px;
+    border-radius: 8px;
+    color: #fff;
+    background-color: #f01414;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.yhm p{
+    margin-top: 30px;
+    color:#93999f;
+}
+
+.pay-box{
+    height: 80px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    box-shadow: 0 10px 10px 10px #93999f;
+    background-color: #fff;
+}
+
+.pay-inner{
+    width: 1150px;
+    margin: 0 auto;
+    line-height: 80px;
+}
+
+.money{
+    float: left;
+}
+
+.should-pay{
+    font-size: 22px;
+    color:#f01414;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.left-price ul{
+    float: left;
+    overflow: hidden;
+}
+
+.left-price ul li{
+    float: left;
+    margin: 0 10px;
+}
+
+.left-price ul li a{
+    display: inline-block;
+    line-height: 18px;
+    padding: 6px 12px;
+    text-align: center;
+    border-radius: 14px;
+    font-size: 12px;
+    color: #f01414;
+    border: 1px solid #f01414;
+}
+
+.right-commit{
+    float: right;
+}
+
+.right-commit a{
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    background-color: #f01414;
+    color: #fff;
+    display: inline-block;
+    border-radius: 25px;
+}

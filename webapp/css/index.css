@@ -1,0 +1,409 @@
+@import url(./base.css);
+/* ------------------------------------------------------------------------------------ */
+a {
+    color: #333;
+}
+
+/* 轮播图区域 */
+.main .banner{
+    display: flex;
+    justify-content: flex-start;
+}
+/* 左侧区域 */
+.leftMenu{
+    z-index: 100;
+    width: 300px;
+    background: #39364d;
+    /* float: left; */
+    margin-left: 458px;
+}
+.leftMenuUl{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 16px 0;
+    background-color: #39364d !important;
+}
+
+.leftMenuUl>li{
+    line-height: 50px;
+    height: 50px;
+    list-style: none;
+    text-align: left;
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+.leftMenuUl li:hover{
+    background: #3e3b51;
+    width: 100%;
+}
+
+.leftMenuUl>li>span:nth-child(1){
+    font-size: 14px;
+    color: #fff;
+}
+
+.leftMenuUl>li>span:nth-child(2){
+    font-size: 12px;
+    margin-left: 6px;
+    color: #fff;
+}
+
+.leftMenuUl li i{
+    width:0;
+    height:0;
+    overflow:hidden;
+    font-size: 0;     /*是因为, 虽然宽高度为0, 但在IE6下会具有默认的 */
+    line-height: 0;  /* 字体大小和行高, 导致盒子呈现被撑开的长矩形 */
+    border-width:5px;
+    border-style:solid;  /*ie6下会出现不透明的兼容问题*/
+    border-color: transparent transparent transparent #fff;
+    float: right;
+    margin-top: 20px;
+    margin-right: -14px;
+}
+
+
+.contentBox{
+    display: none;
+    position: absolute;
+    width: 800px;
+    height: 100%;
+    background-color: #fff;
+    z-index: 10000;
+    border-top-right-radius: 20px;
+    left: 252px;
+    top: 0px;
+}
+
+.leftMenuUl>li:hover>.contentBox{
+    display: block;
+}
+
+.topTag{
+    padding: 30px;
+    height: 50%;
+}
+
+.topTag h5{
+    font-size: 25px;
+}
+
+.tags{
+    font-size: 14px;
+}
+
+.tags span{
+    display: block;
+    font-size: 12px !important;
+    float: left;
+    font-weight: 500 !important;
+    color: #000 !important;;
+}
+
+.adiv{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 80%;
+}
+
+.adiv a{
+    font-size: 12px;
+    color: #888;
+    margin-right: 20px;
+    margin-bottom: -20px;
+    /* line-height: 40px !important; */
+}
+
+.bottomDiv{
+    padding-top: 15px;
+    padding-left: 30px;
+    height: 50%;
+    line-height: normal !important;
+    overflow: hidden;
+    background-color: #f3f5f6;
+}
+
+.courseItem{
+    float: left;
+    width: 355px;
+    margin-right: 12px;
+}
+
+
+.coursePic{
+    overflow: hidden;
+    float: left;
+}
+
+.coursePic img{
+    margin-top: 18px;
+    width: 90px;
+    height: 50px;
+    margin-right: 11px;
+    border-radius: 4px;
+    box-shadow: 0 6px 10px 0 #999;
+}
+
+.courseInfo{
+    margin-left: 10px;
+    float: left;
+}
+
+.courseInfo p span{
+    font: 1em sans-serif;
+}
+
+.courseName{
+    color: #000;
+    max-width: 173px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.courseTag{
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.hong{
+    background-color: #e87576;
+}
+
+.cheng{
+    background-color: #f79e62;
+}
+
+.lan{
+    background-color: #61b9fb;
+}
+
+.coursePrice{
+    color: #E02020;
+    font-weight: 600;
+}
+
+.gray{
+    color: #999;
+}
+
+
+/* 左侧区域结束 */
+/* 轮播开始 */
+.banner-center {
+    padding: 0;
+    width: 900px;
+    height: 400px;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel {
+    width: 900px;
+    height: 400px;
+    display: flex;
+    /* 表示.carousel的属性变化在规定时间内完成 */
+    transition: 0.5s;
+}
+
+.banner-center .carousel img {
+    width: 900px;
+    height: 400px;
+}
+
+.indicator {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.indicator span {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin: 0 6px;
+}
+
+.indicator span.active {
+    background: white;
+    border-color: white;
+}
+
+.main {
+    width: 100%;
+    height: 1600px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.main .wrapper {
+    width: 100%;
+    padding: 0 360px;
+    display: flex;
+    flex-direction: column;
+}
+/* 轮播结束 */
+/* 底部区域 */
+.jobCourse{
+    width: 1200px;
+    height: 100px;
+    box-shadow: 0 5px 20px 0 rgb(0 0 0 / 30%);
+    margin: 0 auto;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.jobs{
+    display: block;
+    width: 186px;
+    color: #6D7278;
+}
+
+.jobs:hover img{
+    transform: translateY(-4px);
+}
+
+.jobs:hover h5{
+    color: #E02020;
+}
+
+.jobs:hover p{
+    margin-top: 10px;
+    color: #6D7278;
+}
+
+.jobs img{
+    transition: all 0.2s;
+    float: left;
+    width: 45px;
+    height: 45px;
+    margin-right: 8px;
+}
+
+.jobs div{
+    float: left;
+}
+
+.jobs div p{
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.shuxian{
+    width: 2px;
+    height: 36px;
+    background-color: #e8e8e8;
+}
+
+.more{
+    width: 50px;
+}
+
+.more div h5{
+    font-size: 12px;
+}
+/* 底部结束 */
+
+
+/* 新上好课开始 */
+.nav-course{
+    width: 1152px;
+    margin: 0 auto;
+    margin-top:40px;
+
+}
+.container-types{
+
+    padding: 32px 0;
+}
+
+.container-types img{
+    display: inline-block;
+    width: 188px;
+    height: 36px;
+}
+.menu{
+    display: inline-block;
+    margin-left: 31px;
+}
+.menu li{
+    float: left;
+    font-size: 14px;
+    padding: 0px 22px;
+    position: relative
+}
+.curr{
+    font-weight: bold;
+}
+.curr::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 3px;
+    background-color: #f20d0d;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+.course li{
+    width: 270px;
+    height: 272px;
+    margin: 0 18px 17px 0;
+    background: #fff;
+    box-shadow: 0 6px 10px 0 rgba(95,101,105,0.5);
+    border-radius: 8px;
+    float: left;
+}
+
+.course li img {
+    width: 270px;
+    border-radius: 8px 8px 0px 0px;
+}
+.course li:hover{
+    transform: translateY(-2px);
+
+}
+
+.course li h3{
+    color: #545c63;
+    line-height: 24px;
+    height: 40px;
+    margin-bottom: 7px;
+    padding: 6px 8px;
+    font-size: 14px;
+}
+.course .course-price span{
+    color: #f01414;
+    font-size: 12px;
+    font-weight: bold;
+    float: right;
+}
+
+.course-price{
+    width: 251px;
+    height: 32px;
+    margin-left: 7px;
+}
+.course-price p{
+    float: left;
+}
+.course-data{
+    width: 250px;
+    margin-left: 8px;
+}
+/* 新上好课结束 */
