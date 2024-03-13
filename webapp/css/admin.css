@@ -154,6 +154,8 @@ a{
 }
 
 .collapse__sublink{
+    display: block;
+    width: 100px;
     color: var(--sub-color);
     font-size: var(--smal-font-size);
 }

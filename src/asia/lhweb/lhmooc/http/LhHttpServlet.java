@@ -13,9 +13,6 @@ import java.lang.reflect.Method;
  * @date 2024/02/26
  */
 public abstract class LhHttpServlet implements LhServlet {
-    public static void main(String[] args) {
-
-    }
     @Override
     public void service(LhRequest request, LhResponse response) throws IOException {
         // equalsIgnoreCase比较两个字符串是否相等，且忽略大小写
@@ -37,11 +34,10 @@ public abstract class LhHttpServlet implements LhServlet {
      */
     public void doGet(LhRequest request, LhResponse response) {
         try {
-            //获取前段传来的动作
+            // 获取前端传来的动作
             String action = request.getParameter(LhMoocConstant.ACTION_NAME);
-            Method declaredMethod = this.getClass().getDeclaredMethod(action, LhRequest.class,
-                    LhResponse.class);
-            //执行方法
+            Method declaredMethod = this.getClass().getDeclaredMethod(action, LhRequest.class, LhResponse.class);
+            // 执行方法
             declaredMethod.invoke(this, request, response);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);

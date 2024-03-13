@@ -1,10 +1,5 @@
 package asia.lhweb.lhmooc.test;
 
-import asia.lhweb.lhmooc.dao.impl.CourseDAOImpl;
-import asia.lhweb.lhmooc.model.bean.Course;
-
-import java.util.List;
-
 /**
  * @author :罗汉
  * @date : 2024/3/12
@@ -63,13 +58,21 @@ public class BasticDAOTest {
         // System.out.println(course1);
 
         // 7 测试动态sql语句查询所有
-        Course course = new Course();
-        // course.setCourseid(1);
-        course.setPrice(143);
-        course.setImgurl("img1.jpg");
+        // Course course = new Course();
+        // // course.setCourseid(1);
+        // course.setPrice(143);
+        // course.setImgurl("img1.jpg");
+        //
+        // CourseDAOImpl courseDAO = new CourseDAOImpl();
+        // List<Course> courseList = courseDAO.selectAll(course);
+        // System.out.println(courseList);
 
-        CourseDAOImpl courseDAO = new CourseDAOImpl();
-        List<Course> courseList = courseDAO.selectAll(course);
-        System.out.println(courseList);
+
+        // 8 分页
+        // MoocUserDAOImpl moocUserDAO = new MoocUserDAOImpl();
+        // List<MoocUser> moocUsers = moocUserDAO.selectAll(BeanFactory.getInstance().getMoocUser());
+        // System.out.println(moocUsers);
+        // Page<MoocUser> page = moocUserDAO.page(BeanFactory.getInstance().getMoocUser(), 1, 3);
+        // System.out.println(page);
     }
 }

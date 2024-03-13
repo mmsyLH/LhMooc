@@ -2,6 +2,8 @@ package asia.lhweb.lhmooc.dao.impl;
 
 import asia.lhweb.lhmooc.dao.BasicDAO;
 import asia.lhweb.lhmooc.dao.MoocUserDAO;
+import asia.lhweb.lhmooc.factory.BeanFactory;
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.MoocUser;
 
 /**
@@ -32,5 +34,28 @@ public class MoocUserDAOImpl extends BasicDAO<MoocUser> implements MoocUserDAO {
     public int add(MoocUser moocUser) {
         String sql = "INSERT INTO mooc_user (username,password) VALUES(?,?)";
         return DML(sql, moocUser.getUsername(), moocUser.getPassword());
+    }
+
+    /**
+     * 用户分页
+     *
+     * @param parseInt 解析int
+     * @param pageSize 页面大小
+     * @return {@link Page}<{@link MoocUser}>
+     */
+    @Override
+    public Page<MoocUser> userPage(int parseInt, int pageSize) {
+        return page(BeanFactory.getInstance().getMoocUser(), parseInt, pageSize);
+    }
+
+    /**
+     * 删除byid
+     *
+     * @param moocUser 蕴藏用户
+     * @return int
+     */
+    @Override
+    public int deleteByid(MoocUser moocUser) {
+        return delete(moocUser);
     }
 }

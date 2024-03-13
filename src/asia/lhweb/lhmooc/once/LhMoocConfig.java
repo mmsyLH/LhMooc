@@ -1,5 +1,6 @@
 package asia.lhweb.lhmooc.once;
 
+import asia.lhweb.lhmooc.factory.BeanFactory;
 import asia.lhweb.lhmooc.factory.ServletFactory;
 
 /**
@@ -10,7 +11,10 @@ import asia.lhweb.lhmooc.factory.ServletFactory;
  */
 public class LhMoocConfig {
     public static void run() {
-        //初始化servlet工厂配置
+        // 初始化servlet工厂配置
         ServletFactory.getInstance();
+
+        // 初始化bean工程
+        BeanFactory.getInstance();
     }
 }

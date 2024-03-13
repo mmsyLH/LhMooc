@@ -1,6 +1,9 @@
 package asia.lhweb.lhmooc.dao.impl;
 
 import asia.lhweb.lhmooc.dao.BasicDAO;
+import asia.lhweb.lhmooc.dao.CourseCategoryDAO;
+import asia.lhweb.lhmooc.factory.BeanFactory;
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.CourseCategory;
 
 /**
@@ -11,6 +14,17 @@ import asia.lhweb.lhmooc.model.bean.CourseCategory;
  * @createDate 2024-03-11 21:23:21
  * @date 2024/03/11
  */
-public class CourseCategoryDAOImpl extends BasicDAO<CourseCategory> {
+public class CourseCategoryDAOImpl extends BasicDAO<CourseCategory> implements CourseCategoryDAO {
 
+    /**
+     * 分类分页
+     *
+     * @param parseInt 解析int
+     * @param pageSize 页面大小
+     * @return {@link Page}<{@link CourseCategory}>
+     */
+    @Override
+    public Page<CourseCategory> categoryPage(int parseInt, int pageSize) {
+        return page(BeanFactory.getInstance().getCourseCategory(), parseInt, pageSize);
+    }
 }

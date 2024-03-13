@@ -1,5 +1,8 @@
 package asia.lhweb.lhmooc.service;
 
+import asia.lhweb.lhmooc.model.Page;
+import asia.lhweb.lhmooc.model.bean.CourseCategory;
+
 /**
  * 课程分类服务
  *
@@ -10,4 +13,28 @@ package asia.lhweb.lhmooc.service;
  */
 public interface CourseCategoryService {
 
+    /**
+     * 页面
+     *
+     * @param parseInt 解析int
+     * @param pageSize 页面大小
+     * @return {@link Page}<{@link CourseCategory}>
+     */
+    Page<CourseCategory> page(int parseInt, int pageSize);
+
+    /**
+     * 更新
+     *
+     * @param category 类别
+     * @return boolean
+     */
+    boolean update(CourseCategory category);
+
+    /**
+     * 删除
+     *
+     * @param category 类别
+     * @return boolean
+     */
+    boolean delete(CourseCategory category);
 }

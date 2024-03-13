@@ -1,5 +1,6 @@
 package asia.lhweb.lhmooc.service;
 
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.MoocUser;
 
 /**
@@ -35,4 +36,30 @@ public interface MoocUserService{
      * @return {@link MoocUser}
      */
     MoocUser login(MoocUser moocUser);
+
+    /**
+     * 页面
+     * 分页
+     *
+     * @param parseInt 解析int
+     * @param pageSize 页面大小
+     * @return {@link Page}<{@link MoocUser}>
+     */
+    Page<MoocUser> page(int parseInt, int pageSize);
+
+    /**
+     * 更新
+     *
+     * @param moocUser 蕴藏用户
+     * @return boolean
+     */
+    boolean update(MoocUser moocUser);
+
+    /**
+     * 删除
+     *
+     * @param moocUser 蕴藏用户
+     * @return boolean
+     */
+    boolean delete(MoocUser moocUser);
 }

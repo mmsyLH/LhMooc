@@ -2,6 +2,7 @@ package asia.lhweb.lhmooc.service.impl;
 
 import asia.lhweb.lhmooc.dao.MoocUserDAO;
 import asia.lhweb.lhmooc.dao.impl.MoocUserDAOImpl;
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.MoocUser;
 import asia.lhweb.lhmooc.service.MoocUserService;
 import asia.lhweb.lhmooc.utils.DataUtils;
@@ -80,5 +81,41 @@ public class MoocUserServiceImpl implements MoocUserService {
             return null;
         }
         return user;
+    }
+
+    /**
+     * 页面
+     * 分页
+     *
+     * @param parseInt 解析int
+     * @param pageSize 页面大小
+     * @return {@link Page}<{@link MoocUser}>
+     */
+    @Override
+    public Page<MoocUser> page(int parseInt, int pageSize) {
+        return moocUserDAO.userPage(parseInt, pageSize);
+    }
+
+    /**
+     * 更新
+     *
+     * @param moocUser 蕴藏用户
+     * @return boolean
+     */
+    @Override
+    public boolean update(MoocUser moocUser) {
+        return moocUserDAO.update(moocUser)!=-1;
+    }
+
+    /**
+     * 删除
+     *
+     * @param moocUser 蕴藏用户
+     * @return boolean
+     */
+    @Override
+    public boolean delete(MoocUser moocUser) {
+
+        return moocUserDAO.deleteByid(moocUser)!=-1;
     }
 }

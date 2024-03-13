@@ -1,5 +1,6 @@
 package asia.lhweb.lhmooc.dao;
 
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.MoocUser;
 
 /**
@@ -27,4 +28,30 @@ public interface MoocUserDAO {
      * @return int
      */
     int add(MoocUser moocUser);
+
+
+    /**
+     * 用户分页
+     *
+     * @param parseInt 解析int
+     * @param pageSize 页面大小
+     * @return {@link Page}<{@link MoocUser}>
+     */
+    Page<MoocUser> userPage(int parseInt, int pageSize);
+
+    /**
+     * 更新
+     *
+     * @param moocUser 蕴藏用户
+     * @return int
+     */
+    int update(MoocUser moocUser);
+
+    /**
+     * 删除byid
+     *
+     * @param moocUser 蕴藏用户
+     * @return int
+     */
+    int deleteByid(MoocUser moocUser);
 }

@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 /**
  * 罗汉响应 V3版本
+ *
  * @author 罗汉
  * @date 2024/02/25
  */
@@ -43,7 +44,6 @@ public class LhResponse {
     }
 
 
-
     /**
      * 向浏览器/客户端发送文件
      *
@@ -59,12 +59,12 @@ public class LhResponse {
         // 获取Http响应头部字节数组
         byte[] buffer = getOkHeaderBytes();
 
-        //将头部字节数组写入byteBuffer中
+        // 将头部字节数组写入byteBuffer中
         ByteBuffer byteBuffer = ByteBuffer.wrap(buffer);
         try {
             socketChannel.write(byteBuffer);
-            byteBuffer=ByteBuffer.allocate(1024);
-            InputStream inputStream=new FileInputStream(file);
+            byteBuffer = ByteBuffer.allocate(1024);
+            InputStream inputStream = new FileInputStream(file);
             byte[] buff = new byte[1024];
             int len;
             // 逐块读取文件内容并发送
@@ -86,7 +86,40 @@ public class LhResponse {
      * @param data 要发送的数据
      */
     public void write(int code, String data) {
-        //todo
+        // 设置响应状态码
+        String statusLine = "HTTP/1.1 " + code + " " + getResponseStatus(code);
+        headers.put("Status", statusLine);
+        // 设置响应数据长度和类型
+        headers.put("Content-Length", String.valueOf(data.length()));
+        headers.put("Content-Type", "text/plain;charset=UTF-8");
+        // 获取响应头部字节数组
+        byte[] headerBytes = getHeaderBytes();
+        try {
+            // 将头部和数据发送给客户端
+            ByteBuffer[] bufferArray = {ByteBuffer.wrap(headerBytes), ByteBuffer.wrap(data.getBytes())};
+            socketChannel.write(bufferArray);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 获取响应状态码对应的状态信息
+     *
+     * @param code 状态码
+     * @return 状态信息
+     */
+    private String getResponseStatus(int code) {
+        switch (code) {
+            case 200:
+                return "OK";
+            case 404:
+                return "Not Found";
+            case 500:
+                return "Internal Server Error";
+            default:
+                return "Unknown";
+        }
     }
 
     /**
@@ -113,6 +146,26 @@ public class LhResponse {
     }
 
     /**
+     * 获取完整的Http头部字节数组
+     *
+     * @return Http头部字节数组
+     */
+    private byte[] getHeaderBytes() {
+        // 构建Http头部字符串
+        StringBuilder stringBuilder = new StringBuilder(1000);
+        for (String key : headers.keySet()) {
+            String value = headers.get(key);
+            stringBuilder.append(key);
+            stringBuilder.append(": ");
+            stringBuilder.append(value);
+            stringBuilder.append("\r\n");
+        }
+        stringBuilder.append("\r\n");
+        // 返回Http头部字节数组
+        return stringBuilder.toString().getBytes();
+    }
+
+    /**
      * 获取成功响应的Http头部字节数组
      *
      * @return 成功响应的Http头部字节数组
@@ -135,18 +188,19 @@ public class LhResponse {
     }
 
     /**
+     * 设置响应状态为404
+     */
+    public void set404() {
+
+    }
+
+    /**
      * 根据文件名设置Content-Type字段
      *
      * @param file 要发送的文件
      */
     private void setFileTypeByName(File file) {
         // todo 根据文件类型去判断
-
-        // String mimeType = FileTypeUtil.getFileType(file.getPath());
-
-        // FileNameMap fileNameMap = java.net.URLConnection.getFileNameMap();
-        // 使用Files.probeContentType(Path)方法来探测文件类型
-
         String fileType;
         try {
             Path filePath = Paths.get(file.getName());
@@ -155,58 +209,8 @@ public class LhResponse {
             throw new RuntimeException(e);
         }
         System.out.println("FileType: " + fileType);
-        headers.put("Content-Type",fileType +";charset=UTF-8");
-
-        // String mimeType = fileNameMap.getContentTypeFor(file.getName());
-        // System.out.println("此文件的类型为"+mimeType);
-        // headers.put("Content-Type",mimeType +";charset=UTF-8");
-        // String extension = "html";
-        // String name = file.getName();
-        // String[] splitArr = name.split("\\.");
-        // if (splitArr.length > 1) {
-        //     extension = splitArr[splitArr.length - 1].toLowerCase();
-        // }
-
-
-        // System.out.println("fileType=" + fileType);
-        // switch (fileType) {
-        //     case "text/html":
-        //         headers.put("Content-Type", "text/html;charset=UTF-8");
-        //         break;
-        //     case "css":
-        //         headers.put("Content-Type", "text/css;charset=UTF-8");
-        //         break;
-        //     case "js":
-        //         headers.put("Content-Type", "text/javascript;charset=UTF-8");
-        //         break;
-        //     case "json":
-        //         headers.put("Content-Type", "application/json;charset=UTF-8");
-        //         break;
-        //     case "xml":
-        //         headers.put("Content-Type", "application/xml;charset=UTF-8");
-        //         break;
-        //     case "png":
-        //         headers.put("Content-Type", "image/png");
-        //         break;
-        //     case "jpg":
-        //     case "jpeg":
-        //         headers.put("Content-Type", "image/jpeg");
-        //         break;
-        //     case "gif":
-        //         headers.put("Content-Type", "image/gif");
-        //         break;
-        //     case "pdf":
-        //         headers.put("Content-Type", "application/pdf");
-        //         break;
-        //     case "txt":
-        //         headers.put("Content-Type", "text/plain;charset=UTF-8");
-        //         break;
-        //     default:
-        //         headers.put("Content-Type", "application/octet-stream");
-        //         break;
-        // }
+        headers.put("Content-Type", fileType + ";charset=UTF-8");
     }
-
 
 
     /**

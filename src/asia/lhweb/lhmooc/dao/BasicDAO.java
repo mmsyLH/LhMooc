@@ -39,11 +39,12 @@ public class BasicDAO<T> {
         // 拼接SQL语句
         sql += tableName.toLowerCase(); // 全部转小写
 
-        // 动态的查询语句
+        // 获取动态的查询语句
         String whereClause = generateWhereClause(t);
         if (!whereClause.isEmpty()) {
             sql += " where " + whereClause;
         }
+
         System.out.println(sql);
         // 定义结果集合
         List<T> list = new ArrayList<T>();
@@ -82,7 +83,9 @@ public class BasicDAO<T> {
                     } else if (field1.getType() == Double.class) {
                         setMethod.invoke(e, res.getDouble(j));
                     } else if (field1.getType() == java.util.Date.class) {
-                        setMethod.invoke(e, res.getObject(j));
+                        setMethod.invoke(e, res.getDate(j));
+                    } else if (field1.getType() == Timestamp.class) {
+                        setMethod.invoke(e, res.getTimestamp(j));
                     }
                 }
                 // 将实体类对象添加到结果集合中
@@ -94,7 +97,6 @@ public class BasicDAO<T> {
         }
         return list;
     }
-
 
 
     /**
@@ -318,8 +320,8 @@ public class BasicDAO<T> {
                         setMethod.invoke(e, res.getInt(j));
                     } else if (field1.getType() == Double.class) {
                         setMethod.invoke(e, res.getDouble(j));
-                    } else if (field1.getType() == Date.class) {
-                        setMethod.invoke(e, res.getDate(j));
+                    } else if (field1.getType() == java.util.Date.class) {
+                        setMethod.invoke(e, res.getTimestamp(j));
                     }
                 }
                 // 将获取到的数据添加到List中
