@@ -1,6 +1,7 @@
 package asia.lhweb.lhmooc.servlet;
 
 import asia.lhweb.lhmooc.annotation.WebServlet;
+import asia.lhweb.lhmooc.common.Result;
 import asia.lhweb.lhmooc.http.LhHttpServlet;
 import asia.lhweb.lhmooc.http.LhRequest;
 import asia.lhweb.lhmooc.http.LhResponse;
@@ -20,8 +21,9 @@ import java.util.List;
  */
 @WebServlet()
 public class CourseServlet extends LhHttpServlet {
-    private CourseService courseService;// 用户服务类
-    private Gson gson;// 谷歌的解析json的工具类
+    private CourseService courseService = new CourseServiceImpl();
+    // 用户服务类
+    private Gson gson = new Gson();// 谷歌的解析json的工具类
 
     @Override
     public void init() throws Exception {
@@ -29,7 +31,38 @@ public class CourseServlet extends LhHttpServlet {
     }
 
     public CourseServlet() {
-        courseService = new CourseServiceImpl();
+
+    }
+
+    public void add(LhRequest req, LhResponse resp) {
+        // 从请求中获取分类名称参数
+        String courseName = req.getParameter("coursename");
+        String categoryid = req.getParameter("categoryid");
+        String profile = req.getParameter("profile");
+        String price = req.getParameter("price");
+
+        // 检查分类名称是否为空，若为空则返回错误信息
+        if (courseName == null || courseName.isEmpty() ||
+                categoryid == null || categoryid.isEmpty() ||
+                profile == null || profile.isEmpty() ||
+                price == null || price.isEmpty()) {
+            resp.writeToJson(gson.toJson(Result.error("添加失败，上传的属性不能为空")));
+            return;
+        }
+
+        // 创建课程分类对象，并设置分类名称
+        Course course = new Course();
+        course.setCoursename(courseName.trim());
+        course.setCategoryid(Integer.parseInt(categoryid.trim()));
+        course.setProfile(profile.trim());
+        course.setPrice(Integer.parseInt(price.trim()));
+        // 尝试添加课程分类到数据库，返回添加结果
+        boolean res = courseService.add(course);
+        // 根据添加结果生成相应的响应信息
+        String jsonResponse = res ? gson.toJson(Result.success("添加成功")) : gson.toJson(Result.error("添加失败"));
+
+        // 将响应信息写回客户端
+        resp.writeToJson(jsonResponse);
     }
 
     /**
@@ -42,6 +75,32 @@ public class CourseServlet extends LhHttpServlet {
         String sort = request.getParameter("sort");
         List<Course> coursesList = courseService.getSortCoursesTop8(sort);
     }
+
+    /**
+     * 根据类别ID获取该类别的课程列表。
+     *
+     * @param req  请求对象，包含客户端请求的数据。
+     * @param resp 响应对象，用于向客户端返回处理结果。
+     */
+    public void getByCategory(LhRequest req, LhResponse resp) {
+        String id = req.getParameter("categoryId");
+
+        // 检查请求中是否提供了必要的categoryId参数
+        if (id == null || id.isEmpty()) {
+            id = "1";
+        }
+        Course course = new Course();
+        course.setCategoryid(Integer.parseInt(id));
+        // 从课程分类服务获取全部分类列表
+        List<Course> courseList = courseService.getByCategory(course);
+
+        // 根据获取的结果，构造相应的JSON响应
+        String jsonResponse = !courseList.isEmpty() ? gson.toJson(Result.success(courseList, "获取该类课程成功")) : gson.toJson(Result.error("该类里没有课程！！！"));
+
+        // 将构造的JSON响应写回给客户端
+        resp.writeToJson(jsonResponse);
+    }
+
 
     @Override
     public void destroy() {

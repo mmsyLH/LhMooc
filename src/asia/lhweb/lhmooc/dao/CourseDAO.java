@@ -21,5 +21,13 @@ public interface CourseDAO {
      *
      * @return {@link ArrayList}<{@link Course}>
      */
-    List<Course> selectAll();
+    List<Course> selectAll(Course course);
+
+    /**
+     * 保存
+     *
+     * @param course 课程
+     * @return boolean
+     */
+    int save(Course course);
 }

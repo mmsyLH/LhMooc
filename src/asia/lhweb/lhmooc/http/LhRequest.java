@@ -1,11 +1,12 @@
 package asia.lhweb.lhmooc.http;
 
+import asia.lhweb.lhmooc.constant.LhMoocConstant;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 /**
@@ -35,12 +36,49 @@ public class LhRequest {
      * 初始化
      */
     private void init() {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(2048);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(8192); // 初始分配1MB缓冲区 最多 8192
+        StringBuilder requestDataBuilder = new StringBuilder(); // 用于保存完整的请求数据
         try {
-            int n = socketChannel.read(byteBuffer);
-            if (n < 1) return;
-            String requestData = new String(byteBuffer.array(), StandardCharsets.UTF_8);
-            // 请求： 请求行 请求头 请求体
+            int bytesRead = 0;
+            while (true) {
+                // 读取数据到缓冲区
+                int n = socketChannel.read(byteBuffer);
+                if (n <= 0) {
+                    // 连接关闭
+                    break;
+                }
+                bytesRead += n;
+                // 判断是否已经读取完整请求数据
+                if (bytesRead >= LhMoocConstant.MAX_REQUEST_SIZE) {
+                    // todo 请求数据限制的处理
+                    throw new IOException("请求数据超过最大限制");
+                }
+                // 切换为读模式
+                byteBuffer.flip();
+                // 将缓冲区的数据读取到字符串构建器中
+                while (byteBuffer.hasRemaining()) {
+                    requestDataBuilder.append((char) byteBuffer.get());
+                }
+                // 清空缓冲区以便下次读取
+                byteBuffer.clear();
+            }
+            String requestData = requestDataBuilder.toString();
+            // System.err.println("requestData: " + requestData);
+            // 处理请求数据
+            processRequestData(requestData);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 处理请求数据
+     *
+     * @param requestData 请求数据
+     * @throws IOException ioexception
+     */
+    private void processRequestData(String requestData) throws IOException {
+        // 请求： 请求行 请求头 请求体
             /*
               请求行 回车换行
               请求头 回车换行
@@ -51,44 +89,47 @@ public class LhRequest {
               1.回车换行回车换行拆分
               2.回车换行拆分
              */
-            String[] splitArr = requestData.split("\r\n\r\n");// 根据2个回车换行符进行分割
-            String[] splitArr2 = splitArr[0].split("\r\n");// 请求行 回车换行 请求头 注意~！请求头有多个
-            String requestLine = splitArr2[0];//请求行字符串
+        String[] splitArr = requestData.split("\r\n\r\n");// 根据2个回车换行符进行分割
+        String[] splitArr2 = splitArr[0].split("\r\n");// 请求行 回车换行 请求头 注意~！请求头有多个
+        String requestLine = splitArr2[0];// 请求行字符串
+        if (splitArr.length > 1) {// 如果有请求体
             body = splitArr[1];// 请求体字符串
-            // 只有requestLine不为空才能往下进行
-            // 按照空格分成一个数组
-            String[] requestLineArr;
-            if (requestLine != null) {
-                requestLineArr = requestLine.split(" ");
-                if (requestLineArr.length < 3) {
-                    throw new IOException("请求格式错误~"); // 请求头一般是    请求方法 请求路径 请求协议
-                }
+        }
+        // 只有requestLine不为空才能往下进行
+        // 按照空格分成一个数组
+        String[] requestLineArr;
+        if (requestLine != null) {
+            requestLineArr = requestLine.split(" ");
+            // System.out.println("requestLineArr:"+ Arrays.toString(requestLineArr));
+            if (requestLineArr.length < 3) {
+                return;
+                // throw new IOException("请求格式错误~"); // 请求头一般是    请求方法 请求路径 请求协议
 
-                // 得到method
-                method = requestLineArr[0];
+            }
 
-                // 得到url
-                url = requestLineArr[1];
+            // 得到method
+            method = requestLineArr[0];
 
-                // 得到protocol
-                protocol = requestLineArr[2];
+            // 得到url
+            url = requestLineArr[1];
 
-                // 解析请求头中url中的参数列表
-                getParameterByUrl(requestLineArr);
+            // 得到protocol
+            protocol = requestLineArr[2];
 
-                // 解析请求头中的参数
-                for (int i = 1; i < splitArr2.length; i++) {
-                    String requestHeader = splitArr2[i];//请求头字符串
-                    getParameterByHeard(requestHeader);
-                }
+            // 解析请求头中url中的参数列表
+            getParameterByUrl(requestLineArr);
 
+            // 解析请求头中的参数
+            for (int i = 1; i < splitArr2.length; i++) {
+                String requestHeader = splitArr2[i];// 请求头字符串
+                getParameterByHeard(requestHeader);
+            }
+
+            if (body != null) {
                 // 解析请求体
                 getBodys(body);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-
     }
 
     /**
@@ -139,6 +180,9 @@ public class LhRequest {
                     String key = parameterVal[0];
                     String value = parameterVal[1];
                     try {
+                        // System.err.println(key + "=" + value);
+                        // System.err.println(URLDecoder.decode(key, "utf-8"));
+                        // System.err.println(URLDecoder.decode(value, "utf-8"));
                         parametersMap.put(URLDecoder.decode(key, "utf-8"), URLDecoder.decode(value, "utf-8"));
                     } catch (UnsupportedEncodingException e) {
                         throw new RuntimeException(e);
@@ -161,7 +205,11 @@ public class LhRequest {
             String[] parameterVal = parameterPair.split("=");
             if (parameterVal.length == 2) {// 说明的的确确有参数值
                 // 放入到parametersMap里去
-                parametersMap.put(parameterVal[0], parameterVal[1]);
+                try {
+                    parametersMap.put(URLDecoder.decode(parameterVal[0], "utf-8"), URLDecoder.decode(parameterVal[1], "utf-8"));
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

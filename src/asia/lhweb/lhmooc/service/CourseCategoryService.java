@@ -3,6 +3,8 @@ package asia.lhweb.lhmooc.service;
 import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.CourseCategory;
 
+import java.util.List;
+
 /**
  * 课程分类服务
  *
@@ -37,4 +39,27 @@ public interface CourseCategoryService {
      * @return boolean
      */
     boolean delete(CourseCategory category);
+
+    /**
+     * 真正删除
+     *
+     * @param category 类别
+     * @return boolean
+     */
+    boolean realDelete(CourseCategory category);
+
+    /**
+     * 添加
+     *
+     * @param category 类别
+     * @return boolean
+     */
+    boolean add(CourseCategory category);
+
+    /**
+     * 得到所有课程分类
+     *
+     * @return {@link List}<{@link CourseCategory}>
+     */
+    List<CourseCategory> getAll();
 }

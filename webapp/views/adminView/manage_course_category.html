@@ -39,17 +39,29 @@
             </div>
             <!-- 查询结果区域结束 -->
         </div>
-        <!-- 弹窗 -->
+        <!-- 添加窗口 -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addModal')">&times;</span>
+                <h2>添加课程分类</h2>
+                <form id="addForm">
+                    <label for="categoryName">分类名称:</label>
+                    <input type="text" id="categoryNameInput"><br><br>
+                    <input type="button" value="确定" onclick="submitAddCategory()">
+                </form>
+            </div>
+        </div>
+        <!-- 编辑窗口 -->
         <div id="editModal" class="modal">
             <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
+                <span class="close" onclick="closeModal('editModal')">&times;</span>
                 <h2>编辑课程分类信息</h2>
                 <form id="editForm">
                     <label for="categoryId">分类ID:</label>
                     <input type="text" id="categoryId" readonly><br><br>
                     <label for="categoryName">分类名称:</label>
-                    <input type="text" id="categoryName"><br><br>
-                    <input type="button" value="确定" onclick="submitCategory()">
+                    <input type="text" id="updateCategoryNameInput"><br><br>
+                    <input type="button" value="确定" onclick="submitEditCategory()">
                 </form>
             </div>
         </div>
@@ -117,6 +129,7 @@
                     if (res.code === 200) {
                         //显示内容
                         categoryList = res.data.items;
+                        console.log("categoryList:",categoryList)
                         displayCategoryList(res.data.items);
                         //显示导航条
                         pageNo = res.data.pageNo;
@@ -143,100 +156,86 @@
                     "<td>" + category.createtime + "</td>" +
                     "<td>" + (category.isdelete === 1 ? "被删除" : "没被删除") + "</td>" +
                     "<td><button class='baseButton' onclick='editCategory(" + i + ")'>编辑</button></td>" +
-                    "<td><button class='baseButton' onclick='deleteCategory(" + i + ")'>删除</button></td>";
+                    "<td><button class='baseButton' onclick='deleteCategory(" + i + ")'>逻辑删除</button></td>" +
+                    "<td><button class='baseButton' onclick='realDelete(" + i + ")'>删除</button></td>";
                 categoryList.appendChild(tr);
             }
         }
 
-        // 在全局定义一个变量来判断当前操作是添加还是编辑
-        var isAdding = false;
-        var currentIndex; // 当前编辑的索引
-
         // 添加课程分类
         function openAddModal() {
-            // 设置添加标志为true
-            isAdding = true;
             // 清空输入框
             document.getElementById("categoryId").value = "";
-            document.getElementById("categoryName").value = "";
+            document.getElementById("categoryNameInput").value = "";
             // 显示弹窗
-            document.getElementById("editModal").style.display = "block";
-            document.getElementById("categoryName").disabled = false;
-            document.getElementById("categoryId").readOnly = false; // 可编辑
+            document.getElementById("addModal").style.display = "block";
         }
 
         // 编辑课程分类
         function editCategory(index) {
-            // 设置添加标志为false
-            isAdding = false;
-            currentIndex = index; // 设置当前编辑的索引
-            // 设置ID输入框为只读状态
-            document.getElementById("categoryId").readOnly = true;
-            openModal(index); // 打开弹窗
+            var { categoryid, categoryname } = categoryList[index];
+            document.getElementById("categoryId").value = categoryid;
+            document.getElementById("updateCategoryNameInput").value = categoryname;
+            // 显示弹窗
+            document.getElementById("editModal").style.display = "block";
         }
 
-        // 更新课程分类信息
-        function submitCategory() {
-            var action;
-            var newCategoryName = document.getElementById("categoryName").value;
-            // 判断是添加还是修改操作
-            if (isAdding) {
-                action = "add"; // 添加操作
-            } else {
-                action = "update"; // 修改操作
-            }
-            if (action === "update") {//是修改操作
-                // 发送Ajax请求进行修改
-                $.ajax({
-                    method: "post", // 修改为POST请求
-                    url: "LhMooc/categoryServlet",
-                    dataType: "json",
-                    data: {
-                        action: "update",
-                        categoryid: categoryList[currentIndex].categoryid,
-                        categoryname: newCategoryName
-                    },
-                    success: function (res) {
-                        if (res.code === 200) {
-                            searchCategory(pageNo);
-                            closeModal(); // 修改成功后关闭弹窗
-                        } else {
-                            closeModal();
-                            alert("修改失败:" + res.msg);
-                        }
-                    },
-                    error: function (err) {
-                        console.log("error", err);
-                    }
-                });
-            } else if (action === "add") {//是添加操作
-                // 发送Ajax请求进行添加
-                $.ajax({
-                    method: "post", // 修改为POST请求
-                    url: "LhMooc/categoryServlet",
-                    dataType: "json",
-                    data: {
-                        action: "add",
-                        categoryname: newCategoryName
-                    },
-                    success: function (res) {
-                        if (res.code === 200) {
-                            searchCategory(pageNo);
-                            closeModal(); // 添加成功后关闭弹窗
-                        } else {
-                            closeModal();
-                            alert("添加失败:" + res.msg);
-                        }
-                    },
-                    error: function (err) {
-                        console.log("error", err);
-                    }
-                });
 
-            }
+        // 提交添加课程分类
+        function submitAddCategory() {
+            var categoryName = document.getElementById("categoryNameInput").value.trim();
+            // 发送Ajax请求进行添加
+            $.ajax({
+                method: "post",
+                url: "LhMooc/categoryServlet",
+                dataType: "json",
+                data: {
+                    action: "add",
+                    categoryname: categoryName
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        searchCategory(pageNo);
+                        closeModal('addModal'); // 添加成功后关闭弹窗
+                    } else {
+                        alert("添加失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
         }
 
-        //删除课程分类
+        // 提交编辑课程分类
+        function submitEditCategory() {
+            var categoryId = document.getElementById("categoryId").value.trim();
+            var categoryName = document.getElementById("updateCategoryNameInput").value.trim();
+            // 发送Ajax请求进行修改
+            $.ajax({
+                method: "post",
+                url: "LhMooc/categoryServlet",
+                dataType: "json",
+                data: {
+                    action: "update",
+                    categoryid: categoryId,
+                    categoryname: categoryName
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        searchCategory(pageNo);
+                        closeModal('editModal'); // 修改成功后关闭弹窗
+                    } else {
+                        alert("修改失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
+        }
+
+        //逻辑删除课程分类
         function deleteCategory(index) {
             const { categoryid } = categoryList[index];
             $.ajax({
@@ -259,18 +258,34 @@
                 }
             })
         }
-        // 打开弹窗并填充数据
-        function openModal(index) {
-            currentIndex = index; // 设置当前编辑的索引
-            var { categoryid, categoryname } = categoryList[index];
-            document.getElementById("categoryId").value = categoryid;
-            document.getElementById("categoryName").value = categoryname;
-            document.getElementById("editModal").style.display = "block";
+
+        //真实删除课程分类
+        function realDelete(index) {
+            const { categoryid } = categoryList[index];
+            $.ajax({
+                method: "get",
+                url: "LhMooc/categoryServlet",
+                dataType: "json",
+                data: {
+                    action: "realDelete",
+                    categoryid: categoryid
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        searchCategory(pageNo);
+                    } else {
+                        console.log("删除失败", res.msg)
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err)
+                }
+            })
         }
 
         // 关闭弹窗
-        function closeModal() {
-            document.getElementById("editModal").style.display = "none";
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
         }
     </script>
 </body>

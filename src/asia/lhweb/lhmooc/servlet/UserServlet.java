@@ -80,16 +80,16 @@ public class UserServlet extends LhHttpServlet {
         // 获取用户和密码
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+        // System.err.println("password"+ password );
         // 新建用户
         MoocUser moocUser = new MoocUser();
         moocUser.setUsername(username);
         moocUser.setPassword(password);
         // 调用service的登录方法
         MoocUser loginUser = userService.login(moocUser);
-        gson = new Gson();
         String presJson;
         if (loginUser != null) {
-            presJson = gson.toJson(Result.success(loginUser, "登录成功"));
+            presJson = gson.toJson(Result.success(loginUser,  "登录成功"));
         } else {
             presJson = gson.toJson(Result.error("登录失败"));
         }

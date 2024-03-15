@@ -8,6 +8,7 @@ import asia.lhweb.lhmooc.dao.impl.CommentVideoDAOImpl;
 import asia.lhweb.lhmooc.dao.impl.CourseDAOImpl;
 import asia.lhweb.lhmooc.dao.impl.FollowVideoDAOImpl;
 import asia.lhweb.lhmooc.dao.impl.LikeVideoDAOImpl;
+import asia.lhweb.lhmooc.factory.BeanFactory;
 import asia.lhweb.lhmooc.model.bean.CommentVideo;
 import asia.lhweb.lhmooc.model.bean.Course;
 import asia.lhweb.lhmooc.model.bean.FollowVideo;
@@ -41,7 +42,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getSortCoursesTop8(String sort) {
         // todo 根据传入的sort去判断 根据什么分类
-        List<Course> courseList = courseDAO.selectAll();// 课程表
+        List<Course> courseList = courseDAO.selectAll(BeanFactory.getInstance().getCourse());// 课程表
         List<CommentVideo> commentVideoList = commentVideoDAO.selectAll();// 课程评论表
         List<LikeVideo> likeVideoList = likeVideoDAO.selectAll();// 课程点赞表
         List<FollowVideo> followVideoList = followVideoDAO.selectAll();// 课程收藏表
@@ -59,6 +60,28 @@ public class CourseServiceImpl implements CourseService {
         // return allUser.subList(0, size);
 
 
-        return courseDAO.selectAll();
+        return null;
+    }
+
+    /**
+     * 按类别获取
+     *
+     * @param course 课程
+     * @return {@link List}<{@link Course}>
+     */
+    @Override
+    public List<Course> getByCategory(Course course) {
+        return courseDAO.selectAll(course);
+    }
+
+    /**
+     * 添加
+     *
+     * @param course 课程
+     * @return boolean
+     */
+    @Override
+    public boolean add(Course course) {
+        return courseDAO.save(course)!=-1;
     }
 }

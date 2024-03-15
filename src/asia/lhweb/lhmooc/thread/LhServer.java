@@ -48,19 +48,18 @@ public class LhServer extends Thread {
                         // System.out.println("工具人通知可以读");
                         // 获取通道selectionKey
                         SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+                        // 设置为非阻塞
+                        socketChannel.configureBlocking(false);
                         LhRequest lhRequest = new LhRequest(socketChannel);
-                        if(lhRequest.getUrl()==null){
+                        if (lhRequest.getUrl() == null) {
                             socketChannel.close();
-                        }else {
+                        } else {
                             LhResponse lhResponse = new LhResponse(socketChannel);
                             // 创建任务
                             TaskThread taskThread = new TaskThread(lhRequest, lhResponse, socketChannel);
                             // 用线程管理者去执行任务
                             ThreadPoolManager.getInstance().execute(taskThread);
                         }
-                    } else if (selectionKey.isWritable()) {// 是否 可以写
-                        ServerSocketChannel socketChannel = (ServerSocketChannel) selectionKey.channel();
-                        System.out.println("工具人查看到可以写");
                     }
                 }
             } catch (IOException e) {

@@ -23,4 +23,8 @@ public interface LhMoocConstant {
      * 动作名称
      */
     String ACTION_NAME = "action";
+    /**
+     * 最大请求大小
+     */
+    int MAX_REQUEST_SIZE = 1024 * 1024*50; // 设置最大请求大小为50MB
 }

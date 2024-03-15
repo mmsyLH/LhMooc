@@ -30,7 +30,7 @@ public class BasicDAO<T> {
      * @param t 泛型参数，表示查询的表对应的实体类
      * @return 返回查询结果，以List形式返回
      */
-    public List<T> selectAll(T t) {
+    public List<T> selectAll(T t) {//Course course
         // 定义SQL语句
         String sql = "select * from ";
         // 获取泛型参数的Class对象
@@ -45,7 +45,7 @@ public class BasicDAO<T> {
             sql += " where " + whereClause;
         }
 
-        System.out.println(sql);
+        System.err.println(sql);
         // 定义结果集合
         List<T> list = new ArrayList<T>();
         // 获取实体类中的所有属性
@@ -105,7 +105,7 @@ public class BasicDAO<T> {
      * @param t t
      * @return int
      */
-    public int deleteOne(T t) {
+    public int realDelete(T t) {
         Class clazz = t.getClass();
         // 获取表名
         String tableName = getTableName(clazz);
@@ -230,22 +230,58 @@ public class BasicDAO<T> {
      * @return int
      */
     public int save(T t) {
-        Class clazz = t.getClass();
+        Class<?> clazz = t.getClass();
         conn = null;
         pstat = null;
         res = null;
         // 获取表名
         String tableName = getTableName(clazz);
-        // 构建更新语句
-        StringBuilder sqlBuilder = new StringBuilder("insert into ");
-        sqlBuilder.append(tableName).append("(");
+        // 构建插入语句
+        StringBuilder sqlBuilder = new StringBuilder("INSERT INTO ");
+        sqlBuilder.append(tableName).append(" (");
+
         // 获取实体类中的所有属性
         Field[] fields = clazz.getDeclaredFields();
         List<Object> params = new ArrayList<>();
-        // todo 拼接各种参数 和?
-        //
-        return -1;
+        boolean isFirstField = true;
+
+        // 遍历实体类中的属性
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                // 获取属性值
+                Object value = field.get(t);
+                // 如果属性值不为空，添加属性名到 SQL 语句中
+                if (value != null) {
+                    if (!isFirstField) {
+                        sqlBuilder.append(", ");
+                    }
+                    sqlBuilder.append(field.getName());
+                    isFirstField = false;
+                    // 将属性值添加到参数列表中
+                    params.add(value);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        sqlBuilder.append(") VALUES (");
+
+        // 构建占位符
+        for (int i = 0; i < params.size(); i++) {
+            if (i > 0) {
+                sqlBuilder.append(", ");
+            }
+            sqlBuilder.append("?");
+        }
+
+        sqlBuilder.append(")");
+
+        // 执行增加操作
+        return DML(sqlBuilder.toString(), params.toArray());
     }
+
 
 
     /**
@@ -299,6 +335,7 @@ public class BasicDAO<T> {
         Field[] field = clazz.getDeclaredFields();
         try {
             // 准备查询语句
+            System.err.println(sql);
             pstat = conn.prepareStatement(sql);
             pstat.setInt(1, begin);
             pstat.setInt(2, pageSize);
@@ -438,6 +475,7 @@ public class BasicDAO<T> {
             // 获取数据连接
             conn = JDBCUtils.getConnection();
             // 获取预编译语句对象
+            System.err.println(sql);
             pstat = conn.prepareStatement(sql);
             // 填充属性值，注意下标从 1 开始
             for (int i = 0; i < args.length; i++) {
@@ -485,6 +523,7 @@ public class BasicDAO<T> {
         pstat = null;
         try {
             conn = JDBCUtils.getConnection();
+            System.err.println(sql);
             pstat = conn.prepareStatement(sql);
             return pstat.executeUpdate();
         } catch (SQLException e) {
@@ -507,7 +546,9 @@ public class BasicDAO<T> {
         pstat = null;
         try {
             conn = JDBCUtils.getConnection();
+            System.err.println(sql);
             pstat = conn.prepareStatement(sql);
+            System.err.println("sql:"+sql);
             if (params != null) {
                 for (int i = 0; i < params.length; i++) {
                     pstat.setObject(i + 1, params[i]);
@@ -533,58 +574,61 @@ public class BasicDAO<T> {
         // 获取类名
         String clazzSimpleName = clazz.getSimpleName();// CommentVideo
         // 转换类名到表名（假设驼峰命名法）
-        String tableName = clazzSimpleName.replaceAll("(?<!^)([A-Z])", "_$1").toLowerCase();
+        String tableName = clazzSimpleName.replaceAll("(?<!^)([A-Z])", "_$1").toLowerCase();// comment_Video
         return tableName;
     }
 
+
     /**
-     * 生成动态的where子句
+     * 根据提供的对象生成对应的 WHERE 子句字符串。
+     * 该方法会遍历对象的所有字段，将非空字段及其值转换为 SQL 查询中的条件部分。
      *
-     * @param t t
-     * @return {@link String}
+     * @param t 用于生成 WHERE 子句的对象，该对象的类必须声明有字段。
+     * @return 表示 SQL 查询中 WHERE 子句的字符串，条件之间使用 " and " 连接。
      */
     private String generateWhereClause(T t) {
         StringBuilder whereClause = new StringBuilder();
-        Field[] fields = t.getClass().getDeclaredFields();
+        Field[] fields = t.getClass().getDeclaredFields(); // 获取对象的所有字段
         try {
             for (Field field : fields) {
-                field.setAccessible(true);
-                Object value = field.get(t);
-                if (value != null) {
+                field.setAccessible(true); // 允许访问私有字段
+                Object value = field.get(t); // 获取字段的值
+                if (value != null) { // 忽略空值字段
                     if (whereClause.length() > 0) {
-                        whereClause.append(" and ");
+                        whereClause.append(" and "); // 条件之间添加 " and " 连接符
                     }
-                    whereClause.append(field.getName()).append(" = ?");
+                    whereClause.append(field.getName()).append(" = ?"); // 字段名拼接 " = ?" 作为查询条件
                 }
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // 处理访问权限异常
         }
         return whereClause.toString();
     }
 
+
     /**
-     * 设置where子句参数
-     *
-     * @param pstat pstat
-     * @param t     t
-     * @throws SQLException sqlexception异常
+     * 设置查询语句参数。该方法会遍历传入对象的所有字段，将非空字段的值设置为PreparedStatement的参数。
+     * @param pstat PreparedStatement对象，用于设置参数。
+     * @param t 传入的对象，其字段值将被设置为查询语句的参数。
+     * @throws SQLException 如果设置参数时发生SQL异常。
      */
     private void setWhereClauseParameters(PreparedStatement pstat, T t) throws SQLException {
-        Field[] fields = t.getClass().getDeclaredFields();
-        int parameterIndex = 1;
+        Field[] fields = t.getClass().getDeclaredFields(); // 获取传入对象的所有字段
+        int parameterIndex = 1; // 参数索引初始化为1
         try {
             for (Field field : fields) {
-                field.setAccessible(true);
-                Object value = field.get(t);
-                if (value != null) {
-                    pstat.setObject(parameterIndex++, value);
+                field.setAccessible(true); // 设置字段为可访问
+                Object value = field.get(t); // 获取字段的值
+                if (value != null) { // 忽略空值
+                    pstat.setObject(parameterIndex++, value); // 设置参数
                 }
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // 处理访问权限异常
         }
     }
+
 
     /**
      * 获取主键字段

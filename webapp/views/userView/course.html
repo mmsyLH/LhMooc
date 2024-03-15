@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全部课程</title>
+    <link rel="stylesheet" href="../../css/course.css">
+</head>
+
+<body>
+    <!-- 头部开始 -->
+    <iframe src="../../component/heard.html?nav=index" width=100% height=120px marginwidth=0 marginheight=0
+        frameborder="0" scrolling="no" style="position: fixed;z-index: 1001;background-color: LightBlue;">
+        <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
+    </iframe>
+    <!-- 头部结束 -->
+    <div class="contatiner" style="padding-top: 120px;">
+        <div class="main">
+            <!--筛选栏-->
+            <div id="filter">
+
+                <!--按类别筛选-->
+                <div id="filter-class">
+                    <span>
+                        <h4>类别</h4>
+                    </span><input type="button" value="默认">
+                    <input type="button" value="前端"><input type="button" value="后端">
+                </div>
+
+                <!--按排序筛选-->
+                <div id="filter-sort">
+                    <span>
+                        <h4>排序方式</h4>
+                    </span><input type="button" value="默认">
+                    <input type="button" value="播放量">
+                    <input type="button" value="评论数">
+                    <input type="button" value="收藏量">
+                    <input type="button" value="时间">
+                </div>
+            </div>
+
+            <!--课程列表栏-->
+            <div id="course-list">
+                <!--课程-->
+                <div class="course">
+                    <img class="course-photo" src="../image/course01.jpg">
+                    <ul class="course-details">
+                        <li>
+                            <h4>零基础产品设计与实践</h4>
+                        </li>
+                        <li>数字化时代下最具竞争力的人才，是具备产品和技术融合能力的复合型人才。
+                            目前岗位缺口大，薪资持续上涨，一将难求。
+                            本课程专题帮你系统掌握产品设计全周期通识与技能，
+                            多维度实践热门工具和实用技巧，助力你快速夯实产品设计基本功，
+                            尽早成为新时代产研融合的抢手人才。
+                        </li>
+                        <li class="videostatus"><span><i class="icon icon-user"></i>484</span>
+                            <span><i class="icon icon-fuwu"></i>3</span>
+                            <span><i class="icon icon-notice"></i>12</span>
+                            <i class="icon icon-shijian"></i>
+                            <input type="date" value="2023-06-21" readonly>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="course">
+                    <img class="course-photo" src="../image/course02.jpg">
+                    <ul class="course-details">
+                        <li>
+                            <h4>零基础产品设计与实践</h4>
+                        </li>
+                        <li>数字化时代下最具竞争力的人才，
+                            是具备产品和技术融合能力的复合型人才。
+                            目前岗位缺口大，薪资持续上涨，一将难求。
+                            本课程专题帮你系统掌握产品设计全周期通识与技能，
+                            多维度实践热门工具和实用技巧，助力你快速夯实产品设计基本功，
+                            尽早成为新时代产研融合的抢手人才。
+                        </li>
+                        <li class="videostatus">
+                            <span><i class="icon icon-user"></i>484</span>
+                            <span><i class="icon icon-fuwu"></i>3</span>
+                            <span><i class="icon icon-notice"></i>12</span>
+                            <i class="icon icon-shijian"></i>
+                            <input type="date" value="2023-06-21" readonly>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="course">
+                    <img class="course-photo" src="../image/course03.jpg">
+                    <ul class="course-details">
+                        <li>
+                            <h4>零基础产品设计与实践</h4>
+                        </li>
+                        <li>数字化时代下最具竞争力的人才，是具备产品和技术融合能力的复合型人才。
+                            目前岗位缺口大，薪资持续上涨，一将难求。
+                            本课程专题帮你系统掌握产品设计全周期通识与技能，
+                            多维度实践热门工具和实用技巧，助力你快速夯实产品设计基本功，
+                            尽早成为新时代产研融合的抢手人才。
+                        </li>
+                        <li class="videostatus"><span><i class="icon icon-user"></i>484</span>
+                            <span><i class="icon icon-fuwu"></i>3</span>
+                            <span><i class="icon icon-notice"></i>12</span>
+                            <i class="icon icon-shijian"></i>
+                            <input type="date" value="2023-06-21" readonly>
+                        </li>
+                    </ul>
+                </div>
+                <!--分页跳转-->
+                <div class="pageNumberColumn">
+                    <span><span>首页</span><span>上一页</span><span>1</span><span>/</span><span>3</span><span>下一页</span><span>尾页</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 尾部开始 -->
+        <iframe src="../../component/foot.html" width=100% height=300px marginwidth=0 marginheight=0 frameborder="0"
+            scrolling="no">
+            <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
+        </iframe>
+        <!-- 尾部结束 -->
+
+    </div>
+    <script src="../../js/course.js"></script>
+</body>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+
+    }
+
+    body {
+        background-color: #ecf0f4;
+    }
+
+    /* 遮障层 */
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+    /*筛选栏*/
+    #filter {
+        width: 1200px;
+        overflow: hidden;
+        margin: 0 auto;
+    }
+
+    /*类别筛选栏*/
+    #filter-class {
+        height: 38px;
+        background-color: white;
+        border-radius: 10px 10px 0 0;
+    }
+
+    #filter-class>span {
+        font-size: 15px;
+        margin-top: 8px;
+        margin-left: 20px;
+        display: inline-block;
+    }
+
+    #filter-class>input {
+        font-size: 13px;
+        margin-left: 30px;
+        height: 25px;
+        padding-top: 3px;
+        padding-bottom: 5px;
+        padding-left: 8px;
+        padding-right: 8px;
+        /*width: 40px;*/
+        /*border: 0.5px solid lightgrey;*/
+        border: 0px;
+        cursor: pointer;
+        border-radius: 12px;
+        color: grey;
+        background-color: white;
+    }
+
+    #filter-class input:nth-child(2) {
+        background-color: rgba(240, 20, 20, 0.8);
+        color: white;
+    }
+
+    #filter-class>input:hover {
+        color: white;
+        background-color: rgba(240, 20, 20, 0.4);
+    }
+
+    /*排序筛选栏*/
+    #filter-sort {
+        margin-top: 1.5px;
+        height: 38px;
+        background-color: white;
+    }
+
+    #filter-sort>span {
+        font-size: 15px;
+        margin-top: 8px;
+        margin-left: 20px;
+        display: inline-block;
+    }
+
+    #filter-sort>input {
+        font-size: 13px;
+        margin-left: 30px;
+        padding-top: 3px;
+        padding-bottom: 5px;
+        padding-left: 8px;
+        padding-right: 8px;
+        height: 25px;
+        cursor: pointer;
+
+        border: 0px;
+        border-radius: 12px;
+        color: grey;
+        background-color: white;
+    }
+
+    #filter-sort input:nth-child(2) {
+        background-color: rgba(240, 20, 20, 0.8);
+        color: white;
+    }
+
+    #filter-sort>input:hover {
+        color: white;
+        background-color: rgba(240, 20, 20, 0.4);
+    }
+
+    /*课程列表栏*/
+    #course-list {
+        width: 1200px;
+        overflow: hidden;
+        margin: 0 auto;
+        margin-top: 1px;
+        background-color: white;
+        border-radius: 0 0 10px 10px;
+
+    }
+
+    /*课程*/
+    .course {
+        margin-top: 40px;
+        margin-left: 50px;
+        height: 200px;
+        width: 1100px;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+    }
+
+    .course:hover {
+        /*设置阴影效果*/
+        box-shadow: 0px 5px 8px 1px rgb(128, 128, 128);
+
+        margin-left: 45px;
+    }
+
+    .course-photo {
+        margin-left: 15px;
+        margin-top: 15px;
+        float: left;
+        width: 302px;
+        height: 169px;
+        border-radius: 7px;
+    }
+
+    /*课程详情*/
+    .course-details {
+        float: left;
+        /*margin-top: 10px;*/
+        margin-left: 40px;
+        list-style-type: none;
+    }
+
+    .course-details>li {
+        width: 650px;
+    }
+
+    .course-details>li:nth-child(1) {
+        /*设置悬停指针样式*/
+        cursor: pointer;
+        margin-top: 15px;
+        width: 650px;
+    }
+
+    .course-details>li:nth-child(1):hover {
+        color: red;
+    }
+
+    .course-details>li:nth-child(2) {
+        margin-top: 15px;
+        width: 650px;
+        height: 95px;
+    }
+
+    .course-details>li:nth-child(3) {
+        margin-top: 15px;
+        width: 650px;
+    }
+
+    /*课程发布时间*/
+    .videostatus>input {
+        border: 0px;
+        font-size: 15px;
+        color: black;
+    }
+
+    .videostatus>span {
+        margin-right: 20px;
+        font-size: 15px;
+        color: black;
+    }
+
+    /*页码跳转栏*/
+    .pageNumberColumn {
+        margin-top: 20px;
+        height: 20px;
+        overflow: hidden;
+        /*background-color: gray;*/
+        margin-bottom: 30px;
+    }
+
+    .pageNumberColumn>span {
+        width: 1200px;
+        /*background-color: dodgerblue;*/
+        display: inline-block;
+        text-align: center;
+    }
+
+    .pageNumberColumn>span>span:nth-child(1),
+    .pageNumberColumn>span>span:nth-child(2) {
+        cursor: pointer;
+        margin-right: 30px;
+    }
+
+    .pageNumberColumn>span>span:nth-child(3),
+    .pageNumberColumn>span>span:nth-child(4),
+    .pageNumberColumn>span>span:nth-child(5) {
+        margin-right: 30px;
+    }
+
+    .pageNumberColumn>span>span:nth-child(6),
+    .pageNumberColumn>span>span:nth-child(7) {
+        cursor: pointer;
+        margin-right: 30px;
+    }
+
+    .pageNumberColumn>span>span:nth-child(1):hover,
+    .pageNumberColumn>span>span:nth-child(2):hover,
+    .pageNumberColumn>span>span:nth-child(6):hover,
+    .pageNumberColumn>span>span:nth-child(7):hover {
+        color: red;
+    }
+</style>
+
+</html>

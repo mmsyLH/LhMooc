@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程管理</title>
+    <link rel="stylesheet" href="../../css/manage_station.css">
+</head>
+
+<body>
+    <div class="container" style="padding-right: 10px;">
+        <!-- 内容区域 -->
+        <div class="main hadmin">
+            <div class="select">
+                课程分类：
+                <select id="categorySelect" onchange="searchCourseByCategory()">
+                    <option value="">全部</option>
+                    <!-- 这里将会自动填充课程分类 -->
+                </select>
+                <input type="button" value="查询" class="baseButton" onclick="searchCourseByCategory()">
+                <input type="button" value="添加" class="baseButton" onclick="openAddModal()">
+            </div>
+            <!-- 查询结果区域开始 -->
+            <div id="resultContainer">
+                <table id="courseTable" style="min-height: 100px;">
+                    <thead>
+                        <tr>
+                            <th>课程ID</th>
+                            <th>课程名称</th>
+                            <th>所属分类</th>
+                            <th>课程介绍</th>
+                            <th>价格</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="courseList">
+
+                    </tbody>
+                </table>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination content will be added here -->
+                </div>
+            </div>
+            <!-- 查询结果区域结束 -->
+        </div>
+        <!-- 添加窗口 -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addModal')">&times;</span>
+                <h2>添加课程</h2>
+                <form id="addForm">
+                    <label for="courseName">课程名称:</label>
+                    <input type="text" id="courseNameInput"><br><br>
+                    <label for="categoryId">所属分类:</label>
+                    <select id="categorySelectAdd">
+                        <!-- 这里将会自动填充课程分类 -->
+                    </select><br><br>
+                    <label for="profile">课程介绍:</label>
+                    <input type="text" id="profileInput"><br><br>
+                    <label for="price">价格:</label>
+                    <input type="text" id="priceInput"><br><br>
+                    <input type="button" value="确定" onclick="submitAddCourse()">
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/jquery-3.6.0.js"></script>
+    <script>
+        var categoryList = {};
+
+        window.onload = function () {
+            loadCategories(); // 在页面加载时加载全部课程分类
+            searchCourseByCategory(); // 在页面加载时查询全部课程
+        };
+
+        // 加载全部课程分类
+        function loadCategories() {
+            $.ajax({
+                url: 'LhMooc/categoryServlet',
+                type: 'get',
+                data: {
+                    action: "getAll"
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        categoryList = res.data;
+                        fillCategorySelects();
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 填充课程分类下拉菜单
+        function fillCategorySelects() {
+            var categorySelect = document.getElementById("categorySelect");
+            var categorySelectAdd = document.getElementById("categorySelectAdd");
+            categorySelectAdd.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < categoryList.length; i++) {
+                var category = categoryList[i];
+                var option = document.createElement("option");
+                option.value = category.categoryid;
+                option.innerText = category.categoryname;
+                categorySelect.appendChild(option);
+
+                var optionAdd = document.createElement("option");
+                optionAdd.value = category.categoryid;
+                optionAdd.innerText = category.categoryname;
+                categorySelectAdd.appendChild(optionAdd);
+            }
+        }
+
+        // 根据课程分类查询课程
+        function searchCourseByCategory() {
+            var categoryId = document.getElementById("categorySelect").value;
+            $.ajax({
+                url: 'LhMooc/courseServlet',
+                type: 'get',
+                data: {
+                    action: "getByCategory",
+                    categoryId: categoryId
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        displayCourseList(res.data);
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 展示课程列表
+        function displayCourseList(data) {
+            var courseList = document.getElementById("courseList");
+            courseList.innerHTML = ""; // 清空之前的数据
+            for (var i = 0; i < data.length; i++) {
+                var course = data[i];
+                var tr = document.createElement("tr");
+                tr.innerHTML = "<td>" + course.courseid + "</td>" +
+                    "<td>" + course.coursename + "</td>" +
+                    "<td>" + getCategoryNameById(course.categoryid) + "</td>" +
+                    "<td>" + course.profile + "</td>" +
+                    "<td>" + course.price + "</td>" +
+                    "<td><button class='baseButton' onclick='editCourse(" + i + ")'>编辑</button></td>" +
+                    "<td><button class='baseButton' onclick='deleteCourse(" + i + ")'>删除</button></td>";
+                courseList.appendChild(tr);
+            }
+        }
+
+        // 根据课程分类ID获取分类名称
+        function getCategoryNameById(categoryId) {
+            for (var i = 0; i < categoryList.length; i++) {
+                if (categoryList[i].categoryid == categoryId) {
+                    return categoryList[i].categoryname;
+                }
+            }
+            return "";
+        }
+
+        // 添加课程
+        function openAddModal() {
+            // 清空输入框
+            document.getElementById("courseNameInput").value = "";
+            document.getElementById("profileInput").value = "";
+            document.getElementById("priceInput").value = "";
+            // 显示弹窗
+            document.getElementById("addModal").style.display = "block";
+        }
+
+        // 提交添加课程
+        function submitAddCourse() {
+            var courseName = document.getElementById("courseNameInput").value.trim();
+            console.log("courseName:", courseName)
+            var categoryId = document.getElementById("categorySelectAdd").value;
+            var profile = document.getElementById("profileInput").value.trim();
+            var price = document.getElementById("priceInput").value.trim();
+            // 发送Ajax请求进行添加
+            $.ajax({
+                method: "post",
+                url: "LhMooc/courseServlet",
+                dataType: "json",
+                data: {
+                    action: "add",
+                    coursename: courseName,
+                    categoryid: categoryId,
+                    profile: profile,
+                    price: price
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        searchCourseByCategory();
+                        closeModal('addModal'); // 添加成功后关闭弹窗
+                    } else {
+                        alert("添加失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
+        }
+
+        // 编辑课程
+        function editCourse(index) {
+            var { courseid, coursename, categoryid, profile, price } = courseList[index];
+            document.getElementById("courseId").value = courseid;
+            document.getElementById("courseNameEdit").value = coursename;
+            document.getElementById("categoryIdEdit").value = categoryid;
+            document.getElementById("profileEdit").value = profile;
+            document.getElementById("priceEdit").value = price;
+            // 显示弹窗
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        // 关闭弹窗
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+    </script>
+</body>
+<style>
+    .main {
+        width: 100%;
+        /* background-color: aquamarine; */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .hadmin {
+        width: 100%;
+        height: 880px;
+    }
+
+    #categoryTable th {
+        min-width: 150px;
+    }
+
+    #categoryTable td {
+        text-align: center;
+    }
+
+    /* 分页 */
+    .pagination {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .pagination ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .pagination ul li {
+        display: inline-block;
+        margin: 0 5px;
+    }
+
+    .pagination ul li a {
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        color: #333;
+    }
+
+    .pagination ul li a.active {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    .pagination ul li a:hover {
+        background-color: #f0f0f0;
+    }
+
+    .pagination ul li a.active {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    /* 弹窗样式 */
+    .modal {
+        display: none;
+        /* 默认隐藏 */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+</html>

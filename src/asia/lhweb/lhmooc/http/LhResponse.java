@@ -1,6 +1,7 @@
 package asia.lhweb.lhmooc.http;
 
 import asia.lhweb.lhmooc.constant.LhMoocConstant;
+import org.apache.tika.Tika;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +10,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
@@ -82,7 +82,7 @@ public class LhResponse {
     /**
      * 向浏览器/客户端发送指定状态码和数据
      *
-     * @param code 状态码
+     .
      * @param data 要发送的数据
      */
     public void write(int code, String data) {
@@ -196,20 +196,41 @@ public class LhResponse {
 
     /**
      * 根据文件名设置Content-Type字段
+     * 此方法使用Tika库来分析文件的类型，然后根据文件类型设置HTTP头中的Content-Type字段。
+     * 对于XML文件，会额外检查文件实际的字符集编码。
      *
-     * @param file 要发送的文件
+     * @param file 要发送的文件，不可为null。
      */
     private void setFileTypeByName(File file) {
-        // todo 根据文件类型去判断
-        String fileType;
+        // 初始化Tika对象用于文件类型检测
+        Tika tika = new Tika();
+        String fileType = null;
         try {
-            Path filePath = Paths.get(file.getName());
-            fileType = Files.probeContentType(filePath);
+            // 检测文件类型
+            fileType = tika.detect(file);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            // 当文件类型无法检测时，抛出运行时异常
+            throw new RuntimeException("没有这个文件类型", e);
         }
-        System.out.println("FileType: " + fileType);
-        headers.put("Content-Type", fileType + ";charset=UTF-8");
+        if ("application/xml".equals(fileType)) {
+            try {
+                // 对于XML文件，尝试通过文件系统探测其实际类型
+                String type = Files.probeContentType(Paths.get(file.getPath()));
+                // 判断探测到的类型是否为XML，以确定Content-Type的具体值
+                if ("xml".equals(type.split("/")[1])) {
+                    headers.put("Content-Type", fileType + ";charset=UTF-8");
+                } else {
+                    // 如果不是纯XML文件，则认为是HTML文件
+                    headers.put("Content-Type", "text/html;charset=UTF-8");
+                }
+            } catch (IOException e) {
+                // 探测文件类型失败时，抛出运行时异常
+                throw new RuntimeException(e);
+            }
+        } else {
+            // 非XML文件，直接设置Content-Type
+            headers.put("Content-Type", fileType + ";charset=UTF-8");
+        }
     }
 
 

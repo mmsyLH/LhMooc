@@ -38,7 +38,7 @@ public class TaskThread  extends Thread {
             // System.out.println("url:" + lhRequest.getUrl());
             //切割servlet名称
             if (null != lhRequest.getUri() && !"/".equals(lhRequest.getUri())) {
-                System.out.println("lhRequest.getUri()" + lhRequest.getUri());// /views/LhTomCat/TrainServlet
+                // System.out.println("lhRequest.getUri()" + lhRequest.getUri());// /views/LhTomCat/TrainServlet
                 int indexOf = lhRequest.getUri().lastIndexOf(LhMoocConstant.SERVER_NAME);//如果k的值不存在，则返回-1 。
                 if (indexOf>=0){
                     //获取服务器名称
@@ -60,7 +60,7 @@ public class TaskThread  extends Thread {
             } else {
                 // 二 走静态资源
                 // 1 判断是否是“/”访问首页 如果是则跳转到首页
-                String fileName = "/index.html";
+                String fileName;
                 if ("/".equals(lhRequest.getUri())) {
                     fileName = LhMoocConstant.WEBAPP_NAME +"/index.html";
                 } else {

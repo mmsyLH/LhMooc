@@ -21,4 +21,21 @@ public interface CourseService {
      * @return {@link List}<{@link Course}>
      */
     List<Course> getSortCoursesTop8(String sort);
+
+
+    /**
+     * 按类别获取
+     *
+     * @param course 课程
+     * @return {@link List}<{@link Course}>
+     */
+    List<Course> getByCategory(Course course);
+
+    /**
+     * 添加
+     *
+     * @param course 课程
+     * @return boolean
+     */
+    boolean add(Course course);
 }

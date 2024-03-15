@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>慕课后台</title>
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="./css/admin.css">
+
 </head>
 
 <body id="body-pd">
@@ -16,7 +17,7 @@
                 <div class="nav_brand">
                     <!-- <ion-icon name="menu-outline" class="nav_toggle" id="nav_toggle"></ion-icon> -->
                     <ion-icon name="menu-outline" class="nav_toggle" id="nav-toggle"></ion-icon>
-                    <a href="#" class="nav_logo">慕课后台</a>
+                    <a href="./index.html" class="nav_logo">慕课后台</a>
                 </div>
                 <div class="nav_list">
                     <a class="nav_link active" href="./views/adminView/manage_user.html">
@@ -27,21 +28,23 @@
                         <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
                         <span class="nav_name">课程分类管理</span>
                     </a>
-                    <div class="nav_link2 collapse">
-                        <ion-icon name="folder-outline" class="nav_icon"></ion-icon>
+
+                    <a href="./views/adminView/manage_course.html" class="nav_link">
+                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
                         <span class="nav_name">课程管理</span>
-                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
-                        <ul class="collapse_menu">
-                            <li>
-                                <a href="#" class="collapse__sublink" style="display: block;width: 200px;">课程分类1</a>
-                                <a href="#" class="collapse__sublink">课程分类2</a>
-                                <a href="#" class="collapse__sublink">课程分类3</a>
-                            </li>
-                        </ul>
-                    </div>
+                    </a>
 
+                    <a href="./views/adminView/manage_course_chapter.html" class="nav_link">
+                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
+                        <span class="nav_name">章节管理</span>
+                    </a>
 
-                    <a href="./views/admin/manage_station.html" class="nav_link">
+                    <a href="./views/adminView/manage_course_video.html" class="nav_link">
+                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
+                        <span class="nav_name">视频管理</span>
+                    </a>
+
+                    <a href="./views/adminView/comment_course.html" class="nav_link">
                         <ion-icon name="pie-chart-outline" class="nav_icon"></ion-icon>
                         <span class="nav_name">评论管理</span>
                     </a>

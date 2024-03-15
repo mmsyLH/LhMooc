@@ -3,6 +3,8 @@ package asia.lhweb.lhmooc.dao;
 import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.CourseCategory;
 
+import java.util.List;
+
 /**
  * 课程分类服务
  *
@@ -37,4 +39,27 @@ public interface CourseCategoryDAO {
      * @return int
      */
     int delete(CourseCategory category);
+
+    /**
+     * 真正删除
+     *
+     * @param category 类别
+     * @return int
+     */
+    int realDelete(CourseCategory category);
+
+    /**
+     * 保存
+     *
+     * @param category 类别
+     * @return int
+     */
+    int save(CourseCategory category);
+
+    /**
+     * 选择所有
+     *
+     * @return {@link List}<{@link CourseCategory}>
+     */
+    List<CourseCategory> selectAll(CourseCategory courseCategory);
 }
