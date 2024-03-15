@@ -18,11 +18,12 @@ public interface CourseCategoryService {
     /**
      * 页面
      *
-     * @param parseInt 解析int
-     * @param pageSize 页面大小
+     * @param courseCategory
+     * @param parseInt       解析int
+     * @param pageSize       页面大小
      * @return {@link Page}<{@link CourseCategory}>
      */
-    Page<CourseCategory> page(int parseInt, int pageSize);
+    Page<CourseCategory> page(CourseCategory courseCategory, int parseInt, int pageSize);
 
     /**
      * 更新

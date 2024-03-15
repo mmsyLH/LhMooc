@@ -27,4 +27,15 @@ public class CourseCategoryDAOImpl extends BasicDAO<CourseCategory> implements C
     public Page<CourseCategory> categoryPage(int parseInt, int pageSize) {
         return page(BeanFactory.getInstance().getCourseCategory(), parseInt, pageSize);
     }
+
+    /**
+     * 按id选择一个
+     *
+     * @param courseCategory 课程类别
+     * @return {@link CourseCategory}
+     */
+    @Override
+    public CourseCategory selectOneById(CourseCategory courseCategory) {
+        return super.selectOneById(courseCategory);
+    }
 }

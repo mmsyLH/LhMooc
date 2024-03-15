@@ -90,4 +90,8 @@ public class Page<T> {
 				", url='" + url + '\'' +
 				'}';
 	}
+
+    public boolean isEmpty() {
+		return pageNo == null || pageNo == 0 || items == null || items.size() == 0;
+    }
 }

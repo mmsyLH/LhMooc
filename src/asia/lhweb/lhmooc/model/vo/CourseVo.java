@@ -1,4 +1,4 @@
-package asia.lhweb.lhmooc.model.bean;
+package asia.lhweb.lhmooc.model.vo;
 
 import asia.lhweb.lhmooc.annotation.Id;
 
@@ -12,7 +12,7 @@ import java.util.Date;
  * @TableName course
  * @date 2024/03/11
  */
-public class Course {
+public class CourseVo {
     /**
      * 课程表Id
      */
@@ -49,6 +49,22 @@ public class Course {
      */
     private Integer isdelete;
     /**
+     * 收藏数
+     */
+    private Integer followCount;
+    /**
+     * 点赞数
+     */
+    private Integer likeCount;
+    /**
+     * 评论数
+     */
+    private Integer commentCount;
+    /**
+     * 视频数
+     */
+    private Integer videoCount;
+    /**
      * 创建时间
      */
     private Date createtime;
@@ -59,6 +75,39 @@ public class Course {
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public Integer getFollowCount() {
+        return followCount;
+    }
+
+    public void setFollowCount(Integer followCount) {
+        this.followCount = followCount;
+    }
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+
+    public Integer getVideoCount() {
+        return videoCount;
+    }
+
+    public void setVideoCount(Integer videoCount) {
+        this.videoCount = videoCount;
     }
 
     /**
@@ -170,13 +219,13 @@ public class Course {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Course other = (Course) that;
+        CourseVo other = (CourseVo) that;
         return (this.getCourseid() == null ? other.getCourseid() == null : this.getCourseid().equals(other.getCourseid()))
-            && (this.getCoursename() == null ? other.getCoursename() == null : this.getCoursename().equals(other.getCoursename()))
-            && (this.getCategoryid() == null ? other.getCategoryid() == null : this.getCategoryid().equals(other.getCategoryid()))
-            && (this.getProfile() == null ? other.getProfile() == null : this.getProfile().equals(other.getProfile()))
-            && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
-            && (this.getImgurl() == null ? other.getImgurl() == null : this.getImgurl().equals(other.getImgurl()));
+                && (this.getCoursename() == null ? other.getCoursename() == null : this.getCoursename().equals(other.getCoursename()))
+                && (this.getCategoryid() == null ? other.getCategoryid() == null : this.getCategoryid().equals(other.getCategoryid()))
+                && (this.getProfile() == null ? other.getProfile() == null : this.getProfile().equals(other.getProfile()))
+                && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
+                && (this.getImgurl() == null ? other.getImgurl() == null : this.getImgurl().equals(other.getImgurl()));
     }
 
     @Override
@@ -197,7 +246,6 @@ public class Course {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
-
         sb.append(", courseid=").append(courseid);
         sb.append(", coursename=").append(coursename);
         sb.append(", categoryid=").append(categoryid);

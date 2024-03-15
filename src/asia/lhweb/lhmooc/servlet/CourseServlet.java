@@ -5,7 +5,9 @@ import asia.lhweb.lhmooc.common.Result;
 import asia.lhweb.lhmooc.http.LhHttpServlet;
 import asia.lhweb.lhmooc.http.LhRequest;
 import asia.lhweb.lhmooc.http.LhResponse;
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.Course;
+import asia.lhweb.lhmooc.model.vo.CourseVo;
 import asia.lhweb.lhmooc.service.CourseService;
 import asia.lhweb.lhmooc.service.impl.CourseServiceImpl;
 import com.google.gson.Gson;
@@ -101,6 +103,40 @@ public class CourseServlet extends LhHttpServlet {
         resp.writeToJson(jsonResponse);
     }
 
+    /**
+     * 根据类别ID获取该类别的课程列表。
+     *
+     * @param req  请求对象，包含客户端请求的数据。
+     * @param resp 响应对象，用于向客户端返回处理结果。
+     */
+    public void pageAndByCategory(LhRequest req, LhResponse resp) {
+        String id = req.getParameter("categoryId");
+        String sortType = req.getParameter("sortType");//// 1收藏 2点赞 3评论 4时间
+        String pageNo = req.getParameter("pageNo");
+        String pageSize = req.getParameter("pageSize");
+
+        // 检查请求中是否提供了必要的categoryId参数
+        if (id == null || id.isEmpty()) {
+            id = "1";
+        }
+        if (sortType == null || sortType.isEmpty()) {
+            sortType = "";
+        }
+        if (pageNo == null || pageNo.isEmpty()) {
+            pageNo = "1";
+        }
+        if (pageSize == null || pageSize.isEmpty()) {
+            pageSize = "5";
+        }
+        // 从课程分类服务获取全部分类列表
+        Page<CourseVo> page = courseService.pageAndByCategory(Integer.parseInt(id),Integer.parseInt(pageNo),Integer.parseInt(pageSize),sortType);
+
+        // 根据获取的结果，构造相应的JSON响应
+        String jsonResponse = !page.isEmpty() ? gson.toJson(Result.success(page, "获取该类课程成功")) : gson.toJson(Result.error("该类里没有课程！！！"));
+
+        // 将构造的JSON响应写回给客户端
+        resp.writeToJson(jsonResponse);
+    }
 
     @Override
     public void destroy() {

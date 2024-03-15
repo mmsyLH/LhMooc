@@ -42,8 +42,14 @@ public class CategoryServlet extends LhHttpServlet {
         // todo 鉴权！！！  判空！！！
         String pageNo = req.getParameter("pageNo");
         String pageSize = req.getParameter("pageSize");
+        String categoryName = req.getParameter("categoryName");
+        if (categoryName==null||categoryName.isEmpty()){
+            categoryName="";
+        }
+        CourseCategory courseCategory = new CourseCategory();
+        courseCategory.setCategoryname(categoryName);
         // 调用课程分类服务类进行模糊查询课程分类
-        Page<CourseCategory> page = courseCategoryService.page(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        Page<CourseCategory> page = courseCategoryService.page(courseCategory,Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         String presJson = gson.toJson(Result.success(page, "分页查询成功"));
         // 将JSON字符串写入响应对象中
         resp.writeToJson(presJson);

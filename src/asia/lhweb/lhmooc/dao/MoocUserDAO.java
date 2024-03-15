@@ -54,4 +54,14 @@ public interface MoocUserDAO {
      * @return int
      */
     int deleteByid(MoocUser moocUser);
+
+    /**
+     * 分页
+     *
+     * @param moocUser 蕴藏用户
+     * @param parseInt 解析int
+     * @param pageSize 页面大小
+     * @return {@link Page}<{@link MoocUser}>
+     */
+    Page<MoocUser> page(MoocUser moocUser, int parseInt, int pageSize);
 }

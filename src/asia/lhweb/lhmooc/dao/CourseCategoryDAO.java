@@ -62,4 +62,22 @@ public interface CourseCategoryDAO {
      * @return {@link List}<{@link CourseCategory}>
      */
     List<CourseCategory> selectAll(CourseCategory courseCategory);
+
+    /**
+     * 页面
+     *
+     * @param courseCategory 课程类别
+     * @param parseInt       解析int
+     * @param pageSize       页面大小
+     * @return {@link Page}<{@link CourseCategory}>
+     */
+    Page<CourseCategory> page(CourseCategory courseCategory, int parseInt, int pageSize);
+
+    /**
+     * 按id选择一个
+     *
+     * @param courseCategory 课程类别
+     * @return {@link CourseCategory}
+     */
+    CourseCategory selectOneById(CourseCategory courseCategory);
 }

@@ -20,13 +20,14 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
     /**
      * 页面
      *
-     * @param parseInt 解析int
-     * @param pageSize 页面大小
+     * @param courseCategory
+     * @param parseInt       解析int
+     * @param pageSize       页面大小
      * @return {@link Page}<{@link CourseCategory}>
      */
     @Override
-    public Page<CourseCategory> page(int parseInt, int pageSize) {
-        return courseDAO.categoryPage(parseInt, pageSize);
+    public Page<CourseCategory> page(CourseCategory courseCategory, int parseInt, int pageSize) {
+        return courseDAO.page(courseCategory,parseInt, pageSize);
     }
 
     /**
@@ -71,6 +72,7 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
      */
     @Override
     public boolean add(CourseCategory category) {
+
         return courseDAO.save(category)!=-1;
     }
 

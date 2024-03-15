@@ -87,13 +87,14 @@ public class MoocUserServiceImpl implements MoocUserService {
      * 页面
      * 分页
      *
+     * @param moocUser
      * @param parseInt 解析int
      * @param pageSize 页面大小
      * @return {@link Page}<{@link MoocUser}>
      */
     @Override
-    public Page<MoocUser> page(int parseInt, int pageSize) {
-        return moocUserDAO.userPage(parseInt, pageSize);
+    public Page<MoocUser> page(MoocUser moocUser, int parseInt, int pageSize) {
+        return moocUserDAO.page(moocUser,parseInt, pageSize);
     }
 
     /**

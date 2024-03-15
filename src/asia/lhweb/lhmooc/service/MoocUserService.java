@@ -41,11 +41,12 @@ public interface MoocUserService{
      * 页面
      * 分页
      *
+     * @param moocUser
      * @param parseInt 解析int
      * @param pageSize 页面大小
      * @return {@link Page}<{@link MoocUser}>
      */
-    Page<MoocUser> page(int parseInt, int pageSize);
+    Page<MoocUser> page(MoocUser moocUser, int parseInt, int pageSize);
 
     /**
      * 更新

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全部课程</title>
+    <title>课程</title>
     <link rel="stylesheet" href="../../css/course.css">
 </head>
 
@@ -15,115 +15,171 @@
         <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
     </iframe>
     <!-- 头部结束 -->
-    <div class="contatiner" style="padding-top: 120px;">
+    <div class="contatiner" style="padding-top: 130px;">
         <div class="main">
             <!--筛选栏-->
             <div id="filter">
 
                 <!--按类别筛选-->
                 <div id="filter-class">
-                    <span>
-                        <h4>类别</h4>
-                    </span><input type="button" value="默认">
-                    <input type="button" value="前端"><input type="button" value="后端">
+
                 </div>
 
                 <!--按排序筛选-->
                 <div id="filter-sort">
                     <span>
                         <h4>排序方式</h4>
-                    </span><input type="button" value="默认">
-                    <input type="button" value="播放量">
-                    <input type="button" value="评论数">
-                    <input type="button" value="收藏量">
-                    <input type="button" value="时间">
+                    </span>
+                    <input type="button" value="默认">
+                    <input type="button" value="收藏数" onclick="searchBySortType(1)">
+                    <input type="button" value="点赞数" onclick="searchBySortType(2)">
+                    <input type="button" value="评论数" onclick="searchBySortType(3)">
+                    <input type="button" value="时间" onclick="searchBySortType(4)">
                 </div>
             </div>
 
             <!--课程列表栏-->
-            <div id="course-list">
+            <div id="course-list" style="padding-bottom: 100px;">
                 <!--课程-->
-                <div class="course">
-                    <img class="course-photo" src="../image/course01.jpg">
-                    <ul class="course-details">
-                        <li>
-                            <h4>零基础产品设计与实践</h4>
-                        </li>
-                        <li>数字化时代下最具竞争力的人才，是具备产品和技术融合能力的复合型人才。
-                            目前岗位缺口大，薪资持续上涨，一将难求。
-                            本课程专题帮你系统掌握产品设计全周期通识与技能，
-                            多维度实践热门工具和实用技巧，助力你快速夯实产品设计基本功，
-                            尽早成为新时代产研融合的抢手人才。
-                        </li>
-                        <li class="videostatus"><span><i class="icon icon-user"></i>484</span>
-                            <span><i class="icon icon-fuwu"></i>3</span>
-                            <span><i class="icon icon-notice"></i>12</span>
-                            <i class="icon icon-shijian"></i>
-                            <input type="date" value="2023-06-21" readonly>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="course">
-                    <img class="course-photo" src="../image/course02.jpg">
-                    <ul class="course-details">
-                        <li>
-                            <h4>零基础产品设计与实践</h4>
-                        </li>
-                        <li>数字化时代下最具竞争力的人才，
-                            是具备产品和技术融合能力的复合型人才。
-                            目前岗位缺口大，薪资持续上涨，一将难求。
-                            本课程专题帮你系统掌握产品设计全周期通识与技能，
-                            多维度实践热门工具和实用技巧，助力你快速夯实产品设计基本功，
-                            尽早成为新时代产研融合的抢手人才。
-                        </li>
-                        <li class="videostatus">
-                            <span><i class="icon icon-user"></i>484</span>
-                            <span><i class="icon icon-fuwu"></i>3</span>
-                            <span><i class="icon icon-notice"></i>12</span>
-                            <i class="icon icon-shijian"></i>
-                            <input type="date" value="2023-06-21" readonly>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="course">
-                    <img class="course-photo" src="../image/course03.jpg">
-                    <ul class="course-details">
-                        <li>
-                            <h4>零基础产品设计与实践</h4>
-                        </li>
-                        <li>数字化时代下最具竞争力的人才，是具备产品和技术融合能力的复合型人才。
-                            目前岗位缺口大，薪资持续上涨，一将难求。
-                            本课程专题帮你系统掌握产品设计全周期通识与技能，
-                            多维度实践热门工具和实用技巧，助力你快速夯实产品设计基本功，
-                            尽早成为新时代产研融合的抢手人才。
-                        </li>
-                        <li class="videostatus"><span><i class="icon icon-user"></i>484</span>
-                            <span><i class="icon icon-fuwu"></i>3</span>
-                            <span><i class="icon icon-notice"></i>12</span>
-                            <i class="icon icon-shijian"></i>
-                            <input type="date" value="2023-06-21" readonly>
-                        </li>
-                    </ul>
-                </div>
-                <!--分页跳转-->
-                <div class="pageNumberColumn">
-                    <span><span>首页</span><span>上一页</span><span>1</span><span>/</span><span>3</span><span>下一页</span><span>尾页</span></span>
-                </div>
             </div>
         </div>
 
         <!-- 尾部开始 -->
         <iframe src="../../component/foot.html" width=100% height=300px marginwidth=0 marginheight=0 frameborder="0"
-            scrolling="no">
+            scrolling="no" style="margin-top: 50px;">
             <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
         </iframe>
         <!-- 尾部结束 -->
 
     </div>
-    <script src="../../js/course.js"></script>
+    <script src="../../js/jquery-3.6.0.js"></script>
+    <script>
+        var categoryList = {};
+        var pageNo = 1; //默认第一页
+        var pageSize = 5; //默认分页2
+        var sortType = 0; //默认排序查询
+        window.onload = function () {
+            loadCategories(); // 在页面加载时加载全部课程分类
+            searchCourseByCategory(1); // 在页面加载时查询全部课程
+        };
+
+        // 加载全部课程分类
+        function loadCategories() {
+            $.ajax({
+                url: 'LhMooc/categoryServlet',
+                type: 'get',
+                data: {
+                    action: "getAll"
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        categoryList = res.data;
+                        console.log("categoryList", categoryList);
+                        fillCategorySelects();
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 填充课程分类
+        function fillCategorySelects() {
+            var filterClass = $("#filter-class");
+            filterClass.empty(); // 清除原来的内容
+
+            // 添加新的类别按钮
+            filterClass.append('<span><h4>类别</h4></span>');
+            $.each(categoryList, function (index, category) {
+                var button = $('<input type="button" class="category-button" value="' + category.categoryname + '">');
+                button.data("category-id", category.categoryid); // 使用 data() 方法来存储 categoryid
+                filterClass.append(button);
+            });
+
+            // 添加点击事件监听器
+            $(".category-button").click(function () {
+                var categoryId = $(this).data("category-id"); // 获取存储的 categoryid
+                console.log("Clicked category id:", categoryId);
+                // 处理点击事件
+                searchCourseByCategory(categoryId);
+            });
+        }
+
+        // 根据课程分类查询课程
+        function searchCourseByCategory(categoryId) {
+            $.ajax({
+                url: 'LhMooc/courseServlet',
+                type: 'get',
+                data: {
+                    action: "pageAndByCategory",
+                    sortType: sortType,
+                    pageNo: pageNo,
+                    pageSize: pageSize,
+                    categoryId: categoryId // 发送所选的分类 ID
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        var data = res.data;
+                        displayCourseList(data.items); // 展示课程列表
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 展示课程列表
+        function displayCourseList(data) {
+            var courseListContainer = $("#course-list");
+            courseListContainer.empty(); // 清空课程列表
+            // 遍历课程数据并填充到页面中
+            $.each(data, function (index, course) {
+                var courseItem = $('<div class="course">');
+                courseItem.append('<img class="course-photo" src="../../images/' + course.imgurl + '">');
+                var courseDetails = $('<ul class="course-details">');
+                courseDetails.append('<li><h4>' + course.coursename + '</h4></li>');
+                courseDetails.append('<li>' + course.profile + '</li>');
+                courseDetails.append('<li class="videostatus">' +
+                    '<span><i class="icon icon-user"></i>收藏数' + course.followCount + '</span>' +
+                    '<span><i class="icon icon-fuwu"></i>点赞数' + course.likeCount + '</span>' +
+                    '<span><i class="icon icon-notice"></i>评论数' + course.commentCount + '</span>' +
+                    '<i class="icon icon-shijian"></i>' +
+                    '<input type="text" value="' + formatDate(course.createtime) + '" readonly>' +
+
+                    '</li>');
+                courseItem.append(courseDetails);
+                courseListContainer.append(courseItem);
+            });
+        }
+
+        // 将日期字符串转换为指定格式（YYYY/MM/DD HH:MM:SS）
+        function formatDate(dateString) {
+            var date = new Date(dateString);
+            var year = date.getFullYear();
+            var month = ('0' + (date.getMonth() + 1)).slice(-2); // 月份从0开始，需要加1，并确保两位数
+            var day = ('0' + date.getDate()).slice(-2); // 确保两位数的日期
+            var hours = ('0' + date.getHours()).slice(-2); // 确保两位数的小时
+            var minutes = ('0' + date.getMinutes()).slice(-2); // 确保两位数的分钟
+            var seconds = ('0' + date.getSeconds()).slice(-2); // 确保两位数的秒钟
+            return year + '/' + month + '/' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+        }
+
+        // 根据排序类型查询课程
+        function searchBySortType(type) {
+            sortType = type; // 更新排序类型
+            searchCourseByCategory(); // 调用查询函数
+        }
+    </script>
 </body>
+
 <style>
     * {
         margin: 0px;
@@ -146,6 +202,7 @@
         background: rgba(0, 0, 0, 0.5);
         z-index: 999;
     }
+
     /*筛选栏*/
     #filter {
         width: 1200px;
@@ -357,6 +414,16 @@
     .pageNumberColumn>span>span:nth-child(6):hover,
     .pageNumberColumn>span>span:nth-child(7):hover {
         color: red;
+    }
+
+    /* 激活状态样式 */
+    .active {
+        background-color: rgba(240, 20, 20, 0.8);
+        color: white;
+    }
+
+    .active:hover {
+        background-color: rgba(240, 20, 20, 0.4);
     }
 </style>
 

@@ -1,5 +1,6 @@
 package asia.lhweb.lhmooc.dao;
 
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.Course;
 
 import java.util.ArrayList;
@@ -30,4 +31,14 @@ public interface CourseDAO {
      * @return boolean
      */
     int save(Course course);
+
+    /**
+     * 根据id查询
+     *
+     * @param course 课程
+     * @return {@link Course}
+     */
+    Course selectOneById(Course course);
+
+    Page<Course> pageByAnd(Course course, int pageNo, int pageSize);
 }

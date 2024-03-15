@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户管理</title>
-    <link rel="stylesheet" href="../../css/manage_station.css">
+    <link rel="stylesheet" href="../../css/manages.css">
 </head>
 
 <body>
@@ -39,7 +39,6 @@
                     </tbody>
                 </table>
                 <div class="pagination" id="pagination">
-                    <!-- Pagination content will be added here -->
                 </div>
             </div>
             <!-- 查询结果区域结束 -->
@@ -119,6 +118,7 @@
                 pageNo = 1;
             }
             var userName = document.getElementById("userName").value.trim();
+            console.log("查询输入框的username",userName)
             $.ajax({
                 url: 'LhMooc/userServlet',
                 type: 'get',

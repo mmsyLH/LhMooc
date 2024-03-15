@@ -116,8 +116,14 @@ public class UserServlet extends LhHttpServlet {
         // todo 鉴权！！！  判空！！！
         String pageNo = req.getParameter("pageNo");
         String pageSize = req.getParameter("pageSize");
+        String userName = req.getParameter("userName");
+        if(userName==null){
+            userName="";
+        }
+        MoocUser moocUser = new MoocUser();
+        moocUser.setUsername(userName);
         // 调用trainService去模糊查询车站
-        Page<MoocUser> page = userService.page(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        Page<MoocUser> page = userService.page(moocUser,Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         gson = new Gson();
         String presJson = gson.toJson(Result.success(page, "分页查询成功"));
         // 将JSON字符串写入响应对象中

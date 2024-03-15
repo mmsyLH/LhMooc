@@ -1,6 +1,8 @@
 package asia.lhweb.lhmooc.service;
 
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.Course;
+import asia.lhweb.lhmooc.model.vo.CourseVo;
 
 import java.util.List;
 
@@ -38,4 +40,7 @@ public interface CourseService {
      * @return boolean
      */
     boolean add(Course course);
+
+
+    Page<CourseVo> pageAndByCategory(int courseCategoryId, int pageNo, int pageSize, String sortType);
 }

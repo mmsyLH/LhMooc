@@ -10,4 +10,14 @@ import asia.lhweb.lhmooc.model.bean.Course;
  */
 public class CourseDAOImpl extends BasicDAO<Course> implements CourseDAO {
 
+    /**
+     * 根据id查询
+     *
+     * @param course 课程
+     * @return {@link Course}
+     */
+    @Override
+    public Course selectOneById(Course course) {
+        return super.selectOneById(course);
+    }
 }
