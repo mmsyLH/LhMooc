@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+    <title>个人中心</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="../../css/geren.css">
+    <link rel="stylesheet" href="../../css/login-res.css">
+    <script type="text/javascript">
+        if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+            alert('朋友，上古浏览器不支持呢~');
+        }
+    </script>
+</head>
+
+<body>
+    <!-- 登录 -->
+    <div id="popBox" class="formBox">
+        <div class="loginMethods">
+            <span class='zhanghao denglu activeLogin'>账号登陆</span>
+            <span class="glyphicon glyphicon-remove closeBox" onclick="showLoginBox()">X</span>
+        </div>
+        <div>
+            <div class="input-items">
+                <form action="">
+                    <div class="zh">
+                        <div class="inputItem">
+                            <input type="text" id='loginusername' class="form-control loginput" placeholder="请输入登录账户"
+                                style='padding-left: 20px;'>
+                        </div>
+                        <div class="inputItem">
+                            <input type="password" id="loginpassword" class="form-control loginput yzminput pswInput"
+                                placeholder="请输入密码">
+                            <a href="" class='iconfont icon-yanjing-guan getMa see'></a>
+                        </div>
+                        <div class="inputItem autoLG">
+                            <label class='autoLogin'>
+                                <input type="checkbox" name="" class="autoLogin1">7天内自动登录</label>
+                            <a href="">找回账号</a>
+                        </div>
+                        <div class="inputItem">
+                            <input type="submit" value="登录" id='loginBtn1' class='loginBtn baseButton' />
+                        </div>
+                    </div>
+                </form>
+
+                <form action="">
+                    <div class="yz">
+                        <div class="inputItem">
+                            <span class='leftspan'>+86</span>
+                            <input type="tel" id="phoneNum" class="form-control loginput" placeholder="短信登陆仅限中国大陆用户">
+                        </div>
+                        <div class="inputItem">
+                            <input type="text" class="form-control loginput yzminput" id="yzm" placeholder="请输入短信验证码">
+                            <a href="" class='getMa'>获取验证码</a>
+                        </div>
+                        <div class="inputItem autoLG">
+                            <label class='autoLogin'>
+                                <input type="checkbox" name="" class="autoLogin1">7天内自动登录</label>
+                            <a href="">找回账号</a>
+                        </div>
+
+                        <div class="inputItem">
+                            <input type="submit" value="登录" id='loginBtn2' class='loginBtn baseButton' />
+                        </div>
+                    </div>
+                </form>
+
+                <div class="loginfooter">
+                    <p>登录即同意慕课网 <a>《隐私政策》</a></p>
+                    <div class="erweima"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 注册 -->
+    <div id="registerBox" class="formBox">
+        <div class="loginMethods">
+            <span class='denglu activeLogin'>快速注册</span>
+            <span class="glyphicon glyphicon-remove closeBox" onclick="showResBox()">X</span>
+        </div>
+        <div>
+            <div class="input-items">
+                <form action="">
+                    <div class="zh rg">
+                        <div class="inputItem">
+                            <input type="tel" id='resusername' class="form-control loginput" placeholder="请输入注册账号"
+                                style='padding-left: 20px;'>
+                        </div>
+                        <div class="inputItem">
+                            <input type="text" id='rgYzm' class="form-control loginput yzminput" placeholder="请输入邮箱验证码">
+                            <a href="" class='getMa'>获取验证码</a>
+                        </div>
+                        <div class="inputItem">
+                            <input type="password" id='respassword' class="form-control loginput yzminput pswInput"
+                                placeholder="请输入8-20位字母数字或字符至少包含两种！">
+                            <a href="" class='iconfont icon-yanjing-guan getMa see'></a>
+                        </div>
+                        <div class="inputItem autoLG">
+                            <label class='autoLogin'>
+                                <input type="checkbox" name="" class="autoLogin1">同意慕课网
+                                <a class='Rxieyi'>《慕课网注册协议》</a>&<a class='Rxieyi'>《隐私政策》</a></label>
+                        </div>
+                        <div class="inputItem">
+                            <input type="submit" value="注册" id='loginBtn3' class='loginBtn baseButton' />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内容区域-->
+    <div id="body-wrap">
+        <header>
+            <iframe src="../../component/heard.html?nav=index" width=100% height=120px marginwidth=0 marginheight=0
+                frameborder="0" scrolling="no" style="position: fixed;z-index: 1001;background-color: LightBlue;">
+                <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
+            </iframe>
+        </header>
+        <main id="content-outer" style="margin-top: 120px;">
+            <div class="layout_page" id="content-inner">
+                <div class="aside_content" id="aside_content">
+                    <div class="card-widget card-info">
+                        <div class="card-content">
+                            <div class="card-info-avatar is-center">
+                                <img class="avatar-img"
+                                    src="https://cdn.jsdelivr.net/gh/laoxuai/assert/images/20200125221102.png"
+                                    alt="avatar">
+                                <div class="author-info__name">欢迎您！罗汉</div>
+                                <div class="author-info__description">我是 "个人简介信息"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-widget card-announcement">
+                        <div class="card-content">
+                            <div class="item-headline">
+                                <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                                <span>一言</span>
+                            </div>
+                            <div id="hitokoto"></div>
+                        </div>
+                    </div>
+
+                    <div class="card-widget card-announcement">
+                        <div class="card-content">
+                            <div class="item-headline">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                <span>今日诗词</span>
+                            </div>
+                            <div id="jinrishici-sentence"></div>
+                        </div>
+                    </div>
+
+                    <!--  个人详情  -->
+                    <div class="card-widget card-webinfo">
+                        <div class="card-content">
+                            <div class="item-headline">
+                                <i class="fa fa-line-chart" aria-hidden="true"></i>
+                                <a href="../userView/gerenIframe/gerenDetail.html" target="gerenContentIframe">个人详情</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 个人播放记录 -->
+                    <div class="card-widget card-webinfo">
+                        <div class="card-content">
+                            <div class="item-headline">
+                                <i class="fa fa-line-chart" aria-hidden="true"></i>
+                                <a href="../userView/gerenIframe/historyVideo.html" target="gerenContentIframe">历史播放记录</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 我的收藏 -->
+                    <div class="card-widget card-webinfo">
+                        <div class="card-content">
+                            <div class="item-headline">
+                                <i class="fa fa-line-chart" aria-hidden="true"></i>
+                                <a href="../userView/gerenIframe/gerenFollow.html" target="gerenContentIframe">我的收藏</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 余额充值 -->
+                    <div class="card-widget card-webinfo">
+                        <div class="card-content">
+                            <div class="item-headline">
+                                <i class="fa fa-line-chart" aria-hidden="true"></i>
+                                <a href="../userView/gerenIframe/recharge.html" target="gerenContentIframe">余额充值</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                 <!-- 内容iframe -->
+                <div class="gerenIframe">
+                    <iframe name="gerenContentIframe" width=1000px height="750px" marginwidth=0 marginheight=0
+                        frameborder="0" scrolling="no">
+                        <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
+                    </iframe>
+                </div>
+
+            </div>
+        </main>
+        <footer id="footer">
+            <!-- 尾部开始 -->
+            <iframe src="../../component/foot.html" width=100% height=300px marginwidth=0 marginheight=0 frameborder="0"
+                scrolling="no" style="margin-top: 50px;">
+                <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
+            </iframe>
+            <!-- 尾部结束 -->
+        </footer>
+    </div>
+
+    <!--   一言、今日诗词   -->
+    <!-- 本例不能添加链接内容，放在此处只是因为此接口比较方便，也许能够解决大部分的需求-->
+    <script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script>
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+
+    <!-- 看板娘 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+
+    <!--鼠标点击效果-->
+    <script src="https://cdn.jsdelivr.net/gh/TRHX/CDN-for-itrhx.com@3.0.8/js/maodian.js"></script>
+
+
+    <script src="../../js/jquery-3.6.0.js"></script>
+    <script src="../../js/login-res.js"></script>
+
+    <script type="text/javascript">
+        console.clear();
+        console.log("%c 有朋自远方来, 不亦说乎.", "background:#24272A; color:#ffffff", "");
+        console.log("%c Github %c", "background:#24272A; color:#ffffff", "", "https://github.com/1072344372");
+        console.log("%c CSDN %c", "background:#24272A; color:#ffffff", "", "https://blog.csdn.net/luohanisme");
+
+        // 浏览器搞笑标题
+        var OriginTitle = document.title;
+        var titleTime;
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) {
+                // $('[rel="icon"]').attr('href', "/funny.ico");
+                document.title = '╭(°A°`)╮ 页面崩溃啦 ~';
+                clearTimeout(titleTime);
+            }
+            else {
+                $('[rel="icon"]').attr('href', "/favicon.ico");
+                document.title = '(ฅ>ω<*ฅ) 噫又好啦 ~' + OriginTitle;
+                titleTime = setTimeout(function () {
+                    document.title = OriginTitle;
+                }, 2000);
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // 判断用户登录状态
+            var user = sessionStorage.getItem("LoginMoocUser");
+            if (!user) {
+                // 如果用户未登录，则提示并跳转到首页
+                alert("您未登录，请先登录！");
+                setTimeout(function () {
+                    window.location.href = "/"; // 跳转到首页
+                }, 1000); // 1秒后跳转
+            }
+        });
+    </script>
+</body>
+
+</html>

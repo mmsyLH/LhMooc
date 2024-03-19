@@ -14,7 +14,7 @@ public class LhMoocConfig {
         // 初始化servlet工厂配置
         ServletFactory.getInstance();
 
-        // 初始化bean工程
+        // 初始化单例bean工程
         BeanFactory.getInstance();
     }
 }

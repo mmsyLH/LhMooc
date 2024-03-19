@@ -34,7 +34,7 @@
                     </tbody>
                 </table>
                 <div class="pagination" id="pagination">
-                    <!-- Pagination content will be added here -->
+                   
                 </div>
             </div>
             <!-- 查询结果区域结束 -->
@@ -67,6 +67,7 @@
         </div>
     </div>
     <script src="../../js/jquery-3.6.0.js"></script>
+    <script src="../../js/manages.js"></script>
     <script>
         var pageSize = 3;
         var categoryList = {}
@@ -74,39 +75,6 @@
         window.onload = function () {
             searchCategory(pageNo); // 在页面加载时查询第一页的课程分类数据
         };
-
-        // 更新导航条内容
-        function updatePagination(pageNo1, totalPages, totalRecords) {
-            var pagination = document.getElementById("pagination");
-            pagination.innerHTML = ""; // 清空之前的内容
-            var ul = document.createElement("ul");
-
-            for (var i = 1; i <= totalPages; i++) {
-                var li = document.createElement("li");
-                var a = document.createElement("a");
-                a.href = "#";
-                a.innerText = i;
-                a.onclick = function () {
-                    searchCategory(this.innerText);
-                };
-                // 是当前页码
-                if (i == pageNo1) {
-                    a.classList.add("active");
-                }
-                li.appendChild(a);
-                ul.appendChild(li);
-            }
-
-            //导航条
-            var totalPageLi = document.createElement("li");
-            totalPageLi.innerHTML = "<a>共" + totalPages + "页</a>";
-            ul.appendChild(totalPageLi);
-            var totalRecordLi = document.createElement("li");
-            totalRecordLi.innerHTML = "<a>共" + totalRecords + "记录</a>";
-            ul.appendChild(totalRecordLi);
-
-            pagination.appendChild(ul);
-        }
 
         //根据分类名称进行模糊查询
         function searchCategory(pageNo) {

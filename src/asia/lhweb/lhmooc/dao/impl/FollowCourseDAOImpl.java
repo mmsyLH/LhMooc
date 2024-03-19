@@ -13,13 +13,5 @@ import java.util.List;
  * @date 2024/03/13
  */
 public class FollowCourseDAOImpl extends BasicDAO<FollowCourse> implements FollowCourseDAO {
-    /**
-     * 选择所有
-     *
-     * @return {@link List}<{@link FollowCourse}>
-     */
-    @Override
-    public List<FollowCourse> selectAll() {
-        return selectAll(new FollowCourse());
-    }
+
 }

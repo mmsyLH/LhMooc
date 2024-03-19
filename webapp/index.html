@@ -6,6 +6,7 @@
     <title>中国铁路12306网站</title>
     <!-- 样式标签 -->
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/login-res.css">
 </head>
 
 <body>
@@ -13,7 +14,6 @@
     <div id="popBox" class="formBox">
         <div class="loginMethods">
             <span class='zhanghao denglu activeLogin'>账号登陆</span>
-            <span class='yzm denglu'>验证码登录</span>
             <span class="glyphicon glyphicon-remove closeBox" onclick="showLoginBox()">X</span>
         </div>
         <div>
@@ -51,7 +51,7 @@
                             <a href="" class='getMa'>获取验证码</a>
                         </div>
                         <div class="inputItem autoLG">
-                            <label  class='autoLogin'>
+                            <label class='autoLogin'>
                                 <input type="checkbox" name="" class="autoLogin1">7天内自动登录</label>
                             <a href="">找回账号</a>
                         </div>
@@ -72,7 +72,7 @@
     <!-- 注册 -->
     <div id="registerBox" class="formBox">
         <div class="loginMethods">
-            <span class='denglu'>快速注册</span>
+            <span class='denglu activeLogin'>快速注册</span>
             <span class="glyphicon glyphicon-remove closeBox" onclick="showResBox()">X</span>
         </div>
         <div>
@@ -93,7 +93,7 @@
                             <a href="" class='iconfont icon-yanjing-guan getMa see'></a>
                         </div>
                         <div class="inputItem autoLG">
-                            <label  class='autoLogin'>
+                            <label class='autoLogin'>
                                 <input type="checkbox" name="" class="autoLogin1">同意慕课网
                                 <a class='Rxieyi'>《慕课网注册协议》</a>&<a class='Rxieyi'>《隐私政策》</a></label>
                         </div>
@@ -106,14 +106,12 @@
             </div>
         </div>
     </div>
-
     <!-- 头部开始 -->
-    <iframe src="./component/heard.html?nav=index" width=100% height=120px 
-       style="position: fixed;z-index: 1001;background-color: LightBlue;">
+    <iframe src="../../component/heard.html?nav=index" width=100% height=120px marginwidth=0 marginheight=0
+        frameborder="0" scrolling="no" style="position: fixed;z-index: 1001;background-color: LightBlue;">
         <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
     </iframe>
     <!-- 头部结束 -->
-
 
     <!-- 内容板块开始 -->
     <div class="container">
@@ -879,6 +877,21 @@
                         <div class="item"><a href="javascript:;"><img src="./images/banner5.png" alt=""></a>
                         </div>
                     </div>
+                    <!-- 左侧按钮区域 -->
+                    <a href="javascript:;" class="indicatorButton left"
+                        style="width: 50px; text-align: center; font-size: 40px;font-weight: bold;">
+                        《
+
+                    </a>
+                    <!-- 左侧按钮区域结束 -->
+
+                    <!-- 左侧按钮区域结束 -->
+                    <!-- 右侧按钮区域 -->
+                    <a href="javascript:;" class="indicatorButton right"
+                        style="width: 50px; text-align: center; font-size: 40px;font-weight: bold;">
+                        》
+                    </a>
+                    <!-- 右侧按钮区域结束 -->
                     <!-- 指示器区域 -->
                     <div class="indicator">
                         <span class="active"></span>
@@ -1266,177 +1279,9 @@
         </div>
         <!-- 内容板块结束 -->
         <script src="./js/index.js"></script>
+        <script src="./js/login-res.js"></script>
         <script src="./js/jquery-3.6.0.js"></script>
     </div>
-    <script>
-        // 登录注册区域Js
-        function showLoginBox() {
-            let popBox = document.querySelector('#popBox');
-            // 如果登录框是显示状态，则隐藏；否则显示
-            if (popBox) {
-                if (getComputedStyle(popBox).display === 'block') {
-                    popBox.style.display = 'none';
-                } else {
-                    popBox.style.display = 'block';
-                }
-            }
-        }
-
-        function showResBox() {
-            let registerBox = document.querySelector('#registerBox');
-            // 如果注册框是显示状态，则隐藏；否则显示
-            if (registerBox) {
-                if (getComputedStyle(registerBox).display === 'block') {
-                    registerBox.style.display = 'none';
-                } else {
-                    registerBox.style.display = 'block';
-                }
-            }
-        }
-        $(document).ready(function () {
-            // 点击登录按钮
-            $('#loginBtn1').click(function (event) {
-                event.preventDefault(); // 阻止表单默认提交行为
-                // 获取用户名和密码
-                var username = $('#loginusername').val();
-                var password = $('#loginpassword').val();
-
-                // 调用ajaxLogin方法进行登录
-                ajaxLogin(username, password);
-            });
-
-            // 点击验证码登录按钮
-            $('#loginBtn2').click(function (event) {
-                event.preventDefault(); // 阻止表单默认提交行为
-
-                // // 获取手机号和验证码
-                // var phoneNum = $('#phoneNum').val();
-                // var yzm = $('#yzm').val();
-
-                // // 调用ajaxLogin方法进行登录
-                // // 此处根据实际需求修改，例如传递phoneNum和yzm参数
-                // ajaxLogin(phoneNum, yzm);
-            });
-
-            // 点击注册按钮
-            $('#loginBtn3').click(function (event) {
-                event.preventDefault(); // 阻止表单默认提交行为
-
-                // 获取注册用户名和密码
-                var resUsername = $('#resusername').val();
-                var resPassword = $('#respassword').val();
-
-                // 调用ajaxRes方法进行注册
-                ajaxRes(resUsername, resPassword);
-            });
-        });
-
-        // ajax登录
-        function ajaxLogin(username, password) {
-            console.log("username", username);
-            console.log("password", password);
-            $.ajax({
-                url: 'LhMooc/userServlet',
-                type: 'get',
-                data: {
-                    action: "login",
-                    username: username,
-                    password: password
-                },
-                dataType: "JSON",
-                success: function (res) {
-                    console.log("返回的res", res);
-                    //转对象
-                    // var jsonObject = $.parseJSON(res)
-                    if (res.code === 200) {
-                        alert("登录成功")
-                        sessionStorage.setItem("MoocUserName", username);
-                    }
-                },
-                error: function (err) {
-                    alert('error', err);
-                    // 只有请求不正常（状态码不为200）才会执行
-                    console.log('error', err);
-                },
-            });
-        }
-
-        // ajax注册
-        function ajaxRes(username, password) {
-            console.log("username", username);
-            console.log("password", password);
-            $.ajax({
-                url: 'LhTomCat/userServlet',
-                type: 'post',
-                data: {
-                    action: "register",
-                    username: username,
-                    password: password
-                },
-                success: function (res) {
-                    console.log("返回的res", res);
-                    //转对象
-                    var jsonObject = $.parseJSON(res)
-                    if (jsonObject.code === 200) {
-                        alert(jsonObject.msg + "<br>3秒后进行跳转")
-                        setTimeout(function name(params) {
-                            // location.href = "login.html";
-                        }, 3000);
-                        // delay(2000);
-                    }
-                },
-                error: function (err) {
-                    console.log('error', err);
-                },
-            });
-        }
-
-        // 注册登录区域结束
-        // 封装自定义弹窗
-        window.alert = function (str) {
-            var shield = document.createElement("div");
-            shield.id = "shield";
-            shield.style.position = "fixed";
-            shield.style.left = "0";
-            shield.style.top = "0";
-            shield.style.width = "100%";
-            shield.style.height = "100%";
-            shield.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // 半透明背景
-            shield.style.zIndex = "25";
-
-            var alertFram = document.createElement("div");
-            alertFram.id = "alertFram";
-            alertFram.style.position = "fixed";
-            alertFram.style.width = "280px";
-            alertFram.style.height = "200px";
-            alertFram.style.left = "50%";
-            alertFram.style.top = "50%";
-            alertFram.style.transform = "translate(-50%, -50%)"; // 居中显示
-            alertFram.style.backgroundColor = "#f9f9f9";
-            alertFram.style.border = "1px solid #ccc";
-            alertFram.style.borderRadius = "8px";
-            alertFram.style.zIndex = "300";
-
-            var strHtml = "<ul style=\"list-style:none;margin:0px;padding:0px;width:100%\">\n";
-            strHtml += " <li style=\"background:#729FFB;text-align:left;padding-left:20px;font-size:14px;font-weight:bold;height:25px;line-height:25px;border-top-left-radius: 8px;border-top-right-radius: 8px;color:white\">消息提示框~</li>\n";
-            strHtml += " <li style=\"background:#f9f9f9;text-align:center;font-size:12px;height:95px;line-height:95px;border-left:1px solid #ccc;border-right:1px solid #ccc;color:#333\">" + str + "</li>\n";
-            strHtml += " <li style=\"background:#f9f9f9;text-align:center;font-weight:bold;height:30px;line-height:30px; border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;\"><input type=\"button\" value=\"确 定\" onclick=\"doOk()\" style=\"width:80px;height:30px;background:#007bff !important;color:white !important;border:1px solid #007bff !important;font-size:14px;outline:none;margin-top: 3px;padding:0;border-radius: 4px;text-align: center\"/></li>\n"; // 修改按钮样式，添加!important关键字
-            strHtml += "</ul>\n";
-            alertFram.innerHTML = strHtml;
-
-            document.body.appendChild(shield);
-            document.body.appendChild(alertFram);
-
-            this.doOk = function () {
-                alertFram.style.display = "none";
-                shield.style.display = "none";
-            }
-
-            alertFram.focus();
-            document.body.onselectstart = function () { return false; };
-        }
-
-    </script>
 </body>
 <style>
 

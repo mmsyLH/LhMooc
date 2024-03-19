@@ -24,6 +24,10 @@ public interface LhMoocConstant {
      */
     String ACTION_NAME = "action";
     /**
+     * Mooc img目录
+     */
+    String MOOC_IMG_DIRECTORY="";
+    /**
      * 最大请求大小
      */
     int MAX_REQUEST_SIZE = 1024 * 1024*50; // 设置最大请求大小为50MB

@@ -5,24 +5,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>课程</title>
+    <link rel="stylesheet" href="../../css/base.css">
     <link rel="stylesheet" href="../../css/course.css">
+    <link rel="stylesheet" href="../../css/login-res.css">
 </head>
 
 <body>
+    <!-- 登录 -->
+    <div id="popBox" class="formBox">
+        <div class="loginMethods">
+            <span class='zhanghao denglu activeLogin'>账号登陆</span>
+            <span class="glyphicon glyphicon-remove closeBox" onclick="showLoginBox()">X</span>
+        </div>
+        <div>
+            <div class="input-items">
+                <form action="">
+                    <div class="zh">
+                        <div class="inputItem">
+                            <input type="text" id='loginusername' class="form-control loginput" placeholder="请输入登录账户"
+                                style='padding-left: 20px;'>
+                        </div>
+                        <div class="inputItem">
+                            <input type="password" id="loginpassword" class="form-control loginput yzminput pswInput"
+                                placeholder="请输入密码">
+                            <a href="" class='iconfont icon-yanjing-guan getMa see'></a>
+                        </div>
+                        <div class="inputItem autoLG">
+                            <label class='autoLogin'>
+                                <input type="checkbox" name="" class="autoLogin1">7天内自动登录</label>
+                            <a href="">找回账号</a>
+                        </div>
+                        <div class="inputItem">
+                            <input type="submit" value="登录" id='loginBtn1' class='loginBtn baseButton' />
+                        </div>
+                    </div>
+                </form>
+
+                <form action="">
+                    <div class="yz">
+                        <div class="inputItem">
+                            <span class='leftspan'>+86</span>
+                            <input type="tel" id="phoneNum" class="form-control loginput" placeholder="短信登陆仅限中国大陆用户">
+                        </div>
+                        <div class="inputItem">
+                            <input type="text" class="form-control loginput yzminput" id="yzm" placeholder="请输入短信验证码">
+                            <a href="" class='getMa'>获取验证码</a>
+                        </div>
+                        <div class="inputItem autoLG">
+                            <label class='autoLogin'>
+                                <input type="checkbox" name="" class="autoLogin1">7天内自动登录</label>
+                            <a href="">找回账号</a>
+                        </div>
+
+                        <div class="inputItem">
+                            <input type="submit" value="登录" id='loginBtn2' class='loginBtn baseButton' />
+                        </div>
+                    </div>
+                </form>
+
+                <div class="loginfooter">
+                    <p>登录即同意慕课网 <a>《隐私政策》</a></p>
+                    <div class="erweima"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 注册 -->
+    <div id="registerBox" class="formBox">
+        <div class="loginMethods">
+            <span class='denglu activeLogin'>快速注册</span>
+            <span class="glyphicon glyphicon-remove closeBox" onclick="showResBox()">X</span>
+        </div>
+        <div>
+            <div class="input-items">
+                <form action="">
+                    <div class="zh rg">
+                        <div class="inputItem">
+                            <input type="tel" id='resusername' class="form-control loginput" placeholder="请输入注册账号"
+                                style='padding-left: 20px;'>
+                        </div>
+                        <div class="inputItem">
+                            <input type="text" id='rgYzm' class="form-control loginput yzminput" placeholder="请输入邮箱验证码">
+                            <a href="" class='getMa'>获取验证码</a>
+                        </div>
+                        <div class="inputItem">
+                            <input type="password" id='respassword' class="form-control loginput yzminput pswInput"
+                                placeholder="请输入8-20位字母数字或字符至少包含两种！">
+                            <a href="" class='iconfont icon-yanjing-guan getMa see'></a>
+                        </div>
+                        <div class="inputItem autoLG">
+                            <label class='autoLogin'>
+                                <input type="checkbox" name="" class="autoLogin1">同意慕课网
+                                <a class='Rxieyi'>《慕课网注册协议》</a>&<a class='Rxieyi'>《隐私政策》</a></label>
+                        </div>
+                        <div class="inputItem">
+                            <input type="submit" value="注册" id='loginBtn3' class='loginBtn baseButton' />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- 头部开始 -->
     <iframe src="../../component/heard.html?nav=index" width=100% height=120px marginwidth=0 marginheight=0
         frameborder="0" scrolling="no" style="position: fixed;z-index: 1001;background-color: LightBlue;">
         <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
     </iframe>
     <!-- 头部结束 -->
+
     <div class="contatiner" style="padding-top: 130px;">
-        <div class="main">
+        <div class="main" style="min-height: 600px;">
             <!--筛选栏-->
             <div id="filter">
 
                 <!--按类别筛选-->
                 <div id="filter-class">
-
+                        
                 </div>
 
                 <!--按排序筛选-->
@@ -30,17 +130,20 @@
                     <span>
                         <h4>排序方式</h4>
                     </span>
-                    <input type="button" value="默认">
-                    <input type="button" value="收藏数" onclick="searchBySortType(1)">
-                    <input type="button" value="点赞数" onclick="searchBySortType(2)">
-                    <input type="button" value="评论数" onclick="searchBySortType(3)">
-                    <input type="button" value="时间" onclick="searchBySortType(4)">
+                    <input type="button" value="默认" class="active" onclick="changeSortButtonStyle(this)">
+                    <input type="button" value="收藏数" onclick="changeSortButtonStyle(this); searchBySortType(1)">
+                    <input type="button" value="点赞数" onclick="changeSortButtonStyle(this); searchBySortType(2)">
+                    <input type="button" value="评论数" onclick="changeSortButtonStyle(this); searchBySortType(3)">
+                    <input type="button" value="时间" onclick="changeSortButtonStyle(this); searchBySortType(4)">
                 </div>
             </div>
 
             <!--课程列表栏-->
             <div id="course-list" style="padding-bottom: 100px;">
                 <!--课程-->
+            </div>
+            <div class="pagination" id="pagination">
+
             </div>
         </div>
 
@@ -53,17 +156,20 @@
 
     </div>
     <script src="../../js/jquery-3.6.0.js"></script>
+    <script src="../../js/manages.js"></script>
+    <script src="../../js/login-res.js"></script>
     <script>
         var categoryList = {};
         var pageNo = 1; //默认第一页
-        var pageSize = 5; //默认分页2
+        var pageSize = 3; //默认分页2
         var sortType = 0; //默认排序查询
+        var categoryIdVar = 1;//默认按分类一个去查询
         window.onload = function () {
             loadCategories(); // 在页面加载时加载全部课程分类
-            searchCourseByCategory(1); // 在页面加载时查询全部课程
+            searchCourseByCategory(categoryIdVar); // 在页面加载时查询全部课程
         };
 
-        // 加载全部课程分类
+        // 查询全部课程分类
         function loadCategories() {
             $.ajax({
                 url: 'LhMooc/categoryServlet',
@@ -103,14 +209,25 @@
             // 添加点击事件监听器
             $(".category-button").click(function () {
                 var categoryId = $(this).data("category-id"); // 获取存储的 categoryid
-                console.log("Clicked category id:", categoryId);
                 // 处理点击事件
                 searchCourseByCategory(categoryId);
+
+                // 移除其他按钮的激活样式
+                $(".category-button").removeClass("active");
+                // 添加当前点击按钮的激活样式
+                $(this).addClass("active");
             });
+
+            // 设置第一个分类按钮为 active
+            $(".category-button").first().addClass("active");
         }
+
+
 
         // 根据课程分类查询课程
         function searchCourseByCategory(categoryId) {
+            console.log("根据课程分类查询课程的categoryId" + categoryId)
+            categoryIdVar = categoryId;
             $.ajax({
                 url: 'LhMooc/courseServlet',
                 type: 'get',
@@ -119,13 +236,15 @@
                     sortType: sortType,
                     pageNo: pageNo,
                     pageSize: pageSize,
-                    categoryId: categoryId // 发送所选的分类 ID
+                    categoryId: categoryIdVar // 发送所选的分类 ID
                 },
                 dataType: "JSON",
                 success: function (res) {
                     if (res.code === 200) {
                         var data = res.data;
+                        console.log("data", data)
                         displayCourseList(data.items); // 展示课程列表
+                        updatePagination(data.pageNo, data.pageTotalCount, data.totalRow);
                     } else {
                         alert(res.msg);
                     }
@@ -175,7 +294,15 @@
         // 根据排序类型查询课程
         function searchBySortType(type) {
             sortType = type; // 更新排序类型
-            searchCourseByCategory(); // 调用查询函数
+            searchCourseByCategory(categoryIdVar); // 传递当前选定的分类 categoryId
+        }
+
+        // 改变排序按钮样式
+        function changeSortButtonStyle(button) {
+            // 移除其他按钮的激活样式
+            $("#filter-sort input").removeClass("active");
+            // 添加当前点击按钮的激活样式
+            $(button).addClass("active");
         }
     </script>
 </body>
@@ -184,7 +311,6 @@
     * {
         margin: 0px;
         padding: 0px;
-
     }
 
     body {
@@ -203,95 +329,50 @@
         z-index: 999;
     }
 
-    /*筛选栏*/
+    /* 筛选栏 */
     #filter {
         width: 1200px;
         overflow: hidden;
         margin: 0 auto;
     }
 
-    /*类别筛选栏*/
+    /* 类别筛选栏 */
     #filter-class {
         height: 38px;
         background-color: white;
         border-radius: 10px 10px 0 0;
     }
 
-    #filter-class>span {
-        font-size: 15px;
-        margin-top: 8px;
-        margin-left: 20px;
-        display: inline-block;
-    }
-
-    #filter-class>input {
-        font-size: 13px;
-        margin-left: 30px;
-        height: 25px;
-        padding-top: 3px;
-        padding-bottom: 5px;
-        padding-left: 8px;
-        padding-right: 8px;
-        /*width: 40px;*/
-        /*border: 0.5px solid lightgrey;*/
-        border: 0px;
-        cursor: pointer;
-        border-radius: 12px;
-        color: grey;
-        background-color: white;
-    }
-
-    #filter-class input:nth-child(2) {
-        background-color: rgba(240, 20, 20, 0.8);
-        color: white;
-    }
-
-    #filter-class>input:hover {
-        color: white;
-        background-color: rgba(240, 20, 20, 0.4);
-    }
-
-    /*排序筛选栏*/
+    /* 排序筛选栏 */
     #filter-sort {
         margin-top: 1.5px;
         height: 38px;
         background-color: white;
     }
 
-    #filter-sort>span {
+    span {
         font-size: 15px;
         margin-top: 8px;
         margin-left: 20px;
         display: inline-block;
     }
 
-    #filter-sort>input {
+   .contatiner input {
         font-size: 13px;
         margin-left: 30px;
+        height: 25px;
         padding-top: 3px;
         padding-bottom: 5px;
         padding-left: 8px;
         padding-right: 8px;
-        height: 25px;
-        cursor: pointer;
-
         border: 0px;
+        cursor: pointer;
         border-radius: 12px;
         color: grey;
         background-color: white;
     }
 
-    #filter-sort input:nth-child(2) {
-        background-color: rgba(240, 20, 20, 0.8);
-        color: white;
-    }
-
-    #filter-sort>input:hover {
-        color: white;
-        background-color: rgba(240, 20, 20, 0.4);
-    }
-
-    /*课程列表栏*/
+    /* 课程列表栏 */
     #course-list {
         width: 1200px;
         overflow: hidden;
@@ -299,10 +380,9 @@
         margin-top: 1px;
         background-color: white;
         border-radius: 0 0 10px 10px;
-
     }
 
-    /*课程*/
+    /* 课程 */
     .course {
         margin-top: 40px;
         margin-left: 50px;
@@ -313,9 +393,8 @@
     }
 
     .course:hover {
-        /*设置阴影效果*/
+        /* 设置阴影效果 */
         box-shadow: 0px 5px 8px 1px rgb(128, 128, 128);
-
         margin-left: 45px;
     }
 
@@ -328,20 +407,16 @@
         border-radius: 7px;
     }
 
-    /*课程详情*/
+    /* 课程详情 */
     .course-details {
         float: left;
-        /*margin-top: 10px;*/
+        /* margin-top: 10px; */
         margin-left: 40px;
         list-style-type: none;
     }
 
     .course-details>li {
-        width: 650px;
-    }
-
-    .course-details>li:nth-child(1) {
-        /*设置悬停指针样式*/
+        /* 设置悬停指针样式 */
         cursor: pointer;
         margin-top: 15px;
         width: 650px;
@@ -362,7 +437,7 @@
         width: 650px;
     }
 
-    /*课程发布时间*/
+    /* 课程发布时间 */
     .videostatus>input {
         border: 0px;
         font-size: 15px;
@@ -375,47 +450,6 @@
         color: black;
     }
 
-    /*页码跳转栏*/
-    .pageNumberColumn {
-        margin-top: 20px;
-        height: 20px;
-        overflow: hidden;
-        /*background-color: gray;*/
-        margin-bottom: 30px;
-    }
-
-    .pageNumberColumn>span {
-        width: 1200px;
-        /*background-color: dodgerblue;*/
-        display: inline-block;
-        text-align: center;
-    }
-
-    .pageNumberColumn>span>span:nth-child(1),
-    .pageNumberColumn>span>span:nth-child(2) {
-        cursor: pointer;
-        margin-right: 30px;
-    }
-
-    .pageNumberColumn>span>span:nth-child(3),
-    .pageNumberColumn>span>span:nth-child(4),
-    .pageNumberColumn>span>span:nth-child(5) {
-        margin-right: 30px;
-    }
-
-    .pageNumberColumn>span>span:nth-child(6),
-    .pageNumberColumn>span>span:nth-child(7) {
-        cursor: pointer;
-        margin-right: 30px;
-    }
-
-    .pageNumberColumn>span>span:nth-child(1):hover,
-    .pageNumberColumn>span>span:nth-child(2):hover,
-    .pageNumberColumn>span>span:nth-child(6):hover,
-    .pageNumberColumn>span>span:nth-child(7):hover {
-        color: red;
-    }
-
     /* 激活状态样式 */
     .active {
         background-color: rgba(240, 20, 20, 0.8);
@@ -424,6 +458,46 @@
 
     .active:hover {
         background-color: rgba(240, 20, 20, 0.4);
+
+    }
+
+    /* 分页 */
+    .pagination {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .pagination ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .pagination ul li {
+        display: inline-block;
+        margin: 0 5px;
+    }
+
+    .pagination ul li a {
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        color: #333;
+    }
+
+    .pagination ul li a.active {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    .pagination ul li a:hover {
+        background-color: #f0f0f0;
+    }
+
+    .pagination ul li a.active {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
     }
 </style>
 

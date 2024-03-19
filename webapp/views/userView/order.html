@@ -23,7 +23,7 @@
         <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
     </iframe>
     <!-- 头部结束 -->
-    <main class='mainBGC' >
+    <main class='mainBGC'>
         <div class="cartHeader">
             <div class="myCart">
                 <div class='leftMyCart'>
@@ -130,5 +130,18 @@
     <script src="../../js/jquery-3.6.0.js"></script>
     <script src="../../js/order.js"></script>
 </body>
+<script>
+    $(document).ready(function () {
+        // 判断用户登录状态
+        var user = sessionStorage.getItem("LoginMoocUser");
+        if (!user) {
+            // 如果用户未登录，则提示并跳转到首页
+            alert("您未登录，请先登录！");
+            setTimeout(function () {
+                window.location.href = "/"; // 跳转到首页
+            }, 1000); // 1秒后跳转
+        }
+    });
+</script>
 
 </html>

@@ -41,4 +41,11 @@ public interface CourseDAO {
     Course selectOneById(Course course);
 
     Page<Course> pageByAnd(Course course, int pageNo, int pageSize);
+
+    /**
+     * 按id选择
+     *
+     * @param parseInt 解析int
+     * @return {@link Course}
+     */
 }

@@ -43,8 +43,12 @@ public class LhRequest {
             while (true) {
                 // 读取数据到缓冲区
                 int n = socketChannel.read(byteBuffer);
-                if (n <= 0) {
-                    // 连接关闭
+                if (n == -1) {
+                    //关闭通道
+                    socketChannel.close();
+                    break;
+                }
+                if (n == 0) {
                     break;
                 }
                 bytesRead += n;
@@ -63,11 +67,16 @@ public class LhRequest {
                 byteBuffer.clear();
             }
             String requestData = requestDataBuilder.toString();
-            // System.err.println("requestData: " + requestData);
             // 处理请求数据
             processRequestData(requestData);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 客户端发生异常
+            try {
+                socketChannel.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 

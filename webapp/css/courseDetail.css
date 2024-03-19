@@ -1,0 +1,93 @@
+body{
+    font: 14px / 1.5 "PingFang SC", "微软雅黑", "Microsoft YaHei", Helvetica, "Helvetica Neue", Tahoma, Arial, sans-serif;
+}
+/* 课程目录开始 */
+.catalogue-container {
+    margin-bottom: 60px;
+}
+.wrapper {
+    width: 1152px;
+    margin: 0 auto;
+}
+.catalogue-container .title-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+.catalogue-container .title-box .left {
+    width: 117px;
+    height: 28px;
+    background-image: url("../images/catalogue-title.png");
+    background-size: cover;
+    background-position: center;
+}
+.catalogue-container .title-box .right {
+    display: block;
+    font-size: 16px;
+    letter-spacing: 0;
+}
+.catalogue-container .catalogue-box {
+    overflow: hidden;
+}
+.catalogue-container .catalogue-box .last-dashed {
+    position: relative;
+}
+.catalogue-container .catalogue-box .catague-item {
+    position: relative;
+    margin-bottom: 2px;
+    float: right;
+    width: 1108px;
+    border: 1px solid #f6f9fa;
+}
+.catalogue-container .catalogue-box .catague-item .name-box {
+    width: 1108px;
+    height: 56px;
+    background: #f6f9fa;
+    padding: 20px 12px 20px 16px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+.catalogue-container .catalogue-box .catague-item .name-box .left {
+    font-size: 16px;
+    color: #1c1f21;
+    font-weight: 600;
+}
+.catalogue-container .catalogue-box .catague-item .name-box .right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.catalogue-container .catalogue-box .catague-item .name-box .right .time-box {
+    font-size: 12px;
+    color: #93999f;
+    margin-right: 12px;
+}
+a:link, a:visited {
+    color: #1c1f21;
+}
+.catalogue-container .catalogue-box .catague-item .media-box {
+    display: none;
+    margin-top: 10px;
+    padding: 0 12px 0 16px;
+}
+.catalogue-container .catalogue-box .catague-item .media-box .istrysee {
+    cursor: pointer;
+}
+.catalogue-container .catalogue-box .catague-item .media-box li {
+    margin-bottom: 17px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.catalogue-container .catalogue-box .catague-item .media-box li .left, .catalogue-container .catalogue-box .catague-item .media-box li .right {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #1c1f21;
+    line-height: 24px;
+}
+/* 课程目录结束 */

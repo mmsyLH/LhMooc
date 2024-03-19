@@ -1,5 +1,9 @@
 package asia.lhweb.lhmooc.dao;
 
+import asia.lhweb.lhmooc.model.bean.CourseChapter;
+
+import java.util.List;
+
 /**
  * 课程章节DAO
  *
@@ -10,4 +14,11 @@ package asia.lhweb.lhmooc.dao;
  */
 public interface CourseChapterDAO {
 
+    /**
+     * 选择所有
+     *
+     * @param courseChapter 章课程
+     * @return {@link List}<{@link CourseChapter}>
+     */
+    List<CourseChapter> selectAll(CourseChapter courseChapter);
 }

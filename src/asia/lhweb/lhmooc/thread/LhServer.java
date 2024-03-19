@@ -36,7 +36,6 @@ public class LhServer extends Thread {
                     if (selectionKey.isAcceptable()) {// 是否 可以接受Accept
                         // 获取通道  selectionKey.channel()返回值是所有通道的父类
                         ServerSocketChannel channel = (ServerSocketChannel) selectionKey.channel();
-                        System.out.println("--------------------------------");
                         // System.out.println("工具人查看到，可以Accept");
                         SocketChannel socketChannel = channel.accept();
                         // 设置为非阻塞
@@ -51,6 +50,7 @@ public class LhServer extends Thread {
                         // 设置为非阻塞
                         socketChannel.configureBlocking(false);
                         LhRequest lhRequest = new LhRequest(socketChannel);
+
                         if (lhRequest.getUrl() == null) {
                             socketChannel.close();
                         } else {
@@ -63,9 +63,8 @@ public class LhServer extends Thread {
                     }
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
-
         }
     }
 

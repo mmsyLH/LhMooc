@@ -1,5 +1,9 @@
 package asia.lhweb.lhmooc.dao;
 
+import asia.lhweb.lhmooc.model.bean.CourseVideo;
+
+import java.util.List;
+
 /**
  * 课程视频服务
  *
@@ -10,4 +14,11 @@ package asia.lhweb.lhmooc.dao;
  */
 public interface CourseVideoDAO {
 
+    /**
+     * 选择所有
+     *
+     * @param courseVideo 课程视频
+     * @return {@link List}<{@link CourseVideo}>
+     */
+    List<CourseVideo> selectAll(CourseVideo courseVideo);
 }

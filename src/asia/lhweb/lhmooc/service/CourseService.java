@@ -1,5 +1,6 @@
 package asia.lhweb.lhmooc.service;
 
+import asia.lhweb.lhmooc.common.Result;
 import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.Course;
 import asia.lhweb.lhmooc.model.vo.CourseVo;
@@ -22,7 +23,7 @@ public interface CourseService {
      * @param sort 排序方式
      * @return {@link List}<{@link Course}>
      */
-    List<Course> getSortCoursesTop8(String sort);
+    List<CourseVo> getSortCoursesTop8(String sort);
 
 
     /**
@@ -43,4 +44,12 @@ public interface CourseService {
 
 
     Page<CourseVo> pageAndByCategory(int courseCategoryId, int pageNo, int pageSize, String sortType);
+
+    /**
+     * 获取课程细节
+     *
+     * @param parseInt 解析int
+     * @return {@link Result}<{@link CourseVo}>
+     */
+    Result<CourseVo> getCourseDetail(int parseInt);
 }

@@ -1,0 +1,253 @@
+/* 登录注册区域样式 */
+/* 共享样式 */
+.formBox {
+    position: fixed;
+    opacity: 1 !important;
+    padding: 30px 30px 0;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 12px 24px 0 rgb(28 31 33 / 10%);
+    top: 50%;
+    left: 50%;
+    background-color: #fff;
+    transform: translate(-50%, -50%);
+    z-index: 300;
+    font-size: 18px;
+    font-weight: 700;
+    border: 3px solid #ccc; /* 实线边框 */
+}
+
+#popBox {
+    display: none;
+}
+
+#registerBox {
+    height: 430px;
+    display: none;
+}
+
+/* 登录区域 */
+#popBox .loginMethods,
+#registerBox .loginMethods {
+    overflow: hidden;
+}
+
+#popBox .loginMethods span,
+#registerBox .loginMethods span {
+    line-height: 40px;
+    float: left;
+    margin-right: 20px;
+}
+
+#popBox .loginMethods span:hover,
+#registerBox .loginMethods span:hover {
+    color: #f20d0d;
+}
+
+#popBox .activeLogin,
+#registerBox .activeLogin {
+    color: #f20d0d;
+}
+
+#popBox .activeLogin:after,
+#registerBox .activeLogin:after {
+    content: " ";
+    width: 16px;
+    height: 4px;
+    background: #f20d0d;
+    border-radius: 2px;
+    display: block;
+    margin: 0 auto;
+}
+
+#popBox .closeBox,
+#registerBox .closeBox {
+    float: right;
+    line-height: 28px;
+}
+
+#popBox .closeBox:hover,
+#registerBox .closeBox:hover {
+    transform: scale(1.2);
+    color: #f20d0d;
+}
+
+#popBox .zhanghao:hover:after,
+#popBox .yzm:hover:after,
+#registerBox .zhanghao:hover:after,
+#registerBox .yzm:hover:after {
+    content: " ";
+    width: 16px;
+    height: 4px;
+    background: #f20d0d;
+    border-radius: 2px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* 输入项目样式 */
+.input-items {
+    display: block;
+}
+
+.inputItem {
+    position: relative;
+    margin-top: 20px;
+}
+
+.loginput {
+    width: 100%;
+    max-width: 300px;
+    max-height: 100px;
+    padding: 20px;
+    border: black 1px solid;
+    padding-left: 50px;
+    border-radius: 6px !important;
+}
+
+.leftspan {
+    z-index: 20;
+    position: absolute;
+    left: 6px;
+    top: 10px;
+}
+
+.yzminput {
+    padding-left: 20px;
+}
+
+.getMa {
+    position: absolute;
+    right: 15%;
+    top: 20px;
+}
+
+.see {
+    font-size: 20px !important;
+}
+
+.see:hover {
+    text-decoration: none;
+}
+
+.inputItem p {
+    font-size: 12px;
+    color: red;
+}
+
+.autoLG {
+    font-weight: normal;
+    font-size: 14px;
+    margin-top: 0;
+    overflow: hidden;
+}
+
+.autoLogin {
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.autoLogin1 {
+    margin-right: 6px;
+}
+
+.autoLG a {
+    float: right;
+}
+
+.Rxieyi {
+    float: none;
+}
+
+.loginBtn {
+    display: block;
+    width: 100%;
+    height: 50px;
+    background-color: #f20d0d;
+    border-radius: 25px;
+    text-align: center;
+    line-height: 50px;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    color: #fff;
+}
+
+.loginBtn:hover {
+    color: #fff;
+    background-color: #c20a0a;
+    text-decoration: none;
+}
+
+.yz {
+    display: none;
+}
+
+.loginfooter {
+    text-align: center;
+}
+
+.loginfooter span {
+    color: #aaa;
+    font-size: 14px;
+    position: relative;
+}
+
+.loginfooter span::before,
+.loginfooter span::after {
+    content: '';
+    width: 24px;
+    height: 1px;
+    position: absolute;
+    background: rgba(28, 31, 33, .1);
+    top: 7px;
+    left: -32px;
+}
+
+.loginfooter span::after {
+    left: 90px;
+}
+
+.lgmd {
+    width: 140px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.lgmd a {
+    font-size: 20px;
+    color: #9199a1;
+}
+
+.lgmd a:first-child:hover {
+    color: red;
+    text-decoration: none;
+}
+
+.lgmd a:nth-child(2):hover {
+    color: green;
+    text-decoration: none;
+}
+
+.lgmd a:last-child:hover {
+    text-decoration: none;
+    color: blue;
+}
+
+.loginfooter p {
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.erweima {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    /* background-image: url(../images/erweima.png); */
+    width: 60px;
+    height: 60px;
+    border-bottom-right-radius: 25px;
+}
+
+/* 登录注册区域结束 */

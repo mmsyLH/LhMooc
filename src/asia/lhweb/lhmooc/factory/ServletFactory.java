@@ -107,11 +107,11 @@ public class ServletFactory {
             throw new RuntimeException("没有这个servlet,反射出错了");
         }
         System.out.println("url=" + url);
-        System.out.println("--------------------------------");
+        // System.out.println("--------------------------------");
         // 根据得到的路径，对其扫描，把类的全路径保存在classFullPathList钟
         String path = url.getFile();
         // System.out.println("得到的路径path：" + path);
-        System.out.println("--------------------------------");
+        // System.out.println("--------------------------------");
 
         // 根据操作系统不同，处理路径分隔符
         String separator = File.separator;

@@ -8,11 +8,23 @@
     /* 去掉下划线 */
     text-decoration: none;
 }
+
 body {
     margin: 0;
     padding: 0;
 }
 
+body,
+li,
+span,
+p {
+    cursor: url(https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cursor/texto.cur), auto;
+}
+
+a {
+    background-color: transparent;
+    cursor: url(https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cursor/ayuda.cur), auto;
+}
 
 p {
     display: block;
@@ -74,7 +86,8 @@ p {
 
 .baseButton {
     min-width: 80px;
-    height: 44px;
+    max-width: 300px;
+    height: 40px;
     line-height: 34px;
     padding: 4px 10px;
     border: 1px solid #dedede;

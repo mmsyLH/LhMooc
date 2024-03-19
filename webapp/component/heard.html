@@ -29,21 +29,18 @@
                 </li>
                 <li class="menu-item menu-line">|</li>
                 <li class="menu-item menu-nav" role="menuitem">
-                    <a data-href="view/index.html" name="g_href" data-type="2" data-redirect="Y" aria-expanded="true"
-                        aria-haspopup="true" aria-controls="megamenu-2" href="javascript:;" class="menu-nav-hd item"
-                        id="my12306">个人中心
+                    <a onclick="window.parent.location.href = '../views/userView/geren.html';" target="_parent">个人中心
                         <i class="caret"></i>
                     </a>
                 </li>
                 <li class="menu-item menu-line">|</li>
-                <li id="J-header-login" class="menu-item menu-login" role="menuitem">
+                <li id="J-header-login" style="display: none" class="menu-item menu-login" role="menuitem">
                     <a onclick="window.parent.showLoginBox();" target="_parent">登录</a>
                     <a onclick="window.parent.showResBox();" target="_parent">注册</a>
                 </li>
-                <li id="J-header-logout" style="display: none" class="menu-item menu-nav menu-login" role="menuitem">
-                    您好，<a name="g_href" data-type="2" data-href="view/index.html" data-redirect="Y" href="javascript:;"
-                        class="txt-primary menu-nav-my-hd">
-                    </a>&nbsp;|&nbsp;<a class="logout" href="javascript:;" onclick="logout()">退出</a>
+                <li id="J-header-logout" class="menu-item menu-nav menu-login" role="menuitem" style="display: none">
+                    您好，<span id="username" class="txt-primary menu-nav-my-hd"></span>&nbsp;|&nbsp;<a class="logout"
+                        href="javascript:;" onclick="logout()">退出</a>
                 </li>
             </ul>
         </div>
@@ -60,25 +57,19 @@
                 onclick="window.parent.location.href = '../views/userView/course.html';" target="_parent" class="nav-hd"
                 aria-expanded="true" aria-haspopup="true" aria-controls="megamenu-3">课程
             </a>
-
-
         </li>
-        <li role="menuitem" class="nav-item "><a href="javascript:void(0) " class="nav-hd " aria-expanded="true"
-                aria-haspopup="true" aria-controls="megamenu-7">商旅服务
-
+        <li role="menuitem" class="nav-item "><a 
+            onclick="window.parent.location.href = '../views/userView/courseDetail.html';" target="_parent" class="nav-hd"
+                aria-haspopup="true" aria-controls="megamenu-7">课程详情测试
             </a>
-
         </li>
         <li role="menuitem" class="nav-item "><a href="javascript:void(0) " class="nav-hd " aria-expanded="true"
                 aria-haspopup="true" aria-controls="megamenu-8">出行指南
-
             </a>
-
         </li>
         <li role="menuitem" class="nav-item "><a onclick="window.parent.location.href = '../admin.html';"
                 target="_parent" class="nav-hd " aria-expanded="true" aria-haspopup="true"
                 aria-controls="megamenu-9">后台管理
-
             </a>
         </li>
 
@@ -188,6 +179,37 @@
     }
 </style>
 <script>
+    // 页面加载完成后检查登录状态
+    document.addEventListener("DOMContentLoaded", function () {
+        checkLoginStatus();
+    });
+
+    // 检查用户登录状态
+    function checkLoginStatus() {
+        var user = sessionStorage.getItem("LoginMoocUser");
+        if (user) {
+            // 已登录状态，显示用户名和退出按钮
+            var userData = JSON.parse(user);
+            document.getElementById("J-header-login").style.display = "none";
+            document.getElementById("J-header-logout").style.display = "block";
+            document.getElementById("username").innerText = userData.username;
+        } else {
+            // 未登录状态，显示登录和注册按钮
+            document.getElementById("J-header-login").style.display = "block";
+            document.getElementById("J-header-logout").style.display = "none";
+        }
+    }
+
+    // 退出登录
+    function logout() {
+        sessionStorage.removeItem("LoginMoocUser"); // 清除用户信息
+        window.location.reload(); // 重新加载页面
+    }
+
+
+    /*
+    * 计算渐变色
+    * */
     window.parent.addEventListener('scroll', function () {
         var scrollTop = window.parent.scrollY;
         var header = document.getElementById('header');

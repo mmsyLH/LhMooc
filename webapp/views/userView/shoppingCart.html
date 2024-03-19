@@ -119,6 +119,19 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script src='./js/shoppingCart.js'></script>
+    <script>
+            $(document).ready(function () {
+        // 判断用户登录状态
+        var user = sessionStorage.getItem("LoginMoocUser");
+        if (!user) {
+            // 如果用户未登录，则提示并跳转到首页
+            alert("您未登录，请先登录！");
+            setTimeout(function () {
+                window.location.href = "/"; // 跳转到首页
+            }, 1000); // 1秒后跳转
+        }
+    });
+    </script>
 </body>
 
 </html>

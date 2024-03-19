@@ -15,13 +15,4 @@ import java.util.List;
  * @date 2024/03/11
  */
 public class CommentCourseDAOImpl extends BasicDAO<CommentCourse>  implements CommentCourseDAO {
-    /**
-     * 选择所有
-     *
-     * @return {@link List}<{@link CommentCourse}>
-     */
-    @Override
-    public List<CommentCourse> selectAll() {
-        return selectAll(new CommentCourse());
-    }
 }

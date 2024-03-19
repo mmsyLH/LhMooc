@@ -10,6 +10,7 @@ import asia.lhweb.lhmooc.model.bean.Course;
 import asia.lhweb.lhmooc.model.vo.CourseVo;
 import asia.lhweb.lhmooc.service.CourseService;
 import asia.lhweb.lhmooc.service.impl.CourseServiceImpl;
+import asia.lhweb.lhmooc.utils.DataUtils;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -68,14 +69,41 @@ public class CourseServlet extends LhHttpServlet {
     }
 
     /**
+     * 根据课程id获取课程详情
+     *
+     * @param request 请求对象
+     * @param response 响应对象
+     * @param gson Gson对象
+     * @param courseService 课程服务对象
+     */
+    public void getCourseDetailById(LhRequest request, LhResponse response, Gson gson, CourseService courseService) {
+        // 获取课程ID
+        String courseid = request.getParameter("courseid");
+        // 检查课程ID是否为空
+        if (!DataUtils.handleNullOrEmpty(response, gson, courseid)) {
+            // 如果课程ID为空，则直接返回，不执行下面的逻辑
+            return;
+        }
+
+        // 根据课程ID获取课程详情
+        Result<CourseVo> jsonResponse = courseService.getCourseDetail(Integer.parseInt(courseid));
+        // 返回json对象
+        response.writeToJson(gson.toJson(jsonResponse));
+    }
+
+    /**
      * 获取排序后的课程
      *
      * @param request  请求
      * @param response 响应
      */
     public void getSortCoursesTop8(LhRequest request, LhResponse response) {
-        String sort = request.getParameter("sort");
-        List<Course> coursesList = courseService.getSortCoursesTop8(sort);
+        String sortType = request.getParameter("sortType");//"0"表示默认不排序，"1"表示按收藏量排序，"2"表示按点赞量排序，"3"表示按评论量排序
+        System.out.println("\"0\"表示默认不排序，\"1\"表示按收藏量排序，\"2\"表示按点赞量排序，\"3\"表示按评论量排序 sortType:" + sortType);
+        List<CourseVo> sortCoursesTop8 = courseService.getSortCoursesTop8(sortType);
+        String jsonResponse = !sortCoursesTop8.isEmpty() ? gson.toJson(Result.success(sortCoursesTop8, "查询成功")) : gson.toJson(Result.error("查询失败"));
+        // 将响应信息写回客户端
+        response.writeToJson(jsonResponse);
     }
 
     /**
@@ -129,7 +157,7 @@ public class CourseServlet extends LhHttpServlet {
             pageSize = "5";
         }
         // 从课程分类服务获取全部分类列表
-        Page<CourseVo> page = courseService.pageAndByCategory(Integer.parseInt(id),Integer.parseInt(pageNo),Integer.parseInt(pageSize),sortType);
+        Page<CourseVo> page = courseService.pageAndByCategory(Integer.parseInt(id), Integer.parseInt(pageNo), Integer.parseInt(pageSize), sortType);
 
         // 根据获取的结果，构造相应的JSON响应
         String jsonResponse = !page.isEmpty() ? gson.toJson(Result.success(page, "获取该类课程成功")) : gson.toJson(Result.error("该类里没有课程！！！"));

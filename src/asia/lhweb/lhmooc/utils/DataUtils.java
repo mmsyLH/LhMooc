@@ -1,9 +1,15 @@
 package asia.lhweb.lhmooc.utils;
 
 
+import asia.lhweb.lhmooc.common.Result;
 import asia.lhweb.lhmooc.constant.LhMoocConstant;
+import asia.lhweb.lhmooc.http.LhResponse;
+import asia.lhweb.lhmooc.model.bean.Course;
+import asia.lhweb.lhmooc.model.vo.CourseVo;
+import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -24,7 +30,7 @@ public class DataUtils {
     public static String encryptPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update((LhMoocConstant.SALT +password).getBytes());
+            md.update((LhMoocConstant.SALT + password).getBytes());
             byte[] digest = md.digest();
             StringBuilder sb = new StringBuilder();
             for (byte b : digest) {
@@ -64,6 +70,39 @@ public class DataUtils {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 是空还是空
+     *
+     * @param strings 字符串
+     * @return boolean
+     */
+    public static boolean isAnyNullOrEmpty(String... strings) {
+        for (String str : strings) {
+            if (str == null || str.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 处理null或空字符串的情况
+     *
+     * @param resp    响应对象
+     * @param gson    Gson对象
+     * @param strings 要检查的字符串
+     * @return 如果所有字符串都不为空或null，则返回true；否则返回false
+     */
+    public static boolean handleNullOrEmpty(LhResponse resp, Gson gson, String... strings) {
+        if (isAnyNullOrEmpty(strings)) {
+            resp.writeToJson(gson.toJson(Result.error("操作失败，上传的属性不能为空")));
+            return false;
+        } else {
+            return true;
+        }
+    }
     // 生成随机验证码
     public static String generateRandomCode() {
         Random random = new Random();
@@ -73,5 +112,53 @@ public class DataUtils {
         }
         return sb.toString();
     }
+    /**
+     * 复制源对象中非空属性值到目标对象中。
+     *
+     * @param source 源对象，其属性值将被复制。
+     * @param target 目标对象，将接收源对象的非空属性值。
+     * @param <T> 源对象和目标对象的通用类型。
+     * @return 返回经过属性值复制后的目标对象。
+     */
+    public static <T> T copyNonNullProperties(T source, T target) {
+        // 获取源对象和目标对象的类类型
+        Class<?> sourceClass = source.getClass();
+        Class<?> targetClass = target.getClass();
 
+        // 获取源对象的所有字段
+        Field[] fields = sourceClass.getDeclaredFields();
+        for (Field field : fields) {
+            try {
+                // 允许访问私有字段
+                field.setAccessible(true);
+                // 获取字段当前值
+                Object value = field.get(source);
+                // 如果字段值非空，则将其值复制到目标对象对应的字段上
+                if (value != null) {
+                    Field targetField = targetClass.getDeclaredField(field.getName());
+                    targetField.setAccessible(true); // 允许访问私有字段
+                    targetField.set(target, value); // 设置字段值
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return target;
+    }
+
+    public static void main(String[] args) {
+        // 示例对象
+        Course sourceCourse = new Course();
+        sourceCourse.setCoursename("Java Programming");
+        sourceCourse.setImgurl("Computer Science");
+        sourceCourse.setCourseid(null);
+
+        CourseVo targetCourseVo = new CourseVo();
+
+        // 调用方法进行属性赋值
+        DataUtils.copyNonNullProperties(sourceCourse, targetCourseVo);
+
+        // 输出结果
+        System.err.println(targetCourseVo);
+    }
 }

@@ -1,0 +1,156 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style-type: none;
+    font-family: Tahoma, "宋体";
+    font-size: 14px;
+    /* 去掉下划线 */
+    text-decoration: none;
+
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    position: relative;
+    min-height: 100%;
+    background: #eee;
+    color: #4c4948;
+    font-size: 14px;
+    font-family: Lato, Helvetica Neue For Number, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, PingFang SC, Hiragino Sans GB, "Microsoft JhengHei", "MicrMicrosoft YaHei", Helvetica Neue, Helvetica, Arial, sans-serif;
+    line-height: 2;
+}
+
+body {
+    margin: 0;
+}
+
+
+
+hr:before {
+    position: absolute;
+    top: -10px;
+    left: 5%;
+    z-index: 1;
+    color: #49b1f5;
+    content: '\f0c4';
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: 20px;
+    transition: all 1s ease-in-out;
+}
+
+hr {
+    position: relative;
+    margin: 2rem auto;
+    width: calc(100% - 4px);
+    border: 2px dashed #a4d8fa;
+    background: #fff;
+}
+
+hr {
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible;
+}
+
+body,
+li,
+span,
+
+p {
+    cursor: url(https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cursor/texto.cur), auto;
+}
+
+a {
+    color: #4c4948;
+    background-color: transparent;
+    cursor: url(https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/cursor/ayuda.cur), auto;
+}
+
+strong {
+    color: #FF0066;
+}
+
+#body-wrap {
+    position: relative;
+    display: box;
+    display: flex;
+    box-flex: 1;
+    flex: 1 auto;
+    -webkit-box-orient: vertical;
+    flex-direction: column;
+    transition: all .5s;
+}
+
+#nav.not_index_bg {
+    height: 20rem;
+}
+
+
+
+
+
+main {
+    display: block;
+}
+
+#content-outer {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -o-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1 auto;
+    -ms-flex: 1 auto;
+    flex: 1 auto;
+}
+
+h1 {
+    font-size: 2em;
+    margin: .67em 0;
+}
+
+.layout_page {
+    display: flex;
+    -webkit-box-align: start;
+    align-items: flex-start;
+    margin: 0 auto;
+    padding: 0 5px;
+    max-width: 1400px;
+}
+
+
+
+#aside_content {
+    width: 25%;
+}
+
+#aside_content .card-widget {
+    overflow: hidden;
+    margin: 10px 0;
+    border-radius: 3px;
+    background: #fff;
+    -webkit-box-shadow: 0 4px 8px 6px rgba(7, 17, 27, .06);
+    box-shadow: 0 4px 8px 6px rgba(7, 17, 27, .06);
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -o-transition: all .3s;
+    -ms-transition: all .3s;
+    transition: all .3s;
+}
+
+#aside_content .card-content {
+    padding: 1rem 1.2rem;
+}
+
+.is-center {
+    text-align: center;
+}
+
+.gerenIframe {
+    margin: 0 0 0 10px;
+    height: 800px;
+    width: 1200px;
+}

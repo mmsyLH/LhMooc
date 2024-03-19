@@ -14,12 +14,13 @@ import java.util.List;
  */
 public interface FollowCourseDAO {
 
+    int getTotalRowAnd(FollowCourse followCourse);
+
     /**
      * 选择所有
      *
+     * @param followCourse 遵循课程
      * @return {@link List}<{@link FollowCourse}>
      */
-    List<FollowCourse> selectAll();
-
-    int getTotalRowAnd(FollowCourse followCourse);
+    List<FollowCourse> selectAll(FollowCourse followCourse);
 }

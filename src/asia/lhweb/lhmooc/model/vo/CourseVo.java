@@ -1,12 +1,13 @@
 package asia.lhweb.lhmooc.model.vo;
 
 import asia.lhweb.lhmooc.annotation.Id;
+import asia.lhweb.lhmooc.model.bean.CommentCourse;
 
 import java.util.Date;
+import java.util.List;
 
 /**
- * 课程
- * 课程表
+ * 课程Vo返回对象
  *
  * @author 罗汉
  * @TableName course
@@ -68,6 +69,31 @@ public class CourseVo {
      * 创建时间
      */
     private Date createtime;
+    /**
+     * 课程章节表 列表
+     */
+    private List<CourseChapterVo> courseChapterList;
+
+    /**
+     * 评论列表
+     */
+    private List<CommentCourse> commentList;
+
+    public List<CourseChapterVo> getCourseChapterList() {
+        return courseChapterList;
+    }
+
+    public void setCourseChapterList(List<CourseChapterVo> courseChapterList) {
+        this.courseChapterList = courseChapterList;
+    }
+
+    public List<CommentCourse> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<CommentCourse> commentList) {
+        this.commentList = commentList;
+    }
 
     public Date getCreatetime() {
         return createtime;

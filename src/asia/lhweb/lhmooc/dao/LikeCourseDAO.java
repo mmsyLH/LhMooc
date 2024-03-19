@@ -14,12 +14,20 @@ import java.util.List;
  */
 public interface LikeCourseDAO {
 
+
+    /**
+     * 得到总行数和
+     *
+     * @param likeCourse 喜欢课程
+     * @return int
+     */
+    int getTotalRowAnd(LikeCourse likeCourse);
+
     /**
      * 选择所有
      *
+     * @param likeCourse 喜欢课程
      * @return {@link List}<{@link LikeCourse}>
      */
-    List<LikeCourse> selectAll();
-
-    int getTotalRowAnd(LikeCourse likeCourse);
+    List<LikeCourse> selectAll(LikeCourse likeCourse);
 }

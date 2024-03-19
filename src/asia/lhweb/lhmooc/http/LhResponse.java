@@ -4,7 +4,6 @@ import asia.lhweb.lhmooc.constant.LhMoocConstant;
 import org.apache.tika.Tika;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -45,44 +44,52 @@ public class LhResponse {
 
 
     /**
+     * 写
      * 向浏览器/客户端发送文件
      *
      * @param file 要发送的文件
      */
     public void write(File file) {
-        // 修改状态行中的Content-Length字段为文件长度
+        // 设置响应头的Content-Length为文件长度
         headers.put("Content-Length", String.valueOf(file.length()));
 
-        // 根据文件扩展名设置Content-Type字段
+        // System.out.println("发送文件Content-Length：" + file.getName()+":"+headers.get("Content-Length"));
+        // 根据文件扩展名设置Content-Type字段，以便浏览器正确解析文件类型
         setFileTypeByName(file);
 
-        // 获取Http响应头部字节数组
-        byte[] buffer = getOkHeaderBytes();
-
-        // 将头部字节数组写入byteBuffer中
-        ByteBuffer byteBuffer = ByteBuffer.wrap(buffer);
         try {
+            // 准备HTTP响应头，并将其写入网络通道
+            byte[] buffer = getOkHeaderBytes();
+            ByteBuffer byteBuffer = ByteBuffer.wrap(buffer);
             socketChannel.write(byteBuffer);
-            byteBuffer = ByteBuffer.allocate(1024);
-            InputStream inputStream = new FileInputStream(file);
-            byte[] buff = new byte[1024];
-            int len;
-            // 逐块读取文件内容并发送
-            while ((len = inputStream.read(buff)) != -1) {
-                byteBuffer.clear();
-                byteBuffer.put(buff, 0, len);
-                byteBuffer.flip();
-                socketChannel.write(byteBuffer);
+
+            // 打开文件输入流，读取文件内容并发送至客户端
+            InputStream inputStream = Files.newInputStream(file.toPath());
+            // 读取文件内容到字节数组
+            byte[] buff = new byte[inputStream.available()];
+            int read = inputStream.read(buff);
+            ByteBuffer wrap = ByteBuffer.wrap(buff);
+            // 逐块读取并发送文件内容
+            while (wrap.hasRemaining()) {
+                socketChannel.write(wrap);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("客户端异常关闭");
+            try {
+                socketChannel.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
+
     /**
      * 向浏览器/客户端发送指定状态码和数据
+     * <p>
+     * .
      *
-     .
      * @param data 要发送的数据
      */
     public void write(int code, String data) {
