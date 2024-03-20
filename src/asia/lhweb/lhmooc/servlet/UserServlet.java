@@ -9,6 +9,7 @@ import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.MoocUser;
 import asia.lhweb.lhmooc.service.MoocUserService;
 import asia.lhweb.lhmooc.service.impl.MoocUserServiceImpl;
+import asia.lhweb.lhmooc.utils.DataUtils;
 import com.google.gson.Gson;
 
 
@@ -89,7 +90,7 @@ public class UserServlet extends LhHttpServlet {
         MoocUser loginUser = userService.login(moocUser);
         String presJson;
         if (loginUser != null) {
-            presJson = gson.toJson(Result.success(loginUser,  "登录成功"));
+            presJson = gson.toJson(Result.success(loginUser, "登录成功"));
         } else {
             presJson = gson.toJson(Result.error("登录失败"));
         }
@@ -107,6 +108,41 @@ public class UserServlet extends LhHttpServlet {
     }
 
     /**
+     * 根据用户ID获取用户信息。
+     *
+     * @param request  包含请求参数的对象，其中应包含需要查询的用户ID。
+     * @param response 用于返回查询结果的对象。
+     */
+    public void getUserById(LhRequest request, LhResponse response) {
+        // 从请求中获取用户ID
+        String id = request.getParameter("id");
+
+        // 检查ID是否为空，若为空或错误则通过response进行相应处理，并返回
+        if (!DataUtils.handleNullOrEmpty(response, gson, id)) {
+            return;
+        }
+
+        // 从携带的请求中获取用户信息
+        String cookies = request.getHeardParameter("Cookie");
+
+        // 验证权限
+        // 1得到cookie中的用户信息
+        MoocUser cookieUser = userService.parseCookieToMoocUser(cookies, gson);
+        // 2调用方法
+        if (!userService.checkUserPermission(id, cookieUser)) {
+            response.writeToJson(gson.toJson(Result.error("权限验证失败 您不是账户本人或者管理员")));
+            return;
+        }
+        // 有权限后再查询
+
+        // 调用userService，根据ID获取用户信息
+        Result<MoocUser> result = userService.getUserById(Integer.parseInt(id));
+
+        // 将查询结果转换为JSON，并通过response返回
+        response.writeToJson(gson.toJson(result));
+    }
+
+    /**
      * 分页
      *
      * @param req  要求事情
@@ -117,13 +153,13 @@ public class UserServlet extends LhHttpServlet {
         String pageNo = req.getParameter("pageNo");
         String pageSize = req.getParameter("pageSize");
         String userName = req.getParameter("userName");
-        if(userName==null){
-            userName="";
+        if (userName == null) {
+            userName = "";
         }
         MoocUser moocUser = new MoocUser();
         moocUser.setUsername(userName);
         // 调用trainService去模糊查询车站
-        Page<MoocUser> page = userService.page(moocUser,Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        Page<MoocUser> page = userService.page(moocUser, Integer.parseInt(pageNo), Integer.parseInt(pageSize));
         gson = new Gson();
         String presJson = gson.toJson(Result.success(page, "分页查询成功"));
         // 将JSON字符串写入响应对象中
@@ -137,7 +173,6 @@ public class UserServlet extends LhHttpServlet {
      * @param resp 分别地
      */
     public void update(LhRequest req, LhResponse resp) {
-        gson = new Gson();
         String id = req.getParameter("id");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -146,6 +181,8 @@ public class UserServlet extends LhHttpServlet {
         String avatar = req.getParameter("avatar");
         String wallet = req.getParameter("wallet");
         String userrole = req.getParameter("userrole");
+
+
 
         // 检查必要属性是否为null或空
         if (id == null || id.isEmpty() ||
@@ -181,6 +218,44 @@ public class UserServlet extends LhHttpServlet {
         String jsonResponse = res ? gson.toJson(Result.success("更新成功")) : gson.toJson(Result.error("更新失败"));
 
         resp.writeToJson(jsonResponse);
+    }
+
+    /**
+     * 用户更新
+     *
+     * @param req  要求事情
+     * @param resp 分别地
+     */
+    public void userUpdate(LhRequest req, LhResponse resp) {
+        String id = req.getParameter("id");
+        String password = req.getParameter("password");
+        String nickname = req.getParameter("nickname");
+        String email = req.getParameter("email");//可以为空
+        String avatar = req.getParameter("avatar");
+        String wallet = req.getParameter("wallet");
+
+        if (!DataUtils.handleNullOrEmpty(resp, gson, id, nickname, avatar, wallet)){
+            return;
+        }
+
+        // 封装属性在对象中
+        MoocUser moocUser = new MoocUser();
+        moocUser.setId(Integer.parseInt(id));
+        if (password != null && !password.isEmpty()) {
+            moocUser.setPassword(DataUtils.encryptPassword(password));
+        }
+
+        moocUser.setNickname(nickname);
+        moocUser.setEmail(email);
+        moocUser.setAvatar(avatar);
+        moocUser.setWallet(Double.parseDouble(wallet));
+
+
+        // 调用userService，根据ID获取用户信息
+        Result result = userService.userUpdate(moocUser);
+
+        // 将查询结果转换为JSON，并通过response返回
+        resp.writeToJson(gson.toJson(result));
     }
 
     /**

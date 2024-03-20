@@ -1,5 +1,7 @@
 package asia.lhweb.lhmooc.service;
 
+import asia.lhweb.lhmooc.common.Result;
+
 /**
  * 播放历史服务
  *
@@ -10,4 +12,12 @@ package asia.lhweb.lhmooc.service;
  */
 public interface PlayHistoryService {
 
+    /**
+     * 通过用户id和视频名称获取个人历史播放记录
+     *
+     * @param videoName 视频名字
+     * @param userId    用户id
+     * @return {@link Result}
+     */
+    Result getByUserIdAndVideoName(int userId, String videoName);
 }

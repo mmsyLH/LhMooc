@@ -1,5 +1,7 @@
-package asia.lhweb.lhmooc.dao;
+package asia.lhweb.lhmooc.dao.impl;
 
+import asia.lhweb.lhmooc.dao.BasicDAO;
+import asia.lhweb.lhmooc.dao.TransactionDAO;
 import asia.lhweb.lhmooc.model.bean.Transaction;
 
 /**
@@ -10,13 +12,6 @@ import asia.lhweb.lhmooc.model.bean.Transaction;
  * @createDate 2024-03-11 21:23:21
  * @date 2024/03/11
  */
-public interface TransactionDAO {
+public class TransactionDAOImpl extends BasicDAO<Transaction> implements TransactionDAO {
 
-    /**
-     * 保存
-     *
-     * @param transaction 事务
-     * @return int
-     */
-    int save(Transaction transaction);
 }

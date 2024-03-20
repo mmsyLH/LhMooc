@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery.fancybox@2.1.5/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="../../../css/gerenIframe.css">
+    <style>
+        .history-title {
+            display: flex;
+            align-items: center;
+            /* 垂直居中 */
+            justify-content: space-between;
+            /* 左右对齐 */
+            padding: 0 30px;
+        }
+
+        .history-title input {
+            height: 30px;
+            width: 200px;
+            /* 设置搜索框宽度 */
+            margin-left: 480px;
+            /* 设置搜索框和标题的间距 */
+        }
+
+        .history-title button {
+            padding: 5px 10px;
+            /* 设置按钮内边距 */
+            background-color: #007bff;
+            /* 设置按钮背景色 */
+            color: #fff;
+            /* 设置按钮文字颜色 */
+            border: none;
+            /* 移除按钮边框 */
+            cursor: pointer;
+            /* 设置鼠标样式为手型 */
+        }
+
+        .skillbox .video {
+            background-color: #00BCD4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .skillbox .video .video-box {
+            display: flex;
+            justify-content: space-around;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page">
+        <div class="article-container">
+            <hr>
+            <div class="history-title">
+                <h1>历史记录</h1>
+                <input type="text" placeholder="视频名称" id="search">
+                <button id="searchBtn">搜索</button>
+            </div>
+
+            <div class="skillbox">
+                <div class="video">
+                    <div class="video-box">
+                        <span id="courseName">课程名称</span>
+                        <span id="courseProfile">课程简介</span>
+                        <span id="courseCateory">课程所属分类名</span>
+                    </div>
+                    <div class="skillbar">
+                        <div class="skillbar-title"
+                            style="background: linear-gradient(to right, #00BCD4 0%, #f54009 100%); width: 80%">
+                            <span id="videoName">视频名称</span>
+                        </div>
+                        <div class="skill-bar-percent">观看时间占视频之间的百分比:80%</div>
+                        <div class="playTime">
+                            <span id="courseName">课程名 </span>
+                            <span id="courseChapter">课程章节 </span>
+                            <span id="videoNums">共xxP </span>
+                            <span>看到12:45</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skillbar">
+                    <div class="skillbar-title"
+                        style="background: linear-gradient(to right, #4CAF50 0%, #81C784 100%); width: 60%">
+                        <span>Mybatis</span>
+                    </div>
+                    <div class="skill-bar-percent">60%</div>
+                </div>
+
+                <div class="skillbar">
+                    <div class="skillbar-title"
+                        style="background: linear-gradient(to right, #FFEB3B 0%, #FFF176 100%); width: 75%">
+                        <span>数据结构与算法</span>
+                    </div>
+                    <div class="skill-bar-percent">75%</div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <script src="../../../js/jquery-3.6.0.js"></script>
+    <script>
+        
+        // 搜索按钮
+        $(document).ready(function () {
+            // 点击搜索按钮触发搜索事件
+            $('#searchBtn').click(function () {
+                var keyword = $('#search').val(); // 获取搜索框中的关键字
+                // ajax事件
+                alert('搜索关键字为：' + keyword);
+            });
+        });
+
+        var userObj;
+        // 页面加载完毕后执行
+        $(document).ready(function () {
+            var user = sessionStorage.getItem("LoginMoocUser");
+            if (!user) {
+                alert("您未登录，请先登录！");
+                setTimeout(function () {
+                    window.location.href = "/"; // 跳转到首页
+                }, 1000); // 1秒后跳转
+            } else {
+                userObj = JSON.parse(user);
+                console.log("用户对象", userObj);
+                // getFollowP  1  ageById();
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../../css/gerenIframe.css">
+    <style>
+        .grenDetail {
+            box-sizing: border-box;
+            /* text-align: center; */
+        }
+
+        #avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ccc;
+            /* Placeholder color */
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page">
+        <div class="article-container">
+            <hr>
+            <div class="grenDetail">
+                <!-- 用户头像 -->
+                <div>
+                    <img id="avatar" src="" alt="User Avatar">
+                </div>
+                <!-- 用户信息表单 -->
+                <div class="user">
+                    <!-- 用户账户 -->
+                    <div>
+                        <span>用户账户：</span>
+                        <span id="username"></span>
+                    </div>
+                    <!-- 用户名 -->
+                    <div>
+                        <span>用户名：</span>
+                        <span id="userNickName"></span>
+                        <input type="text" id="newUserName" placeholder="新用户名">
+                        <button onclick="updateUserInfo('username')">更新</button>
+                    </div>
+                    <!-- 密码 -->
+                    <div>
+                        <span>密码：</span>
+                        <span></span>
+                        <input type="password" id="oldPassword" placeholder="旧密码">
+                        <button onclick="confirmOldPassword()">确认旧密码</button>
+                        <input type="password" id="newPassword" placeholder="新密码" style="display: none;">
+                        <button onclick="updateUserInfo('password')" style="display: none;">更新</button>
+                    </div>
+
+                    <!-- 金钱余额 -->
+                    <div>
+                        <span>金钱余额：</span>
+                        <span id="userMoney"></span>
+                    </div>
+                    <!-- 邮箱 -->
+                    <div>
+                        <span>邮箱：</span>
+                        <span id="userEmail"></span>
+                        <input type="text" id="newUserEmail" placeholder="新邮箱">
+                        <button onclick="updateUserInfo('email')">更新</button>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+    <script src="../../../js/jquery-3.6.0.js"></script>
+    <script>
+        var userDetail;
+        // 页面加载完毕后执行
+        $(document).ready(function () {
+            // 获取用户信息
+            var user = sessionStorage.getItem("LoginMoocUser");
+            if (!user) {
+                alert("您未登录，请先登录！");
+                setTimeout(function () {
+                    window.location.href = "/"; // 跳转到首页
+                }, 1000); // 1秒后跳转
+            } else {
+                var userObj = JSON.parse(user);
+                $.ajax({
+                    url: "LhMooc/userServlet",
+                    type: "GET",
+                    data: {
+                        action: "getUserById",
+                        id: userObj.id
+                    },
+                    success: function (response) {
+                        userDetail = response.data;
+                        $('#username').text(userDetail.username);
+                        $('#userNickName').text(userDetail.nickname);
+                        $('#userMoney').text(userDetail.wallet);
+                        $('#userEmail').text(userDetail.email);
+                        $('#avatar').attr('src', userDetail.avatar); // 将用户头像路径设置为图片src属性
+                    },
+                    error: function (error) {
+                        alert("获取用户信息失败：", error.msg);
+                    }
+                });
+            }
+        });
+
+        // 更新用户信息函数
+        function updateUserInfo(fieldToUpdate) {
+            var newValue;
+            if (fieldToUpdate === 'username') {
+                newValue = $('#newUserName').val();
+                userDetail.nickname = newValue;
+            } else if (fieldToUpdate === 'email') {
+                newValue = $('#newUserEmail').val();
+                userDetail.email = newValue;
+            } else if (fieldToUpdate === 'password') {
+                newValue = $('#newPassword').val();
+                userDetail.password = newValue;
+            }
+
+            $.ajax({
+                url: "LhMooc/userServlet",
+                type: "POST",
+                data: {
+                    action: "userUpdate",
+                    id: userDetail.id,
+                    avatar: userDetail.avatar,
+                    nickname: userDetail.nickname,
+                    password: userDetail.password,
+                    email: userDetail.email,
+                    wallet: userDetail.wallet
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        alert("更新用户信息成功！");
+                        location.reload();
+                    }
+                },
+                error: function (error) {
+                    alert("更新用户信息失败：", error.msg);
+                }
+            });
+        }
+        // 确认旧密码
+        function confirmOldPassword() {
+            var oldPassword = $('#oldPassword').val();
+
+            $.ajax({
+                url: "LhMooc/commonServlet",
+                type: "get",
+                data: {
+                    action: "getMd5Str",
+                    text: oldPassword
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        oldPasswordHash = response.data;
+                        if (oldPasswordHash === userDetail.password) {
+                            alert("旧密码正确！");
+                            // 隐藏旧密码输入框和确认按钮，显示新密码输入框和更新按钮
+                            $('#oldPassword').hide();
+                            $('#newPassword').show();
+                            $('button:contains("确认旧密码")').hide();
+                            $('button:contains("更新")').show();
+                        } else {
+                            alert("旧密码错误！");
+                        }
+                    }
+                },
+                error: function (error) {
+                    alert("更新用户信息失败：", error.msg);
+                }
+            });
+        }
+    </script>
+    <script src="../../../js/md5.js"></script>
+
+</body>
+
+</html>

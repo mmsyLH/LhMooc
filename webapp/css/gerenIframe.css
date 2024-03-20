@@ -8,7 +8,7 @@ html {
 
 body {
     position: relative;
-    min-height: 100%;
+    /* min-height: 100%; */
     background: #eee;
     color: #4c4948;
     font-size: 14px;
@@ -180,7 +180,7 @@ h1 {
 .skillbar {
     position: relative;
     display: block;
-    max-width: 360px;
+    max-width: 250px;
     margin: 15px 10px;
     background: #eee;
     height: 30px;
@@ -230,6 +230,19 @@ h1 {
     color: #ffffff;
     color: rgba(0, 0, 0, 0.5);
 }
+
+.skillbar .playTime {
+    position: absolute;
+    /* right: -120px; */
+    width: 300px;
+    left: 265px;
+    top: 0;
+    font-size: 20px;
+    height: 30px;
+    line-height: 30px;
+    color: rgba(0, 0, 0);
+}
+
 
 .tool a {
     color: #FF0066;

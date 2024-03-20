@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>逼真的玻璃卡片悬停效果</title>
+    <link rel="stylesheet" href="../../../css/gerenFollow.css">
+    <link rel="stylesheet" href="../../../css/gerenIframe.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="content">
+                <h2>01</h2>
+                <h3>第一个卡片</h3>
+                <p>逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果</p>
+                <a href="#">阅读更多</a>
+                <a>取消收藏</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="content">
+                <h2>02</h2>
+                <h3>第二个卡片</h3>
+                <p>逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果</p>
+                <a href="#">查看详情</a>
+                <a>取消收藏</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="content">
+                <h2>03</h2>
+                <h3>第三个卡片</h3>
+                <p>逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果</p>
+                <a href="#">查看详情</a>
+                <a>取消收藏</a>
+            </div>
+        </div>
+    </div>
+    <!-- 导航条区域 -->
+    <script src="../../../js/vanilla-tilt.js"></script>
+    <script src="../../../js/jquery-3.6.0.js"></script>
+    <script>
+        // vanilla-tilt.js是一个平滑的3D倾斜JS库，具体参数配置度娘可查到
+        VanillaTilt.init(document.querySelectorAll(".card"), {
+            max: 15, //最大倾斜度数
+            speed: 400, //倾斜转换的速度
+            glare: true,//是否开启眩光效果
+            "max-glare": 1//最大眩光的不透明度
+        })
+
+        var userFollowPage;
+        var pageNo = 1;
+        var pageSize = 3;
+        var userObj;
+        // 页面加载完毕后执行
+        $(document).ready(function () {
+            // 获取个人的收藏分页记录
+            var user = sessionStorage.getItem("LoginMoocUser");
+            if (!user) {
+                alert("您未登录，请先登录！");
+                setTimeout(function () {
+                    window.location.href = "/"; // 跳转到首页
+                }, 1000); // 1秒后跳转
+            } else {
+                 userObj = JSON.parse(user);
+                console.log("用户对象", userObj);
+                getFollowPageById();
+            }
+        });
+
+        function getFollowPageById() {
+            $.ajax({
+                url: "LhMooc/followServlet",
+                type: "GET",
+                data: {
+                    action: "getFollowPageById",
+                    pageNo: pageNo,
+                    pageSize: pageSize,
+                    userId: userObj.id
+                },
+                success: function (response) {
+                    if (response === 200) {
+                        userFollowPage = response.data;
+                        console.log("查询的分页结果", response.data);
+                    }else{
+                        alert(response.msg);
+                    }
+                },
+                error: function (error) {
+                    alert(error.msg);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

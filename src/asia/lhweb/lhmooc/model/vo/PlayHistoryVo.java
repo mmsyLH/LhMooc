@@ -1,4 +1,4 @@
-package asia.lhweb.lhmooc.model.bean;
+package asia.lhweb.lhmooc.model.vo;
 
 import asia.lhweb.lhmooc.annotation.Id;
 
@@ -11,7 +11,7 @@ import java.util.Date;
  * @TableName play_history
  * @date 2024/03/11
  */
-public class PlayHistory {
+public class PlayHistoryVo {
     /**
      * 播放表的id
      */
@@ -118,7 +118,7 @@ public class PlayHistory {
         if (getClass() != that.getClass()) {
             return false;
         }
-        PlayHistory other = (PlayHistory) that;
+        PlayHistoryVo other = (PlayHistoryVo) that;
         return (this.getPlayid() == null ? other.getPlayid() == null : this.getPlayid().equals(other.getPlayid()))
             && (this.getUserid() == null ? other.getUserid() == null : this.getUserid().equals(other.getUserid()))
             && (this.getVideoid() == null ? other.getVideoid() == null : this.getVideoid().equals(other.getVideoid()))

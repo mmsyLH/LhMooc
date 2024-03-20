@@ -217,6 +217,9 @@
             </div>
             <!-- 课程目录结束 -->
             <!-- 课程介绍区域结束 -->
+
+            <!-- 评论区开始 -->
+            <!-- 评论区结束 -->
         </div>
     </div>
 
@@ -230,6 +233,41 @@
     <!-- <script src="../../js/manages.js"></script> -->
     <script src="../../js/login-res.js"></script>
     <script src="../../js/courseDetail.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 获取当前页面的 URL
+            var url = window.location.href;
+
+            // 获取 URL 中的参数部分
+            var params = url.split("?")[1];
+            var courseId = params.split("=")[1];
+
+            // 查询课程详情
+            getCourseDetailById(courseId);
+        });
+
+        //查询课程详情
+        function getCourseDetailById(courseId) {
+            $.ajax({
+                url: "LhMooc/courseServlet",
+                type: "GET",
+                data: {
+                    action: "getCourseDetailById",
+                    courseId: courseId,
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        console.log("查询的结果", response.data);
+                    } else {
+                        alert(response.msg);
+                    }
+                },
+                error: function (error) {
+                    alert(error.msg);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

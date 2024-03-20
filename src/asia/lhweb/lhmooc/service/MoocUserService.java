@@ -1,7 +1,11 @@
 package asia.lhweb.lhmooc.service;
 
+import asia.lhweb.lhmooc.common.Result;
+import asia.lhweb.lhmooc.http.LhRequest;
+import asia.lhweb.lhmooc.http.LhResponse;
 import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.MoocUser;
+import com.google.gson.Gson;
 
 /**
  * Mooc用户服务
@@ -63,4 +67,51 @@ public interface MoocUserService{
      * @return boolean
      */
     boolean delete(MoocUser moocUser);
+
+    /**
+     * 通过id获取用户
+     *
+     * @param parseInt 解析int
+     * @return {@link Result}<{@link MoocUser}>
+     */
+    Result<MoocUser> getUserById(int parseInt);
+
+    /**
+     * 解析cookie到mooc用户
+     *
+     * @param cookies 饼干
+     * @param gson    gson
+     * @return {@link MoocUser}
+     */
+    MoocUser parseCookieToMoocUser(String cookies, Gson gson);
+
+    /**
+     * 检查用户权限
+     *
+     * @param userId     用户id
+     * @param cookieUser 饼干用户
+     * @return boolean
+     */
+    boolean checkUserPermission(String userId, MoocUser cookieUser);
+
+    /**
+     * 用户更新通过id
+     *
+     * @param moocUser 蕴藏用户
+     * @return {@link Result}
+     */
+    Result userUpdate(MoocUser moocUser);
+
+    Result recharge(Integer parseInt, Double parseDouble);
+
+    /**
+     * 不是我还是管理员
+     *
+     * @param req    要求事情
+     * @param resp   分别地
+     * @param userId 用户id
+     * @param gson   gson
+     * @return boolean
+     */
+    boolean isNoMeOrAdmin(LhRequest req, LhResponse resp, String userId, Gson gson);
 }

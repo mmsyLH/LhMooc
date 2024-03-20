@@ -64,4 +64,6 @@ public interface MoocUserDAO {
      * @return {@link Page}<{@link MoocUser}>
      */
     Page<MoocUser> page(MoocUser moocUser, int parseInt, int pageSize);
+
+    MoocUser selectOneById(MoocUser moocUser);
 }

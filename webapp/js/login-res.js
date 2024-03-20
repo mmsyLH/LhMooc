@@ -79,9 +79,15 @@ function ajaxLogin(username, password) {
             //转对象
             // var jsonObject = $.parseJSON(res)
             if (res.code === 200) {
+                //存session
                 sessionStorage.setItem("LoginMoocUser", JSON.stringify(res.data));
+                //存cookies
+                //存储用户信息到cookies
+                document.cookie = `LoginMoocUser=${JSON.stringify(res.data)}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
                 alert(res.msg)
                 location.href = "/";
+            } else {
+                alert(res.msg)
             }
         },
         error: function (err) {
@@ -97,7 +103,7 @@ function ajaxRes(username, password) {
     console.log("username", username);
     console.log("password", password);
     $.ajax({
-        url: 'LhTomCat/userServlet',
+        url: 'LhMooc/userServlet',
         type: 'post',
         data: {
             action: "register",
@@ -106,10 +112,8 @@ function ajaxRes(username, password) {
         },
         success: function (res) {
             console.log("返回的res", res);
-            //转对象
-            var jsonObject = $.parseJSON(res)
-            if (jsonObject.code === 200) {
-                alert(jsonObject.msg)
+            if (res.code === 200) {
+                alert(res.msg)
                 location.href = "/";
             }
         },

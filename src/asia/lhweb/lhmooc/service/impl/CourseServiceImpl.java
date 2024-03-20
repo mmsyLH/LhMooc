@@ -254,7 +254,12 @@ public class CourseServiceImpl implements CourseService {
         List<CourseChapter> courseChapterList = courseChapterDAO.selectAll(courseChapter);
 
         List<CourseChapterVo> courseChapterVoList = new ArrayList<>();
-        DataUtils.copyNonNullProperties(courseChapterList,courseChapterVoList);
+        CourseChapterVo courseChapterTemp;
+        for (CourseChapter chapter : courseChapterList) {
+            courseChapterTemp= new CourseChapterVo();
+            DataUtils.copyNonNullProperties(chapter,courseChapterTemp);
+            courseChapterVoList.add(courseChapterTemp);
+        }
 
         CourseVideo courseVideo;
         List<CourseVideo> courseVideoList;

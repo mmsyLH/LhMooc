@@ -122,7 +122,7 @@
 
                 <!--按类别筛选-->
                 <div id="filter-class">
-                        
+
                 </div>
 
                 <!--按排序筛选-->
@@ -261,7 +261,7 @@
             courseListContainer.empty(); // 清空课程列表
             // 遍历课程数据并填充到页面中
             $.each(data, function (index, course) {
-                var courseItem = $('<div class="course">');
+                var courseItem = $('<div class="course" onclick="showCourseDetail(' + course.courseid + ')">');
                 courseItem.append('<img class="course-photo" src="../../images/' + course.imgurl + '">');
                 var courseDetails = $('<ul class="course-details">');
                 courseDetails.append('<li><h4>' + course.coursename + '</h4></li>');
@@ -272,11 +272,15 @@
                     '<span><i class="icon icon-notice"></i>评论数' + course.commentCount + '</span>' +
                     '<i class="icon icon-shijian"></i>' +
                     '<input type="text" value="' + formatDate(course.createtime) + '" readonly>' +
-
                     '</li>');
                 courseItem.append(courseDetails);
                 courseListContainer.append(courseItem);
             });
+        }
+
+        //跳转到课程详情页面
+        function showCourseDetail(courseid) {
+            window.location.href = "courseDetail.html?courseid=" + courseid;
         }
 
         // 将日期字符串转换为指定格式（YYYY/MM/DD HH:MM:SS）
@@ -357,7 +361,7 @@
         display: inline-block;
     }
 
-   .contatiner input {
+    .contatiner input {
         font-size: 13px;
         margin-left: 30px;
         height: 25px;

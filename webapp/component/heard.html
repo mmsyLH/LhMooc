@@ -58,9 +58,9 @@
                 aria-expanded="true" aria-haspopup="true" aria-controls="megamenu-3">课程
             </a>
         </li>
-        <li role="menuitem" class="nav-item "><a 
-            onclick="window.parent.location.href = '../views/userView/courseDetail.html';" target="_parent" class="nav-hd"
-                aria-haspopup="true" aria-controls="megamenu-7">课程详情测试
+        <li role="menuitem" class="nav-item "><a
+                onclick="window.parent.location.href = '../views/userView/courseDetail.html';" target="_parent"
+                class="nav-hd" aria-haspopup="true" aria-controls="megamenu-7">课程详情测试
             </a>
         </li>
         <li role="menuitem" class="nav-item "><a href="javascript:void(0) " class="nav-hd " aria-expanded="true"
@@ -203,6 +203,8 @@
     // 退出登录
     function logout() {
         sessionStorage.removeItem("LoginMoocUser"); // 清除用户信息
+        // 清除cookies中的用户信息
+        document.cookie = "LoginMoocUser=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
         window.location.reload(); // 重新加载页面
     }
 

@@ -77,6 +77,7 @@ public class CourseVo {
     /**
      * 评论列表
      */
+
     private List<CommentCourse> commentList;
 
     public List<CourseChapterVo> getCourseChapterList() {

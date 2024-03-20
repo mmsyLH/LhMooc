@@ -31,6 +31,9 @@ public class Page<T> {
 	private List<T> items;
 	private String url;
 
+	public Page() {
+	}
+
 	public Integer getPageNo() {
 		return pageNo;
 	}
@@ -51,6 +54,11 @@ public class Page<T> {
 		return pageTotalCount;
 	}
 
+	/**
+	 * 设置页面总数
+	 *
+	 * @param pageTotalCount
+	 */
 	public void setPageTotalCount(Integer pageTotalCount) {
 		this.pageTotalCount = pageTotalCount;
 	}

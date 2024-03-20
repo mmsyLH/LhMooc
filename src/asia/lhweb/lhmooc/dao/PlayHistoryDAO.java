@@ -1,5 +1,9 @@
 package asia.lhweb.lhmooc.dao;
 
+import asia.lhweb.lhmooc.model.bean.PlayHistory;
+
+import java.util.List;
+
 /**
  * 播放历史服务
  *
@@ -10,4 +14,11 @@ package asia.lhweb.lhmooc.dao;
  */
 public interface PlayHistoryDAO {
 
+    /**
+     * 选择所有
+     *
+     * @param playHistory 个人播放历史
+     * @return {@link List}<{@link PlayHistory}>
+     */
+    List<PlayHistory> selectAll(PlayHistory playHistory);
 }

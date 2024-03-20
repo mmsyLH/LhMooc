@@ -15,7 +15,8 @@ public class BeanFactory {
     private static final CourseCategory courseCategory = new CourseCategory();
     private static final CourseChapter courseChapter = new CourseChapter();
     private static final CourseVideo courseVideo = new CourseVideo();
-    private static final FollowVideo followVideo = new FollowVideo();
+
+    private static final FollowCourse followCourse = new FollowCourse();
     private static final LikeVideo likeVideo = new LikeVideo();
     private static final MoocAdmin moocAdmin = new MoocAdmin();
     private static final MoocUser moocUser = new MoocUser();
@@ -62,6 +63,9 @@ public class BeanFactory {
     public CourseCategory getCourseCategory() {
         return courseCategory;
     }
+    public FollowCourse getFollowCourse() {
+        return followCourse;
+    }
 
     /**
      * 获取 CourseChapter 实例
@@ -81,14 +85,6 @@ public class BeanFactory {
         return courseVideo;
     }
 
-    /**
-     * 获取 FollowVideo 实例
-     *
-     * @return FollowVideo 实例
-     */
-    public FollowVideo getFollowVideo() {
-        return followVideo;
-    }
 
     /**
      * 获取 LikeVideo 实例

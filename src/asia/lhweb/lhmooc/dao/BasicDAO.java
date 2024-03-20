@@ -83,7 +83,7 @@ public class BasicDAO<T> {
                     } else if (field1.getType() == Double.class) {
                         setMethod.invoke(e, res.getDouble(j));
                     } else if (field1.getType() == java.util.Date.class) {
-                        setMethod.invoke(e, res.getDate(j));
+                        setMethod.invoke(e, res.getTimestamp(j));
                     } else if (field1.getType() == Timestamp.class) {
                         setMethod.invoke(e, res.getTimestamp(j));
                     }

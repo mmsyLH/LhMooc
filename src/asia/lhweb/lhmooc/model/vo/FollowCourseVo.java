@@ -1,4 +1,4 @@
-package asia.lhweb.lhmooc.model.bean;
+package asia.lhweb.lhmooc.model.vo;
 
 import java.util.Date;
 
@@ -6,7 +6,7 @@ import java.util.Date;
  * 课程收藏表
  * @TableName follow_course
  */
-public class FollowCourse {
+public class FollowCourseVo {
     /**
      * 视频收藏的id
      */
@@ -27,7 +27,28 @@ public class FollowCourse {
      */
     private Date createtime;
 
+    /**
+     * 更新时间
+     */
+    private Date updatetime;
 
+    /**
+     * 0是未收藏 1是已经收藏
+     */
+    private Integer isdelete;
+
+    /**
+     * 收藏数量
+     */
+    private  Integer followCount;
+
+    public Integer getFollowCount() {
+        return followCount;
+    }
+
+    public void setFollowCount(Integer followCount) {
+        this.followCount = followCount;
+    }
 
     /**
      * 视频收藏的id
@@ -83,5 +104,33 @@ public class FollowCourse {
      */
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
+    }
+
+    /**
+     * 更新时间
+     */
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    /**
+     * 更新时间
+     */
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
+    }
+
+    /**
+     * 0是未收藏 1是已经收藏
+     */
+    public Integer getIsdelete() {
+        return isdelete;
+    }
+
+    /**
+     * 0是未收藏 1是已经收藏
+     */
+    public void setIsdelete(Integer isdelete) {
+        this.isdelete = isdelete;
     }
 }

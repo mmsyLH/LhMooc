@@ -14,13 +14,30 @@ import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author :罗汉
  * @date : 2024/1/29
  */
 public class DataUtils {
+    /**
+     * 随机生成id
+     *
+     * @return
+     */
+    public static String getId() {
+        return UUID.randomUUID().toString().replace("-", "").toUpperCase();
+    }
 
+    /**
+     * 生成随机码
+     *
+     * @return
+     */
+    public static String getCode() {
+        return getId();
+    }
     /**
      * MD5加密密码
      *
@@ -160,5 +177,26 @@ public class DataUtils {
 
         // 输出结果
         System.err.println(targetCourseVo);
+    }
+
+
+    /**
+     * 是否是数字
+     *
+     * @param strings 字符串参数列表
+     * @return boolean
+     */
+    public static boolean isNumeric(String... strings) {
+        for (String str : strings) {
+            if (str == null || str.isEmpty()) {
+                return false;
+            }
+            for (char c : str.toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

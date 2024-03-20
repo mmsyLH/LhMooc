@@ -36,7 +36,7 @@ public class Transaction {
     /**
      * 交易金额
      */
-    private Integer amount;
+    private Double amount;
 
     /**
      * 交易时间
@@ -62,6 +62,7 @@ public class Transaction {
      * 0表示还没删除 1表示删除
      */
     private Integer isdelete;
+
     /**
      * 0表示还没删除 1表示删除
      */
@@ -75,6 +76,7 @@ public class Transaction {
     public void setIsdelete(Integer isdelete) {
         this.isdelete = isdelete;
     }
+
     /**
      * 交易流水表的id
      */
@@ -131,17 +133,11 @@ public class Transaction {
         this.transactiontype = transactiontype;
     }
 
-    /**
-     * 交易金额
-     */
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    /**
-     * 交易金额
-     */
-    public void setAmount(Integer amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

@@ -128,9 +128,10 @@
                     <div class="card-widget card-info">
                         <div class="card-content">
                             <div class="card-info-avatar is-center">
-                                <img class="avatar-img"
+                                <img id="avatar" class="avatar-img"
                                     src="https://cdn.jsdelivr.net/gh/laoxuai/assert/images/20200125221102.png"
                                     alt="avatar">
+
                                 <div class="author-info__name">欢迎您！罗汉</div>
                                 <div class="author-info__description">我是 "个人简介信息"</div>
                             </div>
@@ -172,7 +173,8 @@
                         <div class="card-content">
                             <div class="item-headline">
                                 <i class="fa fa-line-chart" aria-hidden="true"></i>
-                                <a href="../userView/gerenIframe/historyVideo.html" target="gerenContentIframe">历史播放记录</a>
+                                <a href="../userView/gerenIframe/historyVideo.html"
+                                    target="gerenContentIframe">历史播放记录</a>
                             </div>
                         </div>
                     </div>
@@ -197,9 +199,9 @@
 
                 </div>
 
-                 <!-- 内容iframe -->
+                <!-- 内容iframe -->
                 <div class="gerenIframe">
-                    <iframe name="gerenContentIframe" width=1000px height="750px" marginwidth=0 marginheight=0
+                    <iframe name="gerenContentIframe" width=1000px height="650px" marginwidth=0 marginheight=0
                         frameborder="0" scrolling="no">
                         <a>你的浏览器不支持iframe页面嵌套，请点击这里访问页面内容。</a>
                     </iframe>
@@ -258,6 +260,7 @@
         });
     </script>
     <script>
+        // 判断是否登录并且拿到用户信息
         $(document).ready(function () {
             // 判断用户登录状态
             var user = sessionStorage.getItem("LoginMoocUser");
@@ -267,8 +270,23 @@
                 setTimeout(function () {
                     window.location.href = "/"; // 跳转到首页
                 }, 1000); // 1秒后跳转
+            } else {
+                var userObj = JSON.parse(user);
+                console.log("userObj", userObj)
+                // 设置用户头像
+                $('#avatar').attr('src', userObj.avatar);
+                // 设置用户名
+                $('#username').text('欢迎您！' + userObj.username);
+                // 设置用户昵称
+                $('#nickname').text('我是 "' + userObj.nickname + '"');
             }
         });
+
+        // 显示用户信息的函数
+        function displayUserInfo(user) {
+            $('#wallet').text('$' + user.wallet.toFixed(2));
+            // 其他用户信息
+        }
     </script>
 </body>
 

@@ -58,4 +58,10 @@ public class MoocUserDAOImpl extends BasicDAO<MoocUser> implements MoocUserDAO {
     public int deleteByid(MoocUser moocUser) {
         return delete(moocUser);
     }
+
+    @Override
+    public MoocUser selectOneById(MoocUser moocUser) {
+        return super.selectOneById(moocUser);
+    }
+
 }

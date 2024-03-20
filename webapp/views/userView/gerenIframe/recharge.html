@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人充值接口页面</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../../css/base.css">
+    <style>
+        /* 添加自定义样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        #page {
+            width: 80%;
+            margin: 10px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-container {
+            text-align: center;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+        }
+
+        .loading img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page">
+        <div class="article-container">
+            <hr>
+            <!-- 充值接口页面开始 -->
+            <h2>充值金额</h2>
+            <select id="predefinedAmount" onchange="toggleCustomInput()">
+                <option value="10">10 元</option>
+                <option value="66">66 元</option>
+                <option value="100">100 元</option>
+                <option value="684">684 元</option>
+                <option value="其他">其他金额</option>
+            </select>
+            <input type="text" id="customAmount" placeholder="请输入自定义金额" style="display: none;">
+            <button class="btn baseButton" onclick="recharge()">充值</button>
+            <div class="loading" id="loading">
+                <img src="https://i.stack.imgur.com/MnyxU.gif" alt="loading">
+            </div>
+            <!-- 充值接口页面结束 -->
+            <hr>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var userObj;
+        // 页面加载完毕后执行
+        $(document).ready(function () {
+            var user = sessionStorage.getItem("LoginMoocUser");
+            if (!user) {
+                alert("您未登录，请先登录！");
+                setTimeout(function () {
+                    window.location.href = "/"; // 跳转到首页
+                }, 1000); // 1秒后跳转
+            } else {
+                userObj = JSON.parse(user);
+                // console.log("用户对象", userObj);
+                getFollowPageById();
+            }
+        });
+        /**
+         * 切换自定义输入框的显示与隐藏
+         * 无参数
+         * 无返回值
+         */
+        function toggleCustomInput() {
+            var predefinedAmount = document.getElementById('predefinedAmount').value; // 获取选择的预设金额值
+            if (predefinedAmount === '其他') {
+                document.getElementById('customAmount').style.display = 'block'; // 如果选择的是“其他”，则显示自定义金额输入框
+            } else {
+                document.getElementById('customAmount').style.display = 'none'; // 否则，隐藏自定义金额输入框
+            }
+        }
+        function isNumeric(input) {
+            return /^\d+$/.test(input);
+        }
+        /**
+         * 执行充值操作
+         * 无参数
+         * 无返回值
+         */
+        function recharge() {
+            var amount;
+            // 确定充值金额，如果选择的是“其他”，则使用自定义金额；否则，使用预设金额
+            if (document.getElementById('predefinedAmount').value === '其他') {
+                amount = document.getElementById('customAmount').value;
+                if (!isNumeric(amount)) {
+                    alert("请输入有效的数字金额！");
+                    return;
+                }
+            } else {
+                amount = document.getElementById('predefinedAmount').value;
+            }
+
+            // 发起 AJAX 请求来进行充值操作
+            $.ajax({
+                url: 'LhMooc/payServlet', // 充值接口URL
+                type: 'POST', // 请求类型为POST
+                data: {
+                    action: "recharge",
+                    userId: userObj.id,
+                    wallet: amount
+                },
+                beforeSend: function () {
+                    document.getElementById('loading').style.display = 'block'; // 显示加载动画
+                },
+                success: function (response) {
+                    console.log("充值结果", response);
+                    document.getElementById('loading').style.display = 'none'; // 隐藏加载动画
+                    alert('充值成功：' + amount + '元'); // 充值成功提示
+                },
+                error: function (xhr, status, error) {
+                    document.getElementById('loading').style.display = 'none'; // 隐藏加载动画
+                    alert('充值失败，请重试！'); // 充值失败提示
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

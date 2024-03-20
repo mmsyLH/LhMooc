@@ -69,24 +69,24 @@ public class CourseServlet extends LhHttpServlet {
     }
 
     /**
+     * 通过id获取课程详细信息
      * 根据课程id获取课程详情
      *
-     * @param request 请求对象
+     * @param request  请求对象
      * @param response 响应对象
-     * @param gson Gson对象
-     * @param courseService 课程服务对象
      */
-    public void getCourseDetailById(LhRequest request, LhResponse response, Gson gson, CourseService courseService) {
+    public void getCourseDetailById(LhRequest request, LhResponse response) {
         // 获取课程ID
-        String courseid = request.getParameter("courseid");
+        String courseId = request.getParameter("courseId");
         // 检查课程ID是否为空
-        if (!DataUtils.handleNullOrEmpty(response, gson, courseid)) {
+        if (!DataUtils.handleNullOrEmpty(response, gson, courseId)) {
             // 如果课程ID为空，则直接返回，不执行下面的逻辑
             return;
         }
 
         // 根据课程ID获取课程详情
-        Result<CourseVo> jsonResponse = courseService.getCourseDetail(Integer.parseInt(courseid));
+        Result<CourseVo> jsonResponse = courseService.getCourseDetail(Integer.parseInt(courseId));
+
         // 返回json对象
         response.writeToJson(gson.toJson(jsonResponse));
     }

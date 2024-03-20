@@ -37,10 +37,11 @@ public abstract class LhHttpServlet implements LhServlet {
             // 获取前端传来的动作
             String action = request.getParameter(LhMoocConstant.ACTION_NAME);
             Method declaredMethod = this.getClass().getDeclaredMethod(action, LhRequest.class, LhResponse.class);
+            System.err.println("declaredMethod:"+declaredMethod);
             // 执行方法
             declaredMethod.invoke(this, request, response);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
