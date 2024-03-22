@@ -106,7 +106,7 @@
     </div>
     <script src="../../../js/jquery-3.6.0.js"></script>
     <script>
-        
+
         // 搜索按钮
         $(document).ready(function () {
             // 点击搜索按钮触发搜索事件
@@ -129,9 +129,42 @@
             } else {
                 userObj = JSON.parse(user);
                 console.log("用户对象", userObj);
-                // getFollowP  1  ageById();
+                getByUserIdAndVideoName();
             }
         });
+        /**
+         * 根据用户ID和视频名称个人观看历史记录
+         * 无参数
+         * 无返回值
+         */
+        function getByUserIdAndVideoName() {
+            var userId = userObj.id;
+            var videoName = document.getElementById('videoName').value;
+            if (!videoName) {
+                videoName = "";
+            }
+            $.ajax({
+                url: 'LhMooc/playHistoryServlet', // 获取个人观看历史记录接口URL
+                type: 'get', // 请求类型为POST
+                data: {
+                    action: "getByUserIdAndVideoName",
+                    userId: userId,
+                    videoName: videoName
+                },
+                success: function (response) {
+                    console.log("获取历史记录结果", response);
+                    if (response.code === 200) {
+
+                    } else {
+                        alert(response.msg);
+                    }
+                },
+                error: function (error) {
+                    alert("获取历史记录失败！", error);
+                }
+            });
+
+        }
 
     </script>
 </body>

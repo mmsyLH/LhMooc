@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>个人详情</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../../css/gerenIframe.css">
     <style>
@@ -21,6 +21,10 @@
             /* Placeholder color */
             margin-bottom: 10px;
         }
+
+        #uploadBtn {
+            display: none;
+        }
     </style>
 </head>
 
@@ -31,7 +35,14 @@
             <div class="grenDetail">
                 <!-- 用户头像 -->
                 <div>
-                    <img id="avatar" src="" alt="User Avatar">
+                    <!-- 文件上传功能区域 -->
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    <!-- 通过点击图片来选择文件 -->
+                    <label for="fileInput" style="cursor: pointer;">
+                        <img id="avatar" src="" alt="用户头像">
+                    </label>
+                    <!-- 确认上传按钮，选择文件后显示 -->
+                    <button id="confirmUploadBtn" style="display: none;">确认更改</button>
                 </div>
                 <!-- 用户信息表单 -->
                 <div class="user">
@@ -178,6 +189,54 @@
                 }
             });
         }
+
+        // 文件上传部分
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('confirmUploadBtn');
+
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+                $('#avatar').attr('src', e
+                    .target.result);
+                $('#confirmUploadBtn').show(); // 显示确认上传按钮
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // 点击确认上传按钮触发上传操作
+        $('#confirmUploadBtn').click(function () {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const base64Data = event.target.result;
+                console.log(base64Data);
+                $.ajax({
+                    url: 'LhMooc/upload',
+                    type: 'POST',
+                    data: {
+                        image: base64Data
+                    },
+                    success: function (response) {
+                        console.log('上传成功');
+                        userDetail.avatar = "../../../download/"+response.data.avatarUrl;
+                        $('#avatar').attr('src', response.data.avatarUrl);
+                    },
+                    error: function (error) {
+                        console.error('上传失败');
+                    }
+                });
+            };
+            reader.readAsDataURL(file);
+            $('#confirmUploadBtn').hide(); // 隐藏确认上传按钮
+            fileInput.value = ''; // 清空文件选择，以便下次选择相同文件时触发change事件
+        });
     </script>
     <script src="../../../js/md5.js"></script>
 

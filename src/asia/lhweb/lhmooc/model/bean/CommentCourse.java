@@ -1,5 +1,7 @@
 package asia.lhweb.lhmooc.model.bean;
 
+import asia.lhweb.lhmooc.annotation.Id;
+
 import java.util.Date;
 
 /**
@@ -10,6 +12,7 @@ public class CommentCourse {
     /**
      * 视频评论id
      */
+    @Id
     private Integer commentid;
 
     /**
@@ -28,16 +31,9 @@ public class CommentCourse {
     private String content;
 
     /**
-     * 评论是否删除 0表示未删除 1表示删除
-     */
-    private Integer isdelete;
-
-    /**
      * 评论时间
      */
     private Date createtime;
-
-
 
     /**
      * 视频评论id
@@ -95,19 +91,7 @@ public class CommentCourse {
         this.content = content;
     }
 
-    /**
-     * 评论是否删除 0表示未删除 1表示删除
-     */
-    public Integer getIsdelete() {
-        return isdelete;
-    }
 
-    /**
-     * 评论是否删除 0表示未删除 1表示删除
-     */
-    public void setIsdelete(Integer isdelete) {
-        this.isdelete = isdelete;
-    }
 
     /**
      * 评论时间

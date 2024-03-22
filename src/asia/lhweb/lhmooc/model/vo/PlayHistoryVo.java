@@ -34,21 +34,92 @@ public class PlayHistoryVo {
     private Date playprogress;
 
     /**
-     * 0表示还没删除 1表示删除
+     * 视频名称
      */
-    private Integer isdelete;
-    /**
-     * 0表示还没删除 1表示删除
-     */
-    public Integer getIsdelete() {
-        return isdelete;
-    }
+    private String videoName;
 
     /**
-     * 0表示还没删除 1表示删除
+     * 课程名称
      */
-    public void setIsdelete(Integer isdelete) {
-        this.isdelete = isdelete;
+    private String courseName;
+    /**
+     * 课程简介
+     */
+    private String courseProfile;
+
+    /**
+     * 视频网址
+     */
+    private String videoUrl;
+
+    /**
+     * 课程类别
+     */
+    private String courCategoryName;
+    /**
+     * 课程章名
+     */
+    private String courChapterName;
+
+    /**
+     * 视频时间
+     */
+    private Date videoTime;
+
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCourseProfile() {
+        return courseProfile;
+    }
+
+    public void setCourseProfile(String courseProfile) {
+        this.courseProfile = courseProfile;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public String getCourCategoryName() {
+        return courCategoryName;
+    }
+
+    public void setCourCategoryName(String courCategoryName) {
+        this.courCategoryName = courCategoryName;
+    }
+
+    public String getCourChapterName() {
+        return courChapterName;
+    }
+
+    public void setCourChapterName(String courChapterName) {
+        this.courChapterName = courChapterName;
+    }
+
+    public Date getVideoTime() {
+        return videoTime;
+    }
+
+    public void setVideoTime(Date videoTime) {
+        this.videoTime = videoTime;
     }
 
     /**

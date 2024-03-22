@@ -1,20 +1,90 @@
-body{
+body {
     font: 14px / 1.5 "PingFang SC", "微软雅黑", "Microsoft YaHei", Helvetica, "Helvetica Neue", Tahoma, Arial, sans-serif;
 }
-/* 课程目录开始 */
-.catalogue-container {
-    margin-bottom: 60px;
+
+.contatiner {
+    padding: 0 15%;
+    min-width: 1300px;
 }
+
+/* 课程介绍 */
+.course-intro {
+    padding-left: 10%;
+    padding-right: 10px;
+    width: 100%;
+    height: 100px;
+    background-color: aqua;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+
+.course-intro h1 {
+    font-size: 20px;
+}
+
+.course-intro h2 {
+    margin-left: 20px;
+}
+
+.course-intro h3 {
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgb(2, 10, 8);
+}
+
+
+/* 课程目录开始 */
+.courseBox {
+    padding-right: 10px;
+    display: flex;
+}
+
+.catalogue-container {
+    max-height: 500px;
+    overflow-x: auto;
+    /* 当内容超过最大高度时显示垂直滚动条 */
+    margin-bottom: 60px;
+    width: 425px;
+    position: relative;
+    /* 为了使伪元素定位相对于此容器 */
+}
+
+.catalogue-container::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 1px;
+    width: 3px;
+    /* 进度条的宽度 */
+    height: 100%;
+    /* 进度条的高度 */
+    background-color: #007bff;
+    /* 进度条的颜色 */
+    z-index: 1;
+    /* 确保进度条在顶部 */
+}
+
+.catalogue-container::-webkit-scrollbar {
+    display: none;
+    /* 隐藏浏览器默认的滚动条 */
+}
+
 .wrapper {
-    width: 1152px;
+    width: 400px;
     margin: 0 auto;
 }
+
 .catalogue-container .title-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
 }
+
 .catalogue-container .title-box .left {
     width: 117px;
     height: 28px;
@@ -22,26 +92,31 @@ body{
     background-size: cover;
     background-position: center;
 }
+
 .catalogue-container .title-box .right {
     display: block;
     font-size: 16px;
     letter-spacing: 0;
 }
+
 .catalogue-container .catalogue-box {
     overflow: hidden;
 }
+
 .catalogue-container .catalogue-box .last-dashed {
     position: relative;
 }
+
 .catalogue-container .catalogue-box .catague-item {
     position: relative;
     margin-bottom: 2px;
     float: right;
-    width: 1108px;
+    width: 400px;
     border: 1px solid #f6f9fa;
 }
+
 .catalogue-container .catalogue-box .catague-item .name-box {
-    width: 1108px;
+    width: 400px;
     height: 56px;
     background: #f6f9fa;
     padding: 20px 12px 20px 16px;
@@ -51,43 +126,149 @@ body{
     align-items: center;
     position: relative;
 }
+
 .catalogue-container .catalogue-box .catague-item .name-box .left {
     font-size: 16px;
     color: #1c1f21;
     font-weight: 600;
 }
+
 .catalogue-container .catalogue-box .catague-item .name-box .right {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .catalogue-container .catalogue-box .catague-item .name-box .right .time-box {
     font-size: 12px;
     color: #93999f;
     margin-right: 12px;
 }
-a:link, a:visited {
+
+a:link,
+a:visited {
     color: #1c1f21;
 }
+
 .catalogue-container .catalogue-box .catague-item .media-box {
     display: none;
     margin-top: 10px;
     padding: 0 12px 0 16px;
 }
+
 .catalogue-container .catalogue-box .catague-item .media-box .istrysee {
     cursor: pointer;
 }
+
 .catalogue-container .catalogue-box .catague-item .media-box li {
     margin-bottom: 17px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.catalogue-container .catalogue-box .catague-item .media-box li .left, .catalogue-container .catalogue-box .catague-item .media-box li .right {
+
+.catalogue-container .catalogue-box .catague-item .media-box li .left,
+.catalogue-container .catalogue-box .catague-item .media-box li .right {
     display: flex;
     align-items: center;
     font-size: 14px;
     color: #1c1f21;
     line-height: 24px;
 }
+
 /* 课程目录结束 */
+/* 视频播放区域开始 */
+.course-play {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+video {
+    width: 100%;
+    min-width: 800px;
+    /* 设置视频宽度为容器宽度 */
+    height: auto;
+    /* 自适应高度 */
+}
+
+/* 视频播放区域结束 */
+/* 点赞区域开始 */
+.like {
+    height: 60px;
+    width: 100%;
+    background-color: aquamarine;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* 评论区开始 */
+.comment-container {
+    margin: 0 auto;
+    width: 100%;
+    min-height: 400px;
+    padding: 20px;
+}
+
+.comment-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-avatar img {
+    width: 50px;
+    /* 调整头像大小 */
+    height: 50px;
+    border-radius: 50%;
+    /* 圆形头像 */
+}
+
+.input-area {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.input-area input {
+    width: calc(100% - 80px);
+    /* 调整输入框宽度 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.input-area button {
+    min-width: 40px;
+}
+
+.comment {
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: brown;
+}
+
+
+.comment-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-details {
+    margin-left: 10px;
+}
+
+.user-name {
+    font-weight: bold;
+}
+
+.comment-time {
+    color: #888;
+}
+
+.comment-text {
+    margin-top: 5px;
+}
+
+/* 评论区结束 */

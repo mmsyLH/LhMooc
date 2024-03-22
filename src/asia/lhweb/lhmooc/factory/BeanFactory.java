@@ -1,5 +1,7 @@
 package asia.lhweb.lhmooc.factory;
 
+import asia.lhweb.lhmooc.dao.CommentCourseDAO;
+import asia.lhweb.lhmooc.dao.impl.CommentCourseDAOImpl;
 import asia.lhweb.lhmooc.model.bean.*;
 
 /**
@@ -10,19 +12,20 @@ import asia.lhweb.lhmooc.model.bean.*;
  */
 public class BeanFactory {
     private static final BeanFactory instance = new BeanFactory();
-    private static final CommentVideo commentVideo = new CommentVideo();
+    private static final CommentCourse commentCourse = new CommentCourse();
     private static final Course course = new Course();
     private static final CourseCategory courseCategory = new CourseCategory();
     private static final CourseChapter courseChapter = new CourseChapter();
     private static final CourseVideo courseVideo = new CourseVideo();
 
     private static final FollowCourse followCourse = new FollowCourse();
-    private static final LikeVideo likeVideo = new LikeVideo();
+    private static final LikeCourse likeCourse = new LikeCourse();
     private static final MoocAdmin moocAdmin = new MoocAdmin();
     private static final MoocUser moocUser = new MoocUser();
     private static final Orders orders = new Orders();
     private static final PlayHistory playHistory = new PlayHistory();
     private static final Transaction transaction = new Transaction();
+    private static final CommentCourseDAO commentCourseDAO = new CommentCourseDAOImpl();
 
     private BeanFactory() {
         // 私有构造函数，防止外部实例化
@@ -42,8 +45,8 @@ public class BeanFactory {
      *
      * @return CommentVideo 实例
      */
-    public CommentVideo getCommentVideo() {
-        return commentVideo;
+    public CommentCourse getCommentCourse() {
+        return commentCourse;
     }
 
     /**
@@ -53,6 +56,9 @@ public class BeanFactory {
      */
     public Course getCourse() {
         return course;
+    }
+    public CommentCourseDAO getCommentCourseDAOImpl() {
+        return commentCourseDAO;
     }
 
     /**
@@ -91,8 +97,8 @@ public class BeanFactory {
      *
      * @return LikeVideo 实例
      */
-    public LikeVideo getLikeVideo() {
-        return likeVideo;
+    public LikeCourse getLikeCourse() {
+        return likeCourse;
     }
 
     /**

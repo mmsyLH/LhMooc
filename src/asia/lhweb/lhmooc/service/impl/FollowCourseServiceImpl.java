@@ -60,4 +60,28 @@ public class FollowCourseServiceImpl implements FollowCourseService {
         return Result.success(page, "查询成功");
     }
 
+    /**
+     * 页面
+     *
+     * @param followCourse 遵循课程
+     * @param pageNo       页面没有
+     * @param pageSize     页面大小
+     * @return {@link Page}<{@link FollowCourse}>
+     */
+    @Override
+    public Page<FollowCourse> page(FollowCourse followCourse, int pageNo, int pageSize) {
+        return followCourseDAO.page(followCourse,pageNo,pageSize);
+    }
+
+    /**
+     * 真正删除
+     *
+     * @param followCourse 遵循课程
+     * @return boolean
+     */
+    @Override
+    public boolean realDelete(FollowCourse followCourse) {
+        return followCourseDAO.realDelete(followCourse)!=-1;
+    }
+
 }

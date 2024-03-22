@@ -72,7 +72,7 @@
     </div>
     <script src="../../js/jquery-3.6.0.js"></script>
     <script>
-        var pageSize = 3;
+        var pageSize = 5;
         var userList = {}
         var pageNo = 1;
         window.onload = function () {
@@ -118,7 +118,7 @@
                 pageNo = 1;
             }
             var userName = document.getElementById("userName").value.trim();
-            console.log("查询输入框的username",userName)
+            console.log("查询输入框的username", userName)
             $.ajax({
                 url: 'LhMooc/userServlet',
                 type: 'get',
@@ -160,8 +160,8 @@
                     "<td>" + user.email + "</td>" +
                     "<td>" + user.avatar + "</td>" +
                     "<td>" + user.wallet + "</td>" +
-                    "<td>" + user.createtime + "</td>" +
-                    "<td>" + user.updatetime + "</td>" +
+                    "<td>" + formatDate(user.createtime) + "</td>" +
+                    "<td>" + formatDate(user.updatetime) + "</td>" +
                     "<td>" + (user.userrole === 1 ? "管理员" : "普通用户") + "</td>" +
                     "<td>" + (user.isdelete === 1 ? "被删除" : "没被删除") + "</td>" +
                     "<td><button class='baseButton' onclick='editUser(" + i + ")'>编辑</button></td>" +
@@ -303,10 +303,11 @@
                 }
             })
         }
+        
         // 打开弹窗并填充数据
         function openModal(index) {
             currentIndex = index; // 设置当前编辑的索引
-            var { id,username, nickname, email, avatar, wallet, userrole } = userList[index];
+            var { id, username, nickname, email, avatar, wallet, userrole } = userList[index];
             document.getElementById("userId").value = id;
             document.getElementById("username").value = username;
             document.getElementById("userNickname").value = nickname;
@@ -321,10 +322,23 @@
         function closeModal() {
             document.getElementById("editModal").style.display = "none";
         }
+
+        // 将日期字符串转换为指定格式（YYYY/MM/DD HH:MM:SS）
+        function formatDate(dateString) {
+            var date = new Date(dateString);
+            var year = date.getFullYear();
+            var month = ('0' + (date.getMonth() + 1)).slice(-2); // 月份从0开始，需要加1，并确保两位数
+            var day = ('0' + date.getDate()).slice(-2); // 确保两位数的日期
+            var hours = ('0' + date.getHours()).slice(-2); // 确保两位数的小时
+            var minutes = ('0' + date.getMinutes()).slice(-2); // 确保两位数的分钟
+            var seconds = ('0' + date.getSeconds()).slice(-2); // 确保两位数的秒钟
+            return year + '/' + month + '/' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+        }
+
     </script>
 </body>
 <style>
-   
+
 </style>
 
 </html>

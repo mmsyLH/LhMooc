@@ -37,7 +37,7 @@ public class PlayHistoryServlet extends LhHttpServlet {
 
 
     /**
-     * 用户余额充值
+     * 通过用户id和视频名称获取
      *
      * @param req  要求事情
      * @param resp 分别地
@@ -49,10 +49,6 @@ public class PlayHistoryServlet extends LhHttpServlet {
         // 请求参数为空
         if (!DataUtils.handleNullOrEmpty(resp, gson, userId)) {
             return;
-        }
-        //
-        if (DataUtils.handleNullOrEmpty(resp, gson, videoName)){
-            videoName="";
         }
 
         // 没有权限

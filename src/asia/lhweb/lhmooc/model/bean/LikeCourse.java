@@ -1,5 +1,7 @@
 package asia.lhweb.lhmooc.model.bean;
 
+import asia.lhweb.lhmooc.annotation.Id;
+
 import java.util.Date;
 
 /**
@@ -10,6 +12,7 @@ public class LikeCourse {
     /**
      * 点赞表的id
      */
+    @Id
     private Integer likeid;
 
     /**
@@ -22,10 +25,6 @@ public class LikeCourse {
      */
     private Integer courseid;
 
-    /**
-     * 0是未点赞 1是点赞
-     */
-    private Integer isdelete;
 
     /**
      * 创建时间
@@ -36,7 +35,6 @@ public class LikeCourse {
      * 修改时间
      */
     private Date updatetime;
-
 
 
     /**
@@ -81,19 +79,6 @@ public class LikeCourse {
         this.courseid = courseid;
     }
 
-    /**
-     * 0是未点赞 1是点赞
-     */
-    public Integer getIsdelete() {
-        return isdelete;
-    }
-
-    /**
-     * 0是未点赞 1是点赞
-     */
-    public void setIsdelete(Integer isdelete) {
-        this.isdelete = isdelete;
-    }
 
     /**
      * 创建时间

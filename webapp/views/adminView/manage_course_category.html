@@ -14,7 +14,7 @@
         <div class="main hadmin">
             <div class="select">
                 课程分类 <input type="text" id="categoryName" placeholder="请输入课程分类名">
-                <input type="button" value="查询" class="baseButton" onclick="searchCategory()">
+                <input type="button" value="查询" class="baseButton" onclick="search()">
                 <input type="button" value="添加" class="baseButton" onclick="openAddModal()">
             </div>
             <!-- 查询结果区域开始 -->
@@ -69,15 +69,15 @@
     <script src="../../js/jquery-3.6.0.js"></script>
     <script src="../../js/manages.js"></script>
     <script>
-        var pageSize = 3;
+        var pageSize = 5;
         var categoryList = {}
         var pageNo = 1;
         window.onload = function () {
-            searchCategory(pageNo); // 在页面加载时查询第一页的课程分类数据
+            search(pageNo); // 在页面加载时查询第一页的课程分类数据
         };
 
         //根据分类名称进行模糊查询
-        function searchCategory(pageNo) {
+        function search(pageNo) {
             if (pageNo == null) {
                 pageNo = 1;
             }
@@ -97,7 +97,7 @@
                     if (res.code === 200) {
                         //显示内容
                         categoryList = res.data.items;
-                        console.log("categoryList:",categoryList)
+                        console.log("categoryList:", categoryList)
                         displayCategoryList(res.data.items);
                         //显示导航条
                         pageNo = res.data.pageNo;
@@ -121,7 +121,7 @@
                 var tr = document.createElement("tr");
                 tr.innerHTML = "<td>" + category.categoryid + "</td>" +
                     "<td>" + category.categoryname + "</td>" +
-                    "<td>" + category.createtime + "</td>" +
+                    "<td>" + formatDate(category.createtime) + "</td>" +
                     "<td>" + (category.isdelete === 1 ? "被删除" : "没被删除") + "</td>" +
                     "<td><button class='baseButton' onclick='editCategory(" + i + ")'>编辑</button></td>" +
                     "<td><button class='baseButton' onclick='deleteCategory(" + i + ")'>逻辑删除</button></td>" +
@@ -163,7 +163,7 @@
                 },
                 success: function (res) {
                     if (res.code === 200) {
-                        searchCategory(pageNo);
+                        search(pageNo);
                         closeModal('addModal'); // 添加成功后关闭弹窗
                     } else {
                         alert("添加失败:" + res.msg);
@@ -191,7 +191,7 @@
                 },
                 success: function (res) {
                     if (res.code === 200) {
-                        searchCategory(pageNo);
+                        search(pageNo);
                         closeModal('editModal'); // 修改成功后关闭弹窗
                     } else {
                         alert("修改失败:" + res.msg);
@@ -216,7 +216,7 @@
                 },
                 success: function (res) {
                     if (res.code === 200) {
-                        searchCategory(pageNo);
+                        search(pageNo);
                     } else {
                         console.log("删除失败", res.msg)
                     }
@@ -240,7 +240,7 @@
                 },
                 success: function (res) {
                     if (res.code === 200) {
-                        searchCategory(pageNo);
+                        search(pageNo);
                     } else {
                         console.log("删除失败", res.msg)
                     }
@@ -257,4 +257,5 @@
         }
     </script>
 </body>
+
 </html>

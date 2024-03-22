@@ -13,12 +13,11 @@
         <!-- 内容区域 -->
         <div class="main hadmin">
             <div class="select">
-                课程分类：
-                <select id="categorySelect" onchange="searchCourseByCategory()">
-                    <option value="">全部</option>
-                    <!-- 这里将会自动填充课程分类 -->
+                选择课程类别：
+                <select id="categorySelect" onchange="search()">
+
                 </select>
-                <input type="button" value="查询" class="baseButton" onclick="searchCourseByCategory()">
+                
                 <input type="button" value="添加" class="baseButton" onclick="openAddModal()">
             </div>
             <!-- 查询结果区域开始 -->
@@ -34,7 +33,7 @@
                             <th>操作</th>
                         </tr>
                     </thead>
-                    <tbody id="courseList">
+                    <tbody id="dataList">
 
                     </tbody>
                 </table>
@@ -44,6 +43,7 @@
             </div>
             <!-- 查询结果区域结束 -->
         </div>
+
         <!-- 添加窗口 -->
         <div id="addModal" class="modal">
             <div class="modal-content">
@@ -64,14 +64,40 @@
                 </form>
             </div>
         </div>
+        <!-- 编辑弹窗 -->
+
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('editModal')">&times;</span>
+                <h2>编辑课程</h2>
+                <form id="editForm">
+                    <input type="hidden" id="courseIdEdit"> <!-- 添加隐藏的课程ID输入框 -->
+                    <label for="courseNameEdit">课程名称:</label>
+                    <input type="text" id="courseNameEdit"><br><br>
+                    <label for="categoryIdEdit">所属分类:</label>
+                    <select id="categoryIdEdit">
+                        <!-- 这里将会自动填充课程分类 -->
+                    </select><br><br>
+                    <label for="profileEdit">课程介绍:</label>
+                    <input type="text" id="profileEdit"><br><br>
+                    <label for="priceEdit">价格:</label>
+                    <input type="text" id="priceEdit"><br><br>
+                    <input type="button" value="确定" onclick="submitEditCourse()">
+                </form>
+            </div>
+        </div>
+
     </div>
     <script src="../../js/jquery-3.6.0.js"></script>
+    <script src="../../js/manages.js"></script>
     <script>
+        var pageNo = 1;
+        var pageSize = 5;
         var categoryList = {};
-        
+        var dataListDate = {};
         window.onload = function () {
             loadCategories(); // 在页面加载时加载全部课程分类
-            searchCourseByCategory(); // 在页面加载时查询全部课程
+            search(); // 在页面加载时查询全部课程
         };
 
         // 加载全部课程分类
@@ -117,19 +143,31 @@
         }
 
         // 根据课程分类查询课程
-        function searchCourseByCategory() {
+        function search(pageNo) {
+            if (pageNo == null) {
+                pageNo = 1;
+            }
             var categoryId = document.getElementById("categorySelect").value;
             $.ajax({
                 url: 'LhMooc/courseServlet',
                 type: 'get',
                 data: {
-                    action: "getByCategory",
+                    // action: "getByCategory",
+                    action: "pageAndByCategory",
+                    pageNo: pageNo,
+                    pageSize: pageSize,
                     categoryId: categoryId
                 },
                 dataType: "JSON",
                 success: function (res) {
                     if (res.code === 200) {
-                        displayCourseList(res.data);
+                        // dataListDate = res.data;
+                        dataListDate = res.data.items;
+                        // displayCourseList(res.data);
+                        displayCourseList(res.data.items);
+                        //显示导航条
+                        pageNo = res.data.pageNo;
+                        updatePagination(res.data.pageNo, res.data.pageTotalCount, res.data.totalRow);
                     } else {
                         alert(res.msg);
                     }
@@ -142,8 +180,8 @@
 
         // 展示课程列表
         function displayCourseList(data) {
-            var courseList = document.getElementById("courseList");
-            courseList.innerHTML = ""; // 清空之前的数据
+            var dataList = document.getElementById("dataList");
+            dataList.innerHTML = ""; // 清空之前的数据
             for (var i = 0; i < data.length; i++) {
                 var course = data[i];
                 var tr = document.createElement("tr");
@@ -154,8 +192,9 @@
                     "<td>" + course.price + "</td>" +
                     "<td><button class='baseButton' onclick='editCourse(" + i + ")'>编辑</button></td>" +
                     "<td><button class='baseButton' onclick='deleteCourse(" + i + ")'>删除</button></td>";
-                courseList.appendChild(tr);
+                dataList.appendChild(tr);
             }
+
         }
 
         // 根据课程分类ID获取分类名称
@@ -199,7 +238,7 @@
                 },
                 success: function (res) {
                     if (res.code === 200) {
-                        searchCourseByCategory();
+                        search();
                         closeModal('addModal'); // 添加成功后关闭弹窗
                     } else {
                         alert("添加失败:" + res.msg);
@@ -213,14 +252,32 @@
 
         // 编辑课程
         function editCourse(index) {
-            var { courseid, coursename, categoryid, profile, price } = courseList[index];
-            document.getElementById("courseId").value = courseid;
+            var { courseid, coursename, categoryid, profile, price } = dataListDate[index];
+            document.getElementById("courseIdEdit").value = courseid;
             document.getElementById("courseNameEdit").value = coursename;
-            document.getElementById("categoryIdEdit").value = categoryid;
             document.getElementById("profileEdit").value = profile;
             document.getElementById("priceEdit").value = price;
+            // 填充所属分类下拉框
+            var categoryIdEditSelect = document.getElementById("categoryIdEdit");
+            categoryIdEditSelect.innerHTML = ""; // 清空之前的选项
+            for (var i = 0; i < categoryList.length; i++) {
+                var category = categoryList[i];
+                var option = document.createElement("option");
+                option.value = category.categoryid;
+                option.innerText = category.categoryname;
+                // 设置选中项
+                if (category.categoryid === categoryid) {
+                    option.selected = true;
+                }
+                categoryIdEditSelect.appendChild(option);
+            }
             // 显示弹窗
             document.getElementById("editModal").style.display = "block";
+        }
+
+        // 提交编辑课程
+        function submitEditCourse() {
+
         }
 
         // 关闭弹窗

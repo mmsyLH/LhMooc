@@ -76,42 +76,47 @@ public class FollowServlet extends LhHttpServlet {
 
 
     /**
-     * 用户更新
+     * 分页查询收藏记录
      *
-     * @param req  要求事情
-     * @param resp 分别地
+     * @param req  请求对象
+     * @param resp 响应对象
      */
-    public void userUpdate(LhRequest req, LhResponse resp) {
-        String id = req.getParameter("id");
-        String password = req.getParameter("password");
-        String nickname = req.getParameter("nickname");
-        String email = req.getParameter("email");// 可以为空
-        String avatar = req.getParameter("avatar");
-        String wallet = req.getParameter("wallet");
+    public void page(LhRequest req, LhResponse resp) {
+        // todo 鉴权！！！  判空！！！ 后台懒得做了
+        String pageNo = req.getParameter("pageNo");
+        String pageSize = req.getParameter("pageSize");
+        String userID = req.getParameter("userID");
 
-        if (!DataUtils.handleNullOrEmpty(resp, gson, id, nickname, avatar, wallet)) {
+        FollowCourse followCourse = new FollowCourse();
+        if (!"".equals(userID)){
+            followCourse.setUserid(Integer.parseInt(userID));
+        }
+        // 调用收藏服务类进行查询收藏记录
+        Page<FollowCourse> page = followCourseService.page(followCourse, Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+        String presJson = gson.toJson(Result.success(page, "分页查询收藏记录"));
+        // 将JSON字符串写入响应对象中
+        resp.writeToJson(presJson);
+    }
+
+    /**
+     * 删除收藏记录
+     *
+     * @param req  请求对象
+     * @param resp 响应对象
+     */
+    public void delete(LhRequest req, LhResponse resp) {
+        String id = req.getParameter("followid");
+
+        // 检查followid是否为null或空
+        if (!DataUtils.handleNullOrEmpty(resp, gson, id)){
             return;
         }
+        FollowCourse followCourse = new FollowCourse();
+        followCourse.setFollowid(Integer.valueOf(id));
+        boolean res = followCourseService.realDelete(followCourse);
+        String jsonResponse = res ? gson.toJson(Result.success("删除成功")) : gson.toJson(Result.error("删除失败"));
 
-
-        // 封装属性在对象中
-        MoocUser moocUser = new MoocUser();
-        moocUser.setId(Integer.parseInt(id));
-        if (password != null && !password.isEmpty()) {
-            moocUser.setPassword(password);
-        }
-
-        moocUser.setNickname(nickname);
-        moocUser.setEmail(email);
-        moocUser.setAvatar(avatar);
-        moocUser.setWallet(Double.parseDouble(wallet));
-
-
-        // 调用userService，根据ID获取用户信息
-        Result result = userService.userUpdate(moocUser);
-
-        // 将查询结果转换为JSON，并通过response返回
-        resp.writeToJson(gson.toJson(result));
+        resp.writeToJson(jsonResponse);
     }
 
     @Override

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收藏管理</title>
+    <link rel="stylesheet" href="../../css/manages.css">
+</head>
+
+<body>
+    <div class="container" style="padding-right: 10px;">
+        <!-- 内容区域 -->
+        <div class="main hadmin">
+            <div class="select">
+                用户ID <input type="text" id="userID" placeholder="请输入用户ID">
+                <input type="button" value="查询" class="baseButton" onclick="search()">
+            </div>
+            <!-- 查询结果区域开始 -->
+            <div id="resultContainer">
+                <table style="min-height: 100px;">
+                    <thead>
+                        <tr>
+                            <th>收藏ID</th>
+                            <th>用户ID</th>
+                            <th>课程ID</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataList">
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- 查询结果区域结束 -->
+        </div>
+        <!-- 导航台 -->
+        <div class="pagination" id="pagination">
+
+        </div>
+    </div>
+    <script src="../../js/jquery-3.6.0.js"></script>
+    <script src="../../js/manages.js"></script>
+    <script>
+        var pageSize = 5;
+        var dataList = {}
+        var pageNo = 1;
+        window.onload = function () {
+            search(pageNo); // 在页面加载时查询第一页的收藏数据
+        };
+
+        //根据用户ID进行查询
+        function search(pageNo) {
+            if (pageNo == null) {
+                pageNo = 1;
+            }
+            var userID = document.getElementById("userID").value.trim();
+            if (userID == null) {
+                userID = "";
+            }
+            $.ajax({
+                url: 'LhMooc/followServlet',
+                type: 'get',
+                data: {
+                    action: "page",
+                    pageNo: pageNo,
+                    pageSize: pageSize,
+                    userID: userID
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    console.log("返回的res", res);
+                    if (res.code === 200) {
+                        //显示内容
+                        dataList = res.data.items;
+                        console.log("dataList:", dataList)
+                        displayList(res.data.items);
+                        //显示导航条
+                        pageNo = res.data.pageNo;
+                        updatePagination(res.data.pageNo, res.data.pageTotalCount, res.data.totalRow);
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 展示收藏数据
+        function displayList(data) {
+            var dataList = document.getElementById("dataList");
+            dataList.innerHTML = ""; // 清空之前的数据
+            for (var i = 0; i < data.length; i++) {
+                var follow = data[i];
+                var tr = document.createElement("tr");
+                tr.innerHTML = "<td>" + follow.followid + "</td>" +
+                    "<td>" + follow.userid + "</td>" +
+                    "<td>" + follow.courseid + "</td>" +
+                    "<td>" + formatDate(follow.createtime) + "</td>" +
+                    "<td><button class='baseButton' onclick='deleteByid(" + i + ")'>删除</button></td>";
+                dataList.appendChild(tr);
+            }
+        }
+
+        // 删除收藏记录
+        function deleteByid(index) {
+            const { followid } = dataList[index];
+            $.ajax({
+                method: "get",
+                url: "LhMooc/followServlet",
+                dataType: "json",
+                data: {
+                    action: "delete",
+                    followid: followid
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        alert("删除成功");
+                        search(pageNo);
+                    } else {
+                        console.log("删除失败", res.msg)
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err)
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

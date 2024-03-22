@@ -1,5 +1,7 @@
 package asia.lhweb.lhmooc.model.bean;
 
+import asia.lhweb.lhmooc.annotation.Id;
+
 import java.util.Date;
 
 /**
@@ -10,6 +12,7 @@ public class FollowCourse {
     /**
      * 视频收藏的id
      */
+    @Id
     private Integer followid;
 
     /**

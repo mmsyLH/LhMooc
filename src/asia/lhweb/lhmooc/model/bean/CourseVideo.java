@@ -63,6 +63,13 @@ public class CourseVideo {
         return isdelete;
     }
 
+    public CourseVideo() {
+    }
+
+    public CourseVideo(String videoname) {
+        this.videoname = videoname;
+    }
+
     /**
      * 0表示还没删除 1表示删除
      */

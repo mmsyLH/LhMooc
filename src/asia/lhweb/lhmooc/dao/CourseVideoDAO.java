@@ -21,4 +21,6 @@ public interface CourseVideoDAO {
      * @return {@link List}<{@link CourseVideo}>
      */
     List<CourseVideo> selectAll(CourseVideo courseVideo);
+
+    CourseVideo selectOneById(CourseVideo courseVideoTemp);
 }

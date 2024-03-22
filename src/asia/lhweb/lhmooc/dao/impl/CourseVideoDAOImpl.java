@@ -9,4 +9,9 @@ import asia.lhweb.lhmooc.model.bean.CourseVideo;
  * @date : 2024/3/12
  */
 public class CourseVideoDAOImpl  extends BasicDAO<CourseVideo> implements CourseVideoDAO {
+
+    @Override
+    public CourseVideo selectOneById(CourseVideo courseVideoTemp) {
+        return super.selectOneById(courseVideoTemp);
+    }
 }

@@ -4,31 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>文件上传</title>
+    <style>
+        .container {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #000;
+        }
+    </style>
 </head>
 
 <body>
-    <input id="cai"> <button onclick="add()">添加菜品</button>
-    <ul id="ulCai">
-        <li>香蕉</li>
-    </ul>
-
+    <!-- 文件选择输入元素，允许用户选择多个文件，并且可以包含整个目录结构。
+     attributes:
+     - type: 输入元素类型，这里为"file"，表示文件选择。
+     - multiple: 允许选择多个文件。
+     - webkitdirectory mozdirectory directory: 各浏览器前缀的属性，允许选择整个目录。
+ -->
+    <input type="file" multiple />
+    <div class="container"></div>
     <script>
-        function add() {
-            var cai = $("#cai").val();
-            var foodExists = false;
-            var $li=$("#ulCai").children("li");
-            for (let index = 0; index < $li.length; index++) {
-                const element = array[index];
-                
-            }
+        /**
+         * 获取页面中具有类名 'container' 的元素
+         */
+        const div = document.querySelector('.container');
 
-            if (foodExists) {
-                alert("菜品已经存在，请重新输入");
-            } else {
-                $("#ulCai").append("<li>" + cai + "</li>");
+        /**
+         * 配置元素的拖入事件，阻止默认行为 触发一次
+         * @param {Event} e - 事件对象
+         */
+        div.ondragenter = function (e) {
+            e.preventDefault();
+        }
+
+        /**
+         * 配置元素的拖过事件，阻止默认行为 不断触发
+         * @param {Event} e - 事件对象
+         */
+        div.ondragover = function (e) {
+            e.preventDefault();
+        }
+
+        /**
+         * 配置元素的放置事件，阻止默认行为 放手那一刻
+         * @param {Event} e - 事件对象
+         */
+        div.ondrop = function (e) {
+            e.preventDefault();
+            const items = e.dataTransfer.items;
+            for (const item of items) {
+                console.log(item)
             }
+            console.log(items.length);
         }
     </script>
 </body>

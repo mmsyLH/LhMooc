@@ -1,5 +1,6 @@
 package asia.lhweb.lhmooc.dao;
 
+import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.CommentCourse;
 
 import java.util.List;
@@ -23,4 +24,8 @@ public interface CommentCourseDAO{
      * @return {@link List}<{@link CommentCourse}>
      */
     List<CommentCourse> selectAll(CommentCourse commentCourse);
+
+    Page<CommentCourse> page(CommentCourse commentCourse, int pageNo, int pageSize);
+
+    int realDelete(CommentCourse commentCourse);
 }

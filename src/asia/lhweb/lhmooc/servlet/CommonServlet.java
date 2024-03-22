@@ -43,6 +43,7 @@ public class CommonServlet extends LhHttpServlet {
 
         response.writeToJson(gson.toJson(Result.success(md5Str, "获取加密后的文本成功")));
     }
+    
 
     @Override
     public void destroy() {

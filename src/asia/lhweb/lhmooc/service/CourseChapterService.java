@@ -1,5 +1,9 @@
 package asia.lhweb.lhmooc.service;
 
+import asia.lhweb.lhmooc.common.Result;
+import asia.lhweb.lhmooc.model.Page;
+import asia.lhweb.lhmooc.model.bean.CourseChapter;
+
 /**
  * 课程章节服务
  *
@@ -10,4 +14,17 @@ package asia.lhweb.lhmooc.service;
  */
 public interface CourseChapterService {
 
+    /**
+     * 页面
+     *
+     * @param courseChapter 章课程
+     * @param parseInt      解析int
+     * @param parseInt1     解析int1
+     * @return {@link Page}<{@link CourseChapter}>
+     */
+    Page<CourseChapter> pageByAnd(CourseChapter courseChapter, int parseInt, int parseInt1);
+
+    boolean realDelete(CourseChapter courseChapter);
+
+    Result update(int chapterID, String chaptername);
 }

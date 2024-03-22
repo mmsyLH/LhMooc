@@ -69,7 +69,6 @@ public class CourseServlet extends LhHttpServlet {
     }
 
     /**
-     * 通过id获取课程详细信息
      * 根据课程id获取课程详情
      *
      * @param request  请求对象
@@ -107,7 +106,7 @@ public class CourseServlet extends LhHttpServlet {
     }
 
     /**
-     * 根据类别ID获取该类别的课程列表。
+     * 根据类别ID获取该类别的课程列表。 后台界面的分页
      *
      * @param req  请求对象，包含客户端请求的数据。
      * @param resp 响应对象，用于向客户端返回处理结果。
@@ -132,7 +131,7 @@ public class CourseServlet extends LhHttpServlet {
     }
 
     /**
-     * 根据类别ID获取该类别的课程列表。
+     * 根据类别ID获取该类别的课程列表。 用户界面的分页
      *
      * @param req  请求对象，包含客户端请求的数据。
      * @param resp 响应对象，用于向客户端返回处理结果。

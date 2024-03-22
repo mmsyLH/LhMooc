@@ -21,4 +21,14 @@ public interface FollowCourseService {
      * @return {@link Result}<{@link Page}<{@link FollowCourse}>>
      */
     Result<Page<FollowCourse>> getFollowPageById(int userId, int pageNo, int pageSize);
+
+    Page<FollowCourse> page(FollowCourse followCourse, int parseInt, int parseInt1);
+
+    /**
+     * 真正删除
+     *
+     * @param followCourse 遵循课程
+     * @return boolean
+     */
+    boolean realDelete(FollowCourse followCourse);
 }

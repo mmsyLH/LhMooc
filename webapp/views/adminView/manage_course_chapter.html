@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程章节管理</title>
+    <link rel="stylesheet" href="../../css/manages.css">
+</head>
+
+<body>
+    <div class="container" style="padding-right: 10px;">
+        <!-- 内容区域 -->
+        <div class="main hadmin">
+            <div class="select">
+                选择课程分类：
+                <select id="categorySelect" onchange="searchCourse()">
+                    <!-- 这里将会自动填充课程分类 -->
+                </select>
+                选择课程:
+                <select id="courseSelect" onchange="search()">
+                    <!-- 这里将会自动填充章节 -->
+                </select>
+                <input type="button" value="添加" class="baseButton" onclick="openAddModal()">
+            </div>
+            <!-- 查询结果区域开始 -->
+            <div id="resultContainer">
+                <table id="courseTable" style="min-height: 100px;">
+                    <thead>
+                        <tr>
+                            <th>章节ID</th>
+                            <th>章节名称</th>
+                            <th>所属课程</th>
+                            <th>时间</th>
+                            <th>是否逻辑删除</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataList">
+
+                    </tbody>
+                </table>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination content will be added here -->
+                </div>
+            </div>
+            <!-- 查询结果区域结束 -->
+        </div>
+
+        <!-- 添加窗口 -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addModal')">&times;</span>
+                <h2>添加章节</h2>
+                <form id="addForm">
+                    <label for="chapterName">章节名称:</label>
+                    <input type="text" id="chapterNameInput"><br><br>
+                    <label for="categoryId">所属课程分类:</label>
+                    <select id="categorySelectAdd">
+                        <!-- 这里将会自动填充当前章节所属的课程分类 -->
+                    </select>
+
+                    <label for="courseId">所属课程:</label>
+                    <select id="courseSelectAdd">
+                        <!-- 这里将会自动填充当前章节所属的课程 -->
+                    </select>
+                    <button class="baseButton" onclick="submitAddChapter()">确定</button>
+                </form>
+            </div>
+        </div>
+        <!-- 编辑弹窗 -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('editModal')">&times;</span>
+                <h2>编辑章节</h2>
+                <form id="editForm">
+                    <input type="hidden" id="chapterIdEdit"> <!-- 添加隐藏的章节ID输入框 -->
+                    <label for="chapterNameEdit">章节名称:</label>
+                    <input type="text" id="chapterNameEdit"><br><br>
+                    <label for="categorySelectEdit">所属课程分类:</label>
+                    <select id="categorySelectEdit">
+                        <!-- 这里将会自动填充课程分类列表 -->
+                    </select><br><br>
+                    <label for="courseSelectEdit">所属课程:</label>
+                    <select id="courseSelectEdit">
+                        <!-- 这里将会自动填充课程列表 -->
+                    </select><br><br>
+                    <label for="isDeleteEdit">是否逻辑删除:</label>
+                    <select id="isDeleteEdit">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select><br><br>
+                    <button class="baseButton" onclick="submitEditChapter()">确定</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script src="../../js/jquery-3.6.0.js"></script>
+    <script src="../../js/manages.js"></script>
+    <script>
+        var pageNo = 1;
+        var pageSize = 5;
+        var categoryList = {}; //课程类别List
+        var courseList = {}; //课程List
+        var dataList = {}; //
+        window.onload = function () {
+            loadCategories(); // 在页面加载时加载全部课程分类
+        };
+
+        // 加载全部课程分类
+        function loadCategories() {
+            $.ajax({
+                url: 'LhMooc/categoryServlet',
+                type: 'get',
+                data: {
+                    action: "getAll"
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        categoryList = res.data;
+                        fillCategorySelects();
+                        searchCourse(); // 在页面加载时查询全部课程
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 填充课程分类下拉菜单
+        function fillCategorySelects() {
+            var categorySelect = document.getElementById("categorySelect");
+            categorySelect.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < categoryList.length; i++) {
+                var category = categoryList[i];
+                var option = document.createElement("option")
+                option.value = category.categoryid;
+                option.innerText = category.categoryname;
+                categorySelect.appendChild(option);
+            }
+        }
+
+        // 根据课程分类查询课程
+        function searchCourse() {
+            console.log("查询课程")
+            var categoryId = document.getElementById("categorySelect").value;
+            $.ajax({
+                url: 'LhMooc/courseServlet',
+                type: 'get',
+                data: {
+                    action: "getByCategory",
+                    categoryId: categoryId
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        courseList = res.data;
+                        console.log("课程分类结果", courseList);
+                        //展示课程下拉框
+                        fillCourseSelects();
+                        //查询章节
+                        search();
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 填充课程下拉菜单
+        function fillCourseSelects() {
+            console.log("填充课程下拉菜单")
+            var courseSelect = document.getElementById("courseSelect");
+            courseSelect.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < courseList.length; i++) {
+                var course = courseList[i];
+                var option = document.createElement("option");
+                option.value = course.courseid;
+                option.innerText = course.coursename;
+                courseSelect.appendChild(option);
+            }
+        }
+
+        // 根据课程章节分类id查询章节
+        function search(pageNo) {
+            if (pageNo == null) {
+                pageNo = 1;
+            }
+            var courseId = document.getElementById("courseSelect").value.trim();
+            if (courseId == null) {
+                courseId = "";
+            }
+            $.ajax({
+                url: 'LhMooc/chapterServlet',
+                type: 'get',
+                data: {
+                    action: "page",
+                    pageNo: pageNo,
+                    pageSize: pageSize,
+                    courseId: courseId
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    console.log("根据课程章节分类id查询章节返回的res", res);
+                    if (res.code === 200) {
+                        //显示内容
+                        dataList = res.data.items;
+                        console.log("dataList:", dataList)
+                        displayList(res.data.items);
+                        //显示导航条
+                        pageNo = res.data.pageNo;
+                        updatePagination(res.data.pageNo, res.data.pageTotalCount, res.data.totalRow);
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+        // 展示课程章节数据
+        function displayList(data) {
+            var dataList = document.getElementById("dataList");
+            dataList.innerHTML = ""; // 清空之前的数据
+            for (var i = 0; i < data.length; i++) {
+                var courseChapter = data[i];
+                var tr = document.createElement("tr");
+                tr.innerHTML = "<td>" + courseChapter.chapterid + "</td>" +
+                    "<td>" + courseChapter.chaptername + "</td>" +
+                    "<td>" + getCategoryNameById(courseChapter.couseid) + "</td>" +
+                    "<td>" + formatDate(courseChapter.createtime) + "</td>" +
+                    "<td>" + (courseChapter.isdelete === 1 ? "是" : "否") + "</td>" +
+                    "<td><button class='baseButton' onclick='editChapter(" + i + ")'>编辑</button></td>" +
+                    "<td><button class='baseButton' onclick='realDelete(" + i + ")'>真实删除</button></td>";
+                dataList.appendChild(tr);
+            }
+        }
+        // 根据课程分类ID获取分类名称
+        function getCategoryNameById(couseid) {
+            for (var i = 0; i < courseList.length; i++) {
+                if (courseList[i].courseid == couseid) {
+                    return courseList[i].coursename;
+                }
+            }
+            return "";
+        }
+
+        // 根据课程ID获取课程名称
+        function getCourseNameById(courseId) {
+            for (var i = 0; i < dataList.length; i++) {
+                if (dataList[i].courseid == courseId) {
+                    return dataList[i].coursename;
+                }
+            }
+            return "";
+        }
+
+        // 添加章节
+        function openAddModal() {
+            // 清空输入框
+            document.getElementById("chapterNameInput").value = "";
+
+            // 获取并填充课程分类列表
+            var categoryId = document.getElementById("categorySelect").value;
+            fillCategorySelectInAddModal(categoryId);
+
+            // 获取并填充课程列表
+            var courseId = document.getElementById("courseSelect").value;
+            console.log("openAddModal() courseId", courseId);
+            fillCourseSelectInAddModal(courseId);
+
+            // 显示弹窗
+            document.getElementById("addModal").style.display = "block";
+        }
+
+        // 提交添加章节
+        function submitAddChapter() {
+            var chapterName = document.getElementById("chapterNameInput").value.trim();
+            var courseId = document.getElementById("courseSelect").value;
+            var categoryId = document.getElementById("categorySelectAdd").value;
+            $.ajax({
+                method: "post",
+                url: "LhMooc/chapterServlet",
+                dataType: "json",
+                data: {
+                    action: "add",
+                    chaptername: chapterName,
+                    courseid: courseId,
+                    categoryid: categoryId,
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        searchCourse();
+                        closeModal('addModal');
+                    } else {
+                        alert("添加失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
+        }
+
+        // 填充添加章节模态框中的课程分类下拉框
+        function fillCategorySelectInAddModal(categoryId) {
+            var categorySelectAdd = document.getElementById("categorySelectAdd");
+            categorySelectAdd.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < categoryList.length; i++) {
+                var category = categoryList[i];
+                var option = document.createElement("option");
+                option.value = category.categoryid;
+                option.innerText = category.categoryname;
+                if (option.value === categoryId) {
+                    option.selected = true; // 默认选中当前课程所属的分类
+                }
+                categorySelectAdd.appendChild(option);
+            }
+        }
+
+        // 填充添加章节模态框中的课程下拉框
+        function fillCourseSelectInAddModal(courseid) {
+            var courseSelectAdd = document.getElementById("courseSelectAdd");
+            courseSelectAdd.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < courseList.length; i++) {
+                var course = courseList[i];
+                var option = document.createElement("option");
+                option.value = course.courseid;
+                option.innerText = course.coursename;
+                if (option.value === courseid) {
+                    option.selected = true; // 默认选中当前课程
+                }
+                courseSelectAdd.appendChild(option);
+            }
+        }
+
+        // 点击编辑按钮，打开编辑弹窗
+        function editChapter(index) {
+            var chapter = dataList[index]; // 获取点击的章节信息
+            document.getElementById("chapterIdEdit").value = chapter.chapterid;
+            document.getElementById("chapterNameEdit").value = chapter.chaptername;
+            fillCategorySelectEdit(chapter.categoryid);
+            fillCourseSelectEdit(chapter.courseid);
+            document.getElementById("isDeleteEdit").value = chapter.isdelete; // 设置是否逻辑删除的值
+            // 显示编辑弹窗
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        // 填充编辑章节模态框中的课程分类下拉框
+        function fillCategorySelectEdit(categoryId) {
+            var categorySelectEdit = document.getElementById("categorySelectEdit");
+            categorySelectEdit.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < categoryList.length; i++) {
+                var category = categoryList[i];
+                var option = document.createElement("option");
+                option.value = category.categoryid;
+                option.innerText = category.categoryname;
+                if (option.value === categoryId) {
+                    option.selected = true; // 默认选中当前章节所属的课程分类
+                }
+                categorySelectEdit.appendChild(option);
+            }
+        }
+
+        // 填充编辑章节模态框中的课程下拉框
+        function fillCourseSelectEdit(courseId) {
+            var courseSelectEdit = document.getElementById("courseSelectEdit");
+            courseSelectEdit.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < courseList.length; i++) {
+                var course = courseList[i];
+                var option = document.createElement("option");
+                option.value = course.courseid;
+                option.innerText = course.coursename;
+                if (option.value === courseId) {
+                    option.selected = true; // 默认选中当前章节所属的课程
+                }
+                courseSelectEdit.appendChild(option);
+            }
+        }
+
+        // 提交编辑章节
+        function submitEditChapter() {
+            var chapterId = document.getElementById("chapterIdEdit").value;
+            var chapterName = document.getElementById("chapterNameEdit").value.trim();
+            var courseId = document.getElementById("courseSelectEdit").value;
+            var categoryId = document.getElementById("categorySelectEdit").value;
+            var isDelete = document.getElementById("isDeleteEdit").value; // 获取是否逻辑删除的值
+            $.ajax({
+                method: "post",
+                url: "LhMooc/chapterServlet",
+                dataType: "json",
+                data: {
+                    action: "update",
+                    chapterid: chapterId,
+                    chaptername: chapterName,
+                    courseid: courseId,
+                    categoryid: categoryId,
+                    isdelete: isDelete // 将是否逻辑删除的值传递给后端
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        searchCourse();
+                        closeModal('editModal');
+                    } else {
+                        alert("编辑失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
+        }
+        /*
+        * 删除章节
+        * */
+        function realDelete(index) {
+            var chapter = dataList[index]; // 获取点击的章节信息
+            var chapterId = chapter.chapterid;
+            var chapterName = chapter.chaptername;
+            var isDelete = chapter.isdelete;
+            var isConfirm = confirm("确定要删除章节【" + chapterName + "】吗？");
+            if (isConfirm) {
+                $.ajax({
+                    method: "post",
+                    url: "LhMooc/chapterServlet",
+                    dataType: "json",
+                    data: {
+                        action: "realDelete",
+                        chapterid: chapterId
+                    },
+                    success: function (res) {
+                        if (res.code === 200) {
+                            searchCourse();
+                            closeModal('deleteModal');
+                            alert("删除成功");
+                        } else {
+                            alert("删除失败:" + res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log("error", err);
+                    }
+                });
+            }
+
+        }
+        // 关闭弹窗
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
