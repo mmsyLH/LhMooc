@@ -148,7 +148,7 @@ public class LhResponse {
             ByteBuffer[] bufferArray = {ByteBuffer.wrap(headerBytes), ByteBuffer.wrap(jsonData)};
             socketChannel.write(bufferArray);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

@@ -50,4 +50,6 @@ public interface CourseChapterDAO {
     Page<CourseChapter> pageByAnd(CourseChapter courseChapter, int pageNo, int pageSize);
 
     int update(CourseChapter findCourseChapter);
+
+    int save(CourseChapter courseChapter);
 }

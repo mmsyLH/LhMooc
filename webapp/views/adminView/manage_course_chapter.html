@@ -393,7 +393,8 @@
             var chapterName = document.getElementById("chapterNameEdit").value.trim();
             var courseId = document.getElementById("courseSelectEdit").value;
             var categoryId = document.getElementById("categorySelectEdit").value;
-            var isDelete = document.getElementById("isDeleteEdit").value; // 获取是否逻辑删除的值
+            console.log("chapterId:", chapterId);
+            var isDelete = document.getElementById("isDeleteEdit").value;
             $.ajax({
                 method: "post",
                 url: "LhMooc/chapterServlet",
@@ -403,7 +404,7 @@
                     chapterid: chapterId,
                     chaptername: chapterName,
                     courseid: courseId,
-                    categoryid: categoryId,
+                    categoryid:   categoryId  ,
                     isdelete: isDelete // 将是否逻辑删除的值传递给后端
                 },
                 success: function (res) {

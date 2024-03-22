@@ -62,18 +62,16 @@ public class ChapterServlet extends LhHttpServlet {
      * @param resp 响应对象
      */
     public void add(LhRequest req, LhResponse resp) {
-        String categoryId = req.getParameter("categoryId");
+        String categoryid = req.getParameter("categoryid");
         String courseid = req.getParameter("courseid");
-        String chapterid = req.getParameter("chapterid");
         String chaptername = req.getParameter("chaptername");
-        String isdelete = req.getParameter("isdelete");
 
         // 检查必要属性是否为null或空
-        if (!DataUtils.handleNullOrEmpty(resp, gson, categoryId, courseid, chapterid, chaptername, isdelete)) {
+        if (!DataUtils.handleNullOrEmpty(resp, gson, categoryid, courseid, chaptername)) {
             return;
         }
         //todo 注意 全部的后台管理应该都做判空（是否存在）、鉴权 这里就懒得做了
-        Result result = courseChapterService.add(Integer.parseInt(chapterid),chaptername);
+        Result result = courseChapterService.add(Integer.parseInt(courseid),chaptername);
         resp.writeToJson(gson.toJson(result));
     }
 
@@ -84,7 +82,7 @@ public class ChapterServlet extends LhHttpServlet {
      * @param resp 响应对象
      */
     public void update(LhRequest req, LhResponse resp) {
-        String categoryId = req.getParameter("categoryId");
+        String categoryid = req.getParameter("categoryid");
         String courseid = req.getParameter("courseid");
         String chapterid = req.getParameter("chapterid");
         String chaptername = req.getParameter("chaptername");
@@ -93,7 +91,7 @@ public class ChapterServlet extends LhHttpServlet {
 
 
         // 检查必要属性是否为null或空
-        if (!DataUtils.handleNullOrEmpty(resp, gson, categoryId, courseid, chapterid, chaptername, isdelete)) {
+        if (!DataUtils.handleNullOrEmpty(resp, gson, categoryid, courseid, chapterid, chaptername, isdelete)) {
             return;
         }
         //todo 注意 全部的后台管理应该都做判空（是否存在）、鉴权 这里就懒得做了
@@ -113,14 +111,14 @@ public class ChapterServlet extends LhHttpServlet {
      * @param resp 响应对象
      */
     public void realDelete(LhRequest req, LhResponse resp) {
-        String categoryId = req.getParameter("categoryId");
+        String chapterid = req.getParameter("chapterid");
 
         // 检查categoryId是否为null或空
-        if (!DataUtils.handleNullOrEmpty(resp, gson, categoryId)) {
+        if (!DataUtils.handleNullOrEmpty(resp, gson, chapterid)) {
             return;
         }
         CourseChapter courseChapter = new CourseChapter();
-        courseChapter.setChapterid(Integer.valueOf(categoryId));
+        courseChapter.setChapterid(Integer.valueOf(chapterid));
         boolean success = courseChapterService.realDelete(courseChapter);
         String jsonResponse = success ? gson.toJson(Result.success("删除成功")) : gson.toJson(Result.error("删除失败"));
 

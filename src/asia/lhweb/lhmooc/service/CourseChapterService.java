@@ -24,7 +24,29 @@ public interface CourseChapterService {
      */
     Page<CourseChapter> pageByAnd(CourseChapter courseChapter, int parseInt, int parseInt1);
 
+    /**
+     * 真正删除
+     *
+     * @param courseChapter 章课程
+     * @return boolean
+     */
     boolean realDelete(CourseChapter courseChapter);
 
+    /**
+     * 更新
+     *
+     * @param chapterID   章id
+     * @param chaptername chaptername
+     * @return {@link Result}
+     */
     Result update(int chapterID, String chaptername);
+
+    /**
+     * 添加
+     *
+     * @param parseInt    解析int
+     * @param chaptername chaptername
+     * @return {@link Result}
+     */
+    Result add(int parseInt, String chaptername);
 }

@@ -40,6 +40,13 @@ public class CourseChapterServiceImpl implements CourseChapterService {
         return courseChapterDAO.realDelete(courseChapter) != -1;
     }
 
+    /**
+     * 更新
+     *
+     * @param chapterID   章id
+     * @param chaptername chaptername
+     * @return {@link Result}
+     */
     @Override
     public Result update(int chapterID, String chaptername) {
         CourseChapter courseChapter = new CourseChapter();
@@ -50,7 +57,22 @@ public class CourseChapterServiceImpl implements CourseChapterService {
         }
         findCourseChapter.setChaptername(chaptername);
 
-        return courseChapterDAO.update(findCourseChapter) != 1 ? Result.success("修改成功") : Result.error("修改失败");
+        return courseChapterDAO.update(findCourseChapter) != -1 ? Result.success("修改成功") : Result.error("修改失败");
+    }
+
+    /**
+     * 添加
+     *
+     * @param chaptername chaptername
+     * @param courseid    courseid
+     * @return {@link Result}
+     */
+    @Override
+    public Result add(int courseid, String chaptername) {
+        CourseChapter courseChapter = new CourseChapter();
+        courseChapter.setCouseid(courseid);
+        courseChapter.setChaptername(chaptername);
+        return courseChapterDAO.save(courseChapter) != -1 ? Result.success("添加成功") : Result.error("添加失败");
     }
 
 }
