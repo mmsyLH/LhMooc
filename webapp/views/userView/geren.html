@@ -204,7 +204,8 @@
                         <div class="card-content">
                             <div class="item-headline">
                                 <i class="fa fa-line-chart" aria-hidden="true"></i>
-                                <a href="../userView/gerenIframe/myHistoryOrder.html" target="gerenContentIframe">我的订单</a>
+                                <a href="../userView/gerenIframe/myHistoryOrder.html"
+                                    target="gerenContentIframe">我的订单</a>
                             </div>
                         </div>
                     </div>
@@ -272,6 +273,7 @@
         });
     </script>
     <script>
+        var userObj;
         // 判断是否登录并且拿到用户信息
         $(document).ready(function () {
             // 判断用户登录状态
@@ -283,7 +285,7 @@
                     window.location.href = "/"; // 跳转到首页
                 }, 1000); // 1秒后跳转
             } else {
-                var userObj = JSON.parse(user);
+                userObj = JSON.parse(user);
                 console.log("userObj", userObj)
                 // 设置用户头像
                 $('#avatar').attr('src', userObj.avatar);
@@ -299,7 +301,9 @@
             $('#wallet').text('$' + user.wallet.toFixed(2));
             // 其他用户信息
         }
+
     </script>
+
 </body>
 
 </html>

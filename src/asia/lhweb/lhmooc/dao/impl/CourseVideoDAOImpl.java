@@ -14,4 +14,5 @@ public class CourseVideoDAOImpl  extends BasicDAO<CourseVideo> implements Course
     public CourseVideo selectOneById(CourseVideo courseVideoTemp) {
         return super.selectOneById(courseVideoTemp);
     }
+
 }

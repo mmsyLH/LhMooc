@@ -37,7 +37,7 @@ public class Course {
     /**
      * 课程价格
      */
-    private Integer price;
+    private Double price;
 
     /**
      * 课程封面的图片
@@ -52,6 +52,10 @@ public class Course {
      * 创建时间
      */
     private Date createtime;
+
+    public Course() {
+        imgurl="download/img/fm/default.png";
+    }
 
     public Date getCreatetime() {
         return createtime;
@@ -131,17 +135,11 @@ public class Course {
         this.profile = profile;
     }
 
-    /**
-     * 课程价格
-     */
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    /**
-     * 课程价格
-     */
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

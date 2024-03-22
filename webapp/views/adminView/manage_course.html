@@ -17,7 +17,7 @@
                 <select id="categorySelect" onchange="search()">
 
                 </select>
-                
+
                 <input type="button" value="添加" class="baseButton" onclick="openAddModal()">
             </div>
             <!-- 查询结果区域开始 -->
@@ -184,18 +184,19 @@
             dataList.innerHTML = ""; // 清空之前的数据
             for (var i = 0; i < data.length; i++) {
                 var course = data[i];
+                var truncatedProfile = course.profile.length > 10 ? course.profile.substring(0, 10) + "..." : course.profile; // 截取课程介绍并添加省略号
                 var tr = document.createElement("tr");
                 tr.innerHTML = "<td>" + course.courseid + "</td>" +
                     "<td>" + course.coursename + "</td>" +
                     "<td>" + getCategoryNameById(course.categoryid) + "</td>" +
-                    "<td>" + course.profile + "</td>" +
+                    "<td title='" + course.profile + "'>" + truncatedProfile + "</td>" + // 使用 title 属性显示完整的课程介绍
                     "<td>" + course.price + "</td>" +
                     "<td><button class='baseButton' onclick='editCourse(" + i + ")'>编辑</button></td>" +
-                    "<td><button class='baseButton' onclick='deleteCourse(" + i + ")'>删除</button></td>";
+                    "<td><button class='baseButton' onclick='realDelete(" + i + ")'>真实删除</button></td>";
                 dataList.appendChild(tr);
             }
-
         }
+
 
         // 根据课程分类ID获取分类名称
         function getCategoryNameById(categoryId) {
@@ -277,7 +278,61 @@
 
         // 提交编辑课程
         function submitEditCourse() {
+            var courseId = document.getElementById("courseIdEdit").value;
+            var courseName = document.getElementById("courseNameEdit").value.trim();
+            var categoryId = document.getElementById("categoryIdEdit").value;
+            var profile = document.getElementById("profileEdit").value.trim();
+            var price = document.getElementById("priceEdit").value.trim();
+            // 发送Ajax请求进行编辑
+            $.ajax({
+                method: "post",
+                url: "LhMooc/courseServlet",
+                dataType: "json",
+                data: {
+                    action: "update",
+                    courseid: courseId,
+                    coursename: courseName,
+                    categoryid: categoryId,
+                    profile: profile,
+                    price: price
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        search();
+                        closeModal('editModal'); // 编辑成功后关闭弹窗
+                    } else {
+                        alert("编辑失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
+        }
 
+        // 真实删除
+        function realDelete(index) {
+            var courseId = dataListDate[index].courseid;
+            // 发送Ajax请求进行删除
+            $.ajax({
+                method: "post",
+                url: "LhMooc/courseServlet",
+                dataType: "json",
+                data: {
+                    action: "realDelete",
+                    courseid: courseId
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        search();
+                    } else {
+                        alert("删除失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
         }
 
         // 关闭弹窗

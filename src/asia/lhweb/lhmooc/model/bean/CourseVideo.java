@@ -232,4 +232,5 @@ public class CourseVideo {
         sb.append("]");
         return sb.toString();
     }
+
 }

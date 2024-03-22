@@ -256,8 +256,8 @@ public class CourseServiceImpl implements CourseService {
         List<CourseChapterVo> courseChapterVoList = new ArrayList<>();
         CourseChapterVo courseChapterTemp;
         for (CourseChapter chapter : courseChapterList) {
-            courseChapterTemp= new CourseChapterVo();
-            DataUtils.copyNonNullProperties(chapter,courseChapterTemp);
+            courseChapterTemp = new CourseChapterVo();
+            DataUtils.copyNonNullProperties(chapter, courseChapterTemp);
             courseChapterVoList.add(courseChapterTemp);
         }
 
@@ -279,7 +279,42 @@ public class CourseServiceImpl implements CourseService {
 
         courseVo.setCommentList(commentCourseList);
 
-        return Result.success(courseVo,"获取指定课程的详细信息成功");
+        return Result.success(courseVo, "获取指定课程的详细信息成功");
+    }
+
+    /**
+     * 真正删除
+     *
+     * @param course 课程
+     * @return boolean
+     */
+    @Override
+    public boolean realDelete(Course course) {
+        return courseDAO.realDelete(course) != -1;
+    }
+
+    /**
+     * 更新
+     *
+     * @param courseId   进程id
+     * @param coursename coursename
+     * @param profile    配置文件
+     * @param price      价格
+     * @return {@link Result}
+     */
+    @Override
+    public Result update(int courseId, String coursename, String profile, String price) {
+        Course course = new Course();
+        course.setCourseid(courseId);
+        Course findCourse = courseDAO.selectOneById(course);
+        if (findCourse == null) return Result.error("您要更新的课程不存在");
+        findCourse.setCoursename(coursename);
+        findCourse.setProfile(profile);
+        findCourse.setPrice(Double.parseDouble(price));
+        if (courseDAO.update(findCourse) != -1) {
+            return Result.success("更新成功");
+        }
+        return Result.error("更新失败");
     }
 
 }

@@ -746,6 +746,31 @@ public class BasicDAO<T> {
         return whereClause.toString();
     }
 
+    // /**
+    //  * 生成where子句和
+    //  *
+    //  * @param t t
+    //  * @return {@link String}
+    //  */
+    // private String generateWhereClauseAndTwo(T t) {
+    //     StringBuilder whereClause = new StringBuilder();
+    //     Field[] fields = t.getClass().getDeclaredFields(); // 获取对象的所有字段
+    //     try {
+    //         for (Field field : fields) {
+    //             field.setAccessible(true); // 允许访问私有字段
+    //             Object value = field.get(t); // 获取字段的值
+    //             if (value != null) { // 忽略空值字段
+    //                 if (whereClause.length() > 0) {
+    //                     whereClause.append(" and "); // 条件之间添加 " and " 连接符
+    //                 }
+    //                 whereClause.append(field.getName()).append(" = ").append(value); // 字段名拼接 " = ?" 作为查询条件
+    //             }
+    //         }
+    //     } catch (IllegalAccessException e) {
+    //         e.printStackTrace(); // 处理访问权限异常
+    //     }
+    //     return whereClause.toString();
+    // }
     /**
      * 生成where子句和
      *
@@ -763,7 +788,11 @@ public class BasicDAO<T> {
                     if (whereClause.length() > 0) {
                         whereClause.append(" and "); // 条件之间添加 " and " 连接符
                     }
-                    whereClause.append(field.getName()).append(" = ").append(value); // 字段名拼接 " = ?" 作为查询条件
+                    if (field.getType().equals(String.class)) { // 判断字段类型是否为字符串
+                        whereClause.append(field.getName()).append(" = '").append(value).append("'"); // 给字符串类型的值加上引号
+                    } else {
+                        whereClause.append(field.getName()).append(" = ").append(value); // 字段名拼接 " = ?" 作为查询条件
+                    }
                 }
             }
         } catch (IllegalAccessException e) {
@@ -771,6 +800,7 @@ public class BasicDAO<T> {
         }
         return whereClause.toString();
     }
+
     /**
      * 根据提供的对象生成对应的 WHERE 子句字符串。
      * 该方法会遍历对象的所有字段，将非空字段及其值转换为 SQL 查询中的条件部分。

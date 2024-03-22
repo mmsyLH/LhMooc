@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频管理后台</title>
+    <link rel="stylesheet" href="../../css/manages.css">
+</head>
+
+<body>
+    <div class="container" style="padding-right: 10px;">
+        <!-- 内容区域 -->
+        <div class="main hadmin">
+            <div class="select">
+                选择课程分类：
+                <select id="categorySelect" onchange="searchCourse()">
+                    <!-- 这里将会自动填充课程分类 -->
+                </select>
+                选择课程:
+                <select id="courseSelect" onchange="search()">
+                    <!-- 这里将会自动填充章节 -->
+                </select>
+                选择章节:
+                <select id="chapterSelect" onchange="search()">
+                    <!-- 这里将会自动填充视频 -->
+                </select>
+                <input type="button" value="添加" class="baseButton" onclick="openAddModal()">
+            </div>
+            <!-- 查询结果区域开始 -->
+            <div id="resultContainer">
+                <table id="courseTable" style="min-height: 100px;">
+                    <thead>
+                        <tr>
+                            <th>视频ID</th>
+                            <th>视频名称</th>
+                            <th>章节名称</th>
+                            <th>视频时长</th>
+                            <th>是否逻辑删除</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataList">
+
+                    </tbody>
+                </table>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination content will be added here -->
+                </div>
+            </div>
+            <!-- 查询结果区域结束 -->
+        </div>
+
+        <!-- 添加窗口 -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addModal')">&times;</span>
+                <h2>添加视频</h2>
+                <form id="addForm">
+                    <label for="videoName">视频名称:</label>
+                    <input type="text" id="videoNameInput"><br><br>
+                    <label for="chapterSelectAdd">所属章节:</label>
+                    <select id="chapterSelectAdd">
+                        <!-- 这里将会自动填充当前视频所属的章节 -->
+                    </select>
+                    <label for="videoTime">视频时长:</label>
+                    <input type="text" id="videoTimeInput"><br><br>
+                    <label for="videoUrl">视频链接:</label>
+                    <input type="text" id="videoUrlInput"><br><br>
+                    <button class="baseButton" onclick="submitAddVideo()">确定</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/jquery-3.6.0.js"></script>
+    <script src="../../js/manages.js"></script>
+    <script>
+        var pageNo = 1;
+        var pageSize = 5;
+        var categoryList = {}; //课程类别List
+        var courseList = {}; //课程List
+        var chapterList = {}; //章节List
+        var dataList = {}; //
+        window.onload = function () {
+            loadCategories(); // 在页面加载时加载全部课程分类
+        };
+
+        // 加载全部课程分类
+        function loadCategories() {
+            $.ajax({
+                url: 'LhMooc/categoryServlet',
+                type: 'get',
+                data: {
+                    action: "getAll"
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        categoryList = res.data;
+                        fillCategorySelects();
+                        searchCourse(); // 在页面加载时查询全部课程
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 填充课程分类下拉菜单
+        function fillCategorySelects() {
+            var categorySelect = document.getElementById("categorySelect");
+            categorySelect.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < categoryList.length; i++) {
+                var category = categoryList[i];
+                var option = document.createElement("option")
+                option.value = category.categoryid;
+                option.innerText = category.categoryname;
+                categorySelect.appendChild(option);
+            }
+        }
+
+        // 根据课程分类查询课程
+        function searchCourse() {
+            var categoryId = document.getElementById("categorySelect").value;
+            $.ajax({
+                url: 'LhMooc/courseServlet',
+                type: 'get',
+                data: {
+                    action: "getByCategory",
+                    categoryId: categoryId
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        courseList = res.data;
+                        fillCourseSelects();
+                        searchChapter(); // 在页面加载时查询全部章节
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 填充课程下拉菜单
+        function fillCourseSelects() {
+            var courseSelect = document.getElementById("courseSelect");
+            courseSelect.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < courseList.length; i++) {
+                var course = courseList[i];
+                var option = document.createElement("option");
+                option.value = course.courseid;
+                option.innerText = course.coursename;
+                courseSelect.appendChild(option);
+            }
+        }
+
+        // 根据课程ID查询章节
+        function searchChapter() {
+            var courseId = document.getElementById("courseSelect").value.trim();
+            $.ajax({
+                url: 'LhMooc/chapterServlet',
+                type: 'get',
+                data: {
+                    action: "getByCourse",
+                    courseId: courseId
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        chapterList = res.data;
+                        fillChapterSelects();
+                        search(); // 查询视频
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 填充章节下拉菜单
+        function fillChapterSelects() {
+            var chapterSelect = document.getElementById("chapterSelect");
+            chapterSelect.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < chapterList.length; i++) {
+                var chapter = chapterList[i];
+                var option = document.createElement("option");
+                option.value = chapter.chapterid;
+                option.innerText = chapter.chaptername;
+                chapterSelect.appendChild(option);
+            }
+        }
+
+        // 根据章节ID查询视频
+        function search(pageNo) {
+            if (pageNo == null) {
+                pageNo = 1;
+            }
+            var chapterId = document.getElementById("chapterSelect").value.trim();
+            $.ajax({
+                url: 'LhMooc/videoServlet',
+                type: 'get',
+                data: {
+                    action: "page",
+                    pageNo: pageNo,
+                    pageSize: pageSize,
+                    chapterId: chapterId
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code === 200) {
+                        dataList = res.data.items;
+                        displayList(res.data.items);
+                        pageNo = res.data.pageNo;
+                        updatePagination(res.data.pageNo, res.data.pageTotalCount, res.data.totalRow);
+                    } else {
+                        alert(res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log('error', err);
+                },
+            });
+        }
+
+        // 展示视频数据
+        function displayList(data) {
+            var dataList = document.getElementById("dataList");
+            dataList.innerHTML = ""; // 清空之前的数据
+            for (var i = 0; i < data.length; i++) {
+                var video = data[i];
+                var tr = document.createElement("tr");
+                tr.innerHTML = "<td>" + video.videoid + "</td>" +
+                    "<td>" + video.videoname + "</td>" +
+                    "<td>" + getChapterNameById(video.chapterid) + "</td>" +
+                    "<td>" + video.videotime + "</td>" +
+                    "<td>" + (video.isdelete === 1 ? "是" : "否") + "</td>" +
+                    "<td><button class='baseButton' onclick='editVideo(" + i + ")'>编辑</button></td>" +
+                    "<td><button class='baseButton' onclick='realDelete(" + i + ")'>真实删除</button></td>";
+                dataList.appendChild(tr);
+            }
+        }
+
+        // 根据章节ID获取章节名称
+        function getChapterNameById(chapterId) {
+            for (var i = 0; i < chapterList.length; i++) {
+                if (chapterList[i].chapterid == chapterId) {
+                    return chapterList[i].chaptername;
+                }
+            }
+            return "";
+        }
+
+        // 添加视频
+        function openAddModal() {
+            document.getElementById("videoNameInput").value = "";
+            document.getElementById("videoTimeInput").value = "";
+            document.getElementById("videoUrlInput").value = "";
+            var chapterId = document.getElementById("chapterSelect").value;
+            fillChapterSelectInAddModal(chapterId);
+            document.getElementById("addModal").style.display = "block";
+        }
+
+        // 提交添加视频
+        function submitAddVideo() {
+            var videoName = document.getElementById("videoNameInput").value.trim();
+            var chapterId = document.getElementById("chapterSelectAdd").value;
+            var videoTime = document.getElementById("videoTimeInput").value.trim();
+            var videoUrl = document.getElementById("videoUrlInput").value.trim();
+            $.ajax({
+                method: "post",
+                url: "LhMooc/videoServlet",
+                dataType: "json",
+                data: {
+                    action: "add",
+                    videoname: videoName,
+                    chapterid: chapterId,
+                    videotime: videoTime,
+                    videourl: videoUrl
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        search();
+                        closeModal('addModal');
+                    } else {
+                        alert("添加失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
+        }
+
+        // 填充添加视频模态框中的章节下拉框
+        function fillChapterSelectInAddModal(chapterId) {
+            var chapterSelectAdd = document.getElementById("chapterSelectAdd");
+            chapterSelectAdd.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < chapterList.length; i++) {
+                var chapter = chapterList[i];
+                var option = document.createElement("option");
+                option.value = chapter.chapterid;
+                option.innerText = chapter.chaptername;
+                if (option.value === chapterId) {
+                    option.selected = true; // 默认选中当前视频所属的章节
+                }
+                chapterSelectAdd.appendChild(option);
+            }
+        }
+
+        // 点击编辑按钮，打开编辑弹窗
+        function editVideo(index) {
+            var video = dataList[index];
+            document.getElementById("videoIdEdit").value = video.videoid;
+            document.getElementById("videoNameEdit").value = video.videoname;
+            fillChapterSelectEdit(video.chapterid);
+            document.getElementById("videoTimeEdit").value = video.videotime;
+            document.getElementById("videoUrlEdit").value = video.videourl;
+            document.getElementById("isDeleteEdit").value = video.isdelete;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        // 填充编辑视频模态框中的章节下拉框
+        function fillChapterSelectEdit(chapterId) {
+            var chapterSelectEdit = document.getElementById("chapterSelectEdit");
+            chapterSelectEdit.innerHTML = ""; // 清空之前的内容
+            for (var i = 0; i < chapterList.length; i++) {
+                var chapter = chapterList[i];
+                var option = document.createElement("option");
+                option.value = chapter.chapterid;
+                option.innerText = chapter.chaptername;
+                if (option.value === chapterId) {
+                    option.selected = true; // 默认选中当前视频所属的章节
+                }
+                chapterSelectEdit.appendChild(option);
+            }
+        }
+
+        // 提交编辑视频
+        function submitEditVideo() {
+            var videoId = document.getElementById("videoIdEdit").value;
+            var videoName = document.getElementById("videoNameEdit").value.trim();
+            var chapterId = document.getElementById("chapterSelectEdit").value;
+            var videoTime = document.getElementById("videoTimeEdit").value.trim();
+            var videoUrl = document.getElementById("videoUrlEdit").value.trim();
+            var isDelete = document.getElementById("isDeleteEdit").value;
+            $.ajax({
+                method: "post",
+                url: "LhMooc/videoServlet",
+                dataType: "json",
+                data: {
+                    action: "update",
+                    videoid: videoId,
+                    videoname: videoName,
+                    chapterid: chapterId,
+                    videotime: videoTime,
+                    videourl: videoUrl,
+                    isdelete: isDelete
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        search();
+                        closeModal('editModal');
+                    } else {
+                        alert("编辑失败:" + res.msg);
+                    }
+                },
+                error: function (err) {
+                    console.log("error", err);
+                }
+            });
+        }
+
+        // 删除视频
+        function realDelete(index) {
+            var video = dataList[index];
+            var videoId = video.videoid;
+            var videoName = video.videoname;
+            var isConfirm = confirm("确定要删除视频【" + videoName + "】吗？");
+            if (isConfirm) {
+                $.ajax({
+                    method: "post",
+                    url: "LhMooc/videoServlet",
+                    dataType: "json",
+                    data: {
+                        action: "realDelete",
+                        videoid: videoId
+                    },
+                    success: function (res) {
+                        if (res.code === 200) {
+                            search();
+                            alert("删除成功");
+                        } else {
+                            alert("删除失败:" + res.msg);
+                        }
+                    },
+                    error: function (err) {
+                        console.log("error", err);
+                    }
+                });
+            }
+        }
+
+        // 关闭弹窗
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

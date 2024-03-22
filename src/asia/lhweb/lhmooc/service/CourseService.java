@@ -52,4 +52,8 @@ public interface CourseService {
      * @return {@link Result}<{@link CourseVo}>
      */
     Result<CourseVo> getCourseDetail(int parseInt);
+
+    boolean realDelete(Course course);
+
+    Result update(int courseId, String coursename, String profile, String price);
 }

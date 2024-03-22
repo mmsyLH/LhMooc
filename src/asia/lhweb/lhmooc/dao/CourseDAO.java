@@ -40,12 +40,23 @@ public interface CourseDAO {
      */
     Course selectOneById(Course course);
 
+    /**
+     * 逐页和
+     *
+     * @param course   课程
+     * @param pageNo   页面没有
+     * @param pageSize 页面大小
+     * @return {@link Page}<{@link Course}>
+     */
     Page<Course> pageByAnd(Course course, int pageNo, int pageSize);
 
     /**
-     * 按id选择
+     * 真正删除
      *
-     * @param parseInt 解析int
-     * @return {@link Course}
+     * @param course 课程
+     * @return boolean
      */
+    int realDelete(Course course);
+
+    int update(Course findCourse);
 }

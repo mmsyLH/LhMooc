@@ -45,11 +45,7 @@ public class CourseServlet extends LhHttpServlet {
         String price = req.getParameter("price");
 
         // 检查分类名称是否为空，若为空则返回错误信息
-        if (courseName == null || courseName.isEmpty() ||
-                categoryid == null || categoryid.isEmpty() ||
-                profile == null || profile.isEmpty() ||
-                price == null || price.isEmpty()) {
-            resp.writeToJson(gson.toJson(Result.error("添加失败，上传的属性不能为空")));
+        if(!DataUtils.handleNullOrEmpty(resp, gson, courseName, categoryid, profile, price)){
             return;
         }
 
@@ -58,7 +54,7 @@ public class CourseServlet extends LhHttpServlet {
         course.setCoursename(courseName.trim());
         course.setCategoryid(Integer.parseInt(categoryid.trim()));
         course.setProfile(profile.trim());
-        course.setPrice(Integer.parseInt(price.trim()));
+        course.setPrice(Double.parseDouble(price.trim()));
         // 尝试添加课程分类到数据库，返回添加结果
         boolean res = courseService.add(course);
         // 根据添加结果生成相应的响应信息
@@ -89,7 +85,35 @@ public class CourseServlet extends LhHttpServlet {
         // 返回json对象
         response.writeToJson(gson.toJson(jsonResponse));
     }
+    /**
+     * 更新章节
+     *
+     * @param req  请求对象
+     * @param resp 响应对象
+     */
+    public void update(LhRequest req, LhResponse resp) {
+        String courseid = req.getParameter("courseid");
+        String coursename = req.getParameter("coursename");
+        String categoryid = req.getParameter("categoryid");
+        String profile = req.getParameter("profile");
+        String price = req.getParameter("price");
+        // String isdelete = req.getParameter("isdelete");
 
+
+
+        // 检查必要属性是否为null或空
+        if (!DataUtils.handleNullOrEmpty(resp, gson, categoryid, courseid, coursename, profile, price)) {
+            return;
+        }
+        //todo 注意 全部的后台管理应该都做判空（是否存在）、鉴权 这里就懒得做了
+
+
+        // 调用userService，根据ID获取用户信息
+        Result result = courseService.update(Integer.parseInt(courseid),coursename,profile,price);
+
+        // 将查询结果转换为JSON，并通过response返回
+        resp.writeToJson(gson.toJson(result));
+    }
     /**
      * 获取排序后的课程
      *
@@ -127,6 +151,28 @@ public class CourseServlet extends LhHttpServlet {
         String jsonResponse = !courseList.isEmpty() ? gson.toJson(Result.success(courseList, "获取该类课程成功")) : gson.toJson(Result.error("该类里没有课程！！！"));
 
         // 将构造的JSON响应写回给客户端
+        resp.writeToJson(jsonResponse);
+    }
+
+
+    /**
+     * 真实删除
+     *
+     * @param req  请求对象
+     * @param resp 响应对象
+     */
+    public void realDelete(LhRequest req, LhResponse resp) {
+        String courseid = req.getParameter("courseid");
+
+        // 检查categoryId是否为null或空
+        if (!DataUtils.handleNullOrEmpty(resp, gson, courseid)) {
+            return;
+        }
+        Course course = new Course();
+        course.setCourseid(Integer.valueOf(courseid));
+        boolean success = courseService.realDelete(course);
+        String jsonResponse = success ? gson.toJson(Result.success("删除成功")) : gson.toJson(Result.error("删除失败"));
+
         resp.writeToJson(jsonResponse);
     }
 
