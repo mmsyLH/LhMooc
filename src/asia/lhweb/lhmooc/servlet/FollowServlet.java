@@ -74,6 +74,30 @@ public class FollowServlet extends LhHttpServlet {
         response.writeToJson(gson.toJson(result));
     }
 
+    /**
+     * 添加
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    public void followAdd(LhRequest request, LhResponse response) {
+        String userId = request.getParameter("userId");
+        String courseId = request.getParameter("courseId");
+
+        // 判空
+        if (DataUtils.isAnyNullOrEmpty(userId, courseId)) {
+            return;
+        }
+
+        // 鉴权
+        if (userService.isNoMeOrAdmin(request, response, userId, gson)) return;
+
+        Result result = followCourseService.followAdd(Integer.parseInt(userId), Integer.parseInt(courseId));
+
+        response.writeToJson(gson.toJson(result));
+
+    }
+
 
     /**
      * 分页查询收藏记录

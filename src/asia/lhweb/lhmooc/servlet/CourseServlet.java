@@ -9,7 +9,9 @@ import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.Course;
 import asia.lhweb.lhmooc.model.vo.CourseVo;
 import asia.lhweb.lhmooc.service.CourseService;
+import asia.lhweb.lhmooc.service.MoocUserService;
 import asia.lhweb.lhmooc.service.impl.CourseServiceImpl;
+import asia.lhweb.lhmooc.service.impl.MoocUserServiceImpl;
 import asia.lhweb.lhmooc.utils.DataUtils;
 import com.google.gson.Gson;
 
@@ -25,6 +27,8 @@ import java.util.List;
 @WebServlet()
 public class CourseServlet extends LhHttpServlet {
     private CourseService courseService = new CourseServiceImpl();
+
+    private MoocUserService userService = new MoocUserServiceImpl();
     // 用户服务类
     private Gson gson = new Gson();// 谷歌的解析json的工具类
 
@@ -37,6 +41,30 @@ public class CourseServlet extends LhHttpServlet {
 
     }
 
+    /**
+     * 添加
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    public void buyCourse(LhRequest request, LhResponse response) {
+        String userId = request.getParameter("userId");
+        String courseId = request.getParameter("courseId");
+
+        // 判空
+        if (DataUtils.isAnyNullOrEmpty(userId, courseId)) {
+            return;
+        }
+
+        // 鉴权
+        if (userService.isNoMeOrAdmin(request, response, userId, gson)) return;
+
+        Result result = courseService.buyCourse(Integer.parseInt(userId), Integer.parseInt(courseId));
+
+        response.writeToJson(gson.toJson(result));
+
+    }
+
     public void add(LhRequest req, LhResponse resp) {
         // 从请求中获取分类名称参数
         String courseName = req.getParameter("coursename");
@@ -45,7 +73,7 @@ public class CourseServlet extends LhHttpServlet {
         String price = req.getParameter("price");
 
         // 检查分类名称是否为空，若为空则返回错误信息
-        if(!DataUtils.handleNullOrEmpty(resp, gson, courseName, categoryid, profile, price)){
+        if (!DataUtils.handleNullOrEmpty(resp, gson, courseName, categoryid, profile, price)) {
             return;
         }
 
@@ -85,6 +113,7 @@ public class CourseServlet extends LhHttpServlet {
         // 返回json对象
         response.writeToJson(gson.toJson(jsonResponse));
     }
+
     /**
      * 更新章节
      *
@@ -100,20 +129,20 @@ public class CourseServlet extends LhHttpServlet {
         // String isdelete = req.getParameter("isdelete");
 
 
-
         // 检查必要属性是否为null或空
         if (!DataUtils.handleNullOrEmpty(resp, gson, categoryid, courseid, coursename, profile, price)) {
             return;
         }
-        //todo 注意 全部的后台管理应该都做判空（是否存在）、鉴权 这里就懒得做了
+        // todo 注意 全部的后台管理应该都做判空（是否存在）、鉴权 这里就懒得做了
 
 
         // 调用userService，根据ID获取用户信息
-        Result result = courseService.update(Integer.parseInt(courseid),coursename,profile,price);
+        Result result = courseService.update(Integer.parseInt(courseid), coursename, profile, price);
 
         // 将查询结果转换为JSON，并通过response返回
         resp.writeToJson(gson.toJson(result));
     }
+
     /**
      * 获取排序后的课程
      *

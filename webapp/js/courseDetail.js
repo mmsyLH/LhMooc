@@ -4,11 +4,12 @@ $(document).ready(function () {
     var isExpanded = false; // 初始状态为未展开
 
     // 点击展开按钮的处理函数
-    $('.js-control-list').click(function () {
+    $('.catalogue-box').on('click', '.js-control-list', function () {
         console.log('点击了展开按钮');
         // 找到下一个兄弟元素，并切换显示状态
         $(this).next('.media-box').toggle();
     });
+
 
     // 点击展开所有按钮的处理函数
     $('.js-control-all-list').click(function () {
@@ -24,9 +25,161 @@ $(document).ready(function () {
         }
     });
 });
+var userObj;
+// 判断是否登录并且拿到用户信息
+$(document).ready(function () {
+    // 判断用户登录状态
+    var user = sessionStorage.getItem("LoginMoocUser");
+    if (!user) {
+        // 如果用户未登录，则提示并跳转到首页
+        alert("您未登录，请先登录！");
+        setTimeout(function () {
+            window.location.href = "/"; // 跳转到首页
+        }, 1000); // 1秒后跳转
+    } else {
+        userObj = JSON.parse(user);
+        console.log("userObj", userObj)
+    }
+});
+
 
 // 页面js结束
 
 // 事件js开始
+$(document).ready(function () {
+    // 点赞按钮点击事件
+    $(".like div:nth-child(1) button").click(function () {
+        console.log("点赞：", courseId);
+        console.log("用户id ", userObj.id);
+        // 发起点赞的ajax请求
+        $.ajax({
+            url: "LhMooc/likeServlet",
+            type: "POST",
+            dataType: "json",
+            data: {
+                userId: userObj.id,
+                courseId: courseId, // 使用已有的courseId
+                action: "likeAdd"
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    alert(response.msg);
+                    setTimeout(function () {
+                        location.reload();
+                    });
+                } else {
+                    alert(response.msg);
+                }
+            },
+            error: function (error) {
+                alert(error.msg);
+            }
+        });
+    });
+
+    // 收藏按钮点击事件
+    $(".like div:nth-child(2) button").click(function () {
+        console.log("收藏：", courseId);
+        console.log("用户id ", userObj.id);
+        // 发起收藏的ajax请求
+        $.ajax({
+            url: "LhMooc/followServlet",
+            type: "POST",
+            dataType: "json",
+            data: {
+                userId: userObj.id,
+                courseId: courseId, // 使用已有的courseId
+                action: "followAdd"
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    alert(response.msg);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 0);
+                } else {
+                    alert(response.msg);
+                }
+            },
+            error: function (error) {
+                alert(error.msg);
+            }
+        });
+    });
+
+    // 发布评论按钮点击事件
+    $(".comment-input button").click(function () {
+        var commentContent = $(".comment-input input").val();
+        console.log("评论：", courseId);
+        console.log("用户id ", userObj.id);
+        // 发起发布评论的ajax请求
+        $.ajax({
+            url: "LhMooc/commentServlet",
+            type: "POST",
+            dataType: "json",
+            data: {
+                action: "followAdd",
+                userId: userObj.id,
+                courseId: courseId, // 使用已有的courseId
+                content: commentContent
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    alert(response.msg);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 0);
+                } else {
+                    alert(response.msg);
+                }
+            },
+            error: function (error) {
+                alert(error.msg);
+            }
+        });
+    });
+
+    // 购买课程按钮点击事件
+    $(".buyButton").click(function () {
+        console.log("购买课程：", courseId);
+        console.log("用户id ", userObj.id);
+        // 发起购买课程的ajax请求
+        $.ajax({
+            url: "LhMooc/courseServlet",
+            type: "POST",
+            dataType: "json",
+            data: {
+                userId: userObj.id,
+                courseId: courseId,
+                action: "buyCourse"
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    alert(response.msg);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 0);
+                } else {
+                    alert(response.msg);
+                }
+            },
+            error: function (error) {
+                alert(error.msg);
+            }
+        });
+    });
+
+});
 
 // 事件js结束
+// 将日期字符串转换为指定格式（YYYY/MM/DD HH:MM:SS）
+function formatDate(dateString) {
+    var date = new Date(dateString);
+    var year = date.getFullYear();
+    var month = ('0' + (date.getMonth() + 1)).slice(-2); // 月份从0开始，需要加1，并确保两位数
+    var day = ('0' + date.getDate()).slice(-2); // 确保两位数的日期
+    var hours = ('0' + date.getHours()).slice(-2); // 确保两位数的小时
+    var minutes = ('0' + date.getMinutes()).slice(-2); // 确保两位数的分钟
+    var seconds = ('0' + date.getSeconds()).slice(-2); // 确保两位数的秒钟
+    return year + '/' + month + '/' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+}

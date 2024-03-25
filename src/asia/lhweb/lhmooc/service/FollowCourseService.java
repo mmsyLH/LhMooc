@@ -31,4 +31,13 @@ public interface FollowCourseService {
      * @return boolean
      */
     boolean realDelete(FollowCourse followCourse);
+
+    /**
+     * 遵循添加
+     *
+     * @param parseInt  解析int
+     * @param parseInt1 解析int1
+     * @return {@link Result}
+     */
+    Result followAdd(int parseInt, int parseInt1);
 }

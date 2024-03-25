@@ -32,7 +32,7 @@ public class Orders{
     /**
      * 订单金额
      */
-    private Integer orderamount;
+    private Double orderamount;
 
     /**
      * 订单的课程id
@@ -114,17 +114,11 @@ public class Orders{
         this.orderstatus = orderstatus;
     }
 
-    /**
-     * 订单金额
-     */
-    public Integer getOrderamount() {
+    public Double getOrderamount() {
         return orderamount;
     }
 
-    /**
-     * 订单金额
-     */
-    public void setOrderamount(Integer orderamount) {
+    public void setOrderamount(Double orderamount) {
         this.orderamount = orderamount;
     }
 
@@ -184,45 +178,4 @@ public class Orders{
         this.paychannel = paychannel;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        Orders other = (Orders) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getOrderid() == null ? other.getOrderid() == null : this.getOrderid().equals(other.getOrderid()))
-            && (this.getOrderstatus() == null ? other.getOrderstatus() == null : this.getOrderstatus().equals(other.getOrderstatus()))
-            && (this.getOrderamount() == null ? other.getOrderamount() == null : this.getOrderamount().equals(other.getOrderamount()))
-            && (this.getCourseid() == null ? other.getCourseid() == null : this.getCourseid().equals(other.getCourseid()))
-            && (this.getCreatetime() == null ? other.getCreatetime() == null : this.getCreatetime().equals(other.getCreatetime()))
-            && (this.getPaytime() == null ? other.getPaytime() == null : this.getPaytime().equals(other.getPaytime()))
-            && (this.getPaychannel() == null ? other.getPaychannel() == null : this.getPaychannel().equals(other.getPaychannel()));
-    }
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-
-        sb.append("id=").append(id);
-        sb.append(", orderid=").append(orderid);
-        sb.append(", orderstatus=").append(orderstatus);
-        sb.append(", orderamount=").append(orderamount);
-        sb.append(", courseid=").append(courseid);
-        sb.append(", createtime=").append(createtime);
-        sb.append(", paytime=").append(paytime);
-        sb.append(", paychannel=").append(paychannel);
-
-        sb.append("]");
-        return sb.toString();
-    }
 }

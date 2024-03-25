@@ -8,7 +8,9 @@ import asia.lhweb.lhmooc.http.LhResponse;
 import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.LikeCourse;
 import asia.lhweb.lhmooc.service.LikeCourseService;
+import asia.lhweb.lhmooc.service.MoocUserService;
 import asia.lhweb.lhmooc.service.impl.LikeCourseServiceImpl;
+import asia.lhweb.lhmooc.service.impl.MoocUserServiceImpl;
 import asia.lhweb.lhmooc.utils.DataUtils;
 import com.google.gson.Gson;
 
@@ -22,6 +24,8 @@ public class LikeServlet extends LhHttpServlet {
 
     // 课程点赞服务类
     private LikeCourseService likeCourseService = new LikeCourseServiceImpl();
+    // 用户服务类
+    private MoocUserService userService = new MoocUserServiceImpl();
     private Gson gson = new Gson(); // Google的解析json的工具类
 
     @Override
@@ -30,6 +34,30 @@ public class LikeServlet extends LhHttpServlet {
     }
 
     public LikeServlet() {
+
+    }
+
+    /**
+     * 添加
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    public void likeAdd(LhRequest request, LhResponse response) {
+        String userId = request.getParameter("userId");
+        String courseId = request.getParameter("courseId");
+
+        // 判空
+        if (DataUtils.isAnyNullOrEmpty(userId, courseId)) {
+            return;
+        }
+
+        // 鉴权
+        if (userService.isNoMeOrAdmin(request, response, userId, gson)) return;
+
+        Result result = likeCourseService.likeAdd(Integer.parseInt(userId), Integer.parseInt(courseId));
+
+        response.writeToJson(gson.toJson(result));
 
     }
 

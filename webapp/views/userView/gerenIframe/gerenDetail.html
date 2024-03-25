@@ -112,7 +112,7 @@
                         $('#userNickName').text(userDetail.nickname);
                         $('#userMoney').text(userDetail.wallet);
                         $('#userEmail').text(userDetail.email);
-                        $('#avatar').attr('src', userDetail.avatar); // 将用户头像路径设置为图片src属性
+                        $('#avatar').attr('src',"../../../download/"+ userDetail.avatar); // 将用户头像路径设置为图片src属性
                     },
                     error: function (error) {
                         alert("获取用户信息失败：", error.msg);

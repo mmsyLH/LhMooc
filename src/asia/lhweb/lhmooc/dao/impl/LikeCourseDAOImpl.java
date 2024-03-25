@@ -10,4 +10,14 @@ import asia.lhweb.lhmooc.model.bean.LikeCourse;
  */
 public class LikeCourseDAOImpl extends BasicDAO<LikeCourse> implements LikeCourseDAO {
 
+    /**
+     * 按id选择一个
+     *
+     * @param likeCourse 喜欢课程
+     * @return {@link LikeCourse}
+     */
+    @Override
+    public LikeCourse selectOneById(LikeCourse likeCourse) {
+        return super.selectOneById(likeCourse);
+    }
 }

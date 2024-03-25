@@ -132,8 +132,8 @@
                                     src="https://cdn.jsdelivr.net/gh/laoxuai/assert/images/20200125221102.png"
                                     alt="avatar">
 
-                                <div class="author-info__name">欢迎您！罗汉</div>
-                                <div class="author-info__description">我是 "个人简介信息"</div>
+                                <div id="username">欢迎您！</div>
+                                <div id="nickname"></div>
                             </div>
                         </div>
                     </div>
@@ -288,11 +288,11 @@
                 userObj = JSON.parse(user);
                 console.log("userObj", userObj)
                 // 设置用户头像
-                $('#avatar').attr('src', userObj.avatar);
+                $('#avatar').attr('src', "../../download/"+userObj.avatar);
                 // 设置用户名
                 $('#username').text('欢迎您！' + userObj.username);
                 // 设置用户昵称
-                $('#nickname').text('我是 "' + userObj.nickname + '"');
+                $('#nickname').text('尊敬的  "' + userObj.nickname + '"');
             }
         });
 

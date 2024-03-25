@@ -21,16 +21,6 @@
               <list>
                 <ModuleInfoGo>
                   <option name="basePath" value="${domain.basePath}" />
-                  <option name="configFileName" value="serviceImpl.ftl" />
-                  <option name="configName" value="serviceImpl" />
-                  <option name="encoding" value="${domain.encoding}" />
-                  <option name="fileName" value="${domain.fileName}ServiceImpl" />
-                  <option name="fileNameWithSuffix" value="${domain.fileName}ServiceImpl.java" />
-                  <option name="modulePath" value="$PROJECT_DIR$" />
-                  <option name="packageName" value="${domain.basePackage}.service.impl" />
-                </ModuleInfoGo>
-                <ModuleInfoGo>
-                  <option name="basePath" value="${domain.basePath}" />
                   <option name="configFileName" value="serviceInterface.ftl" />
                   <option name="configName" value="serviceInterface" />
                   <option name="encoding" value="${domain.encoding}" />
@@ -48,16 +38,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="LikeCourse" />
-                  <option name="tableName" value="like_course" />
-                </TableUIInfo>
-                <TableUIInfo>
-                  <option name="className" value="FollowCourse" />
-                  <option name="tableName" value="follow_course" />
-                </TableUIInfo>
-                <TableUIInfo>
-                  <option name="className" value="CommentCourse" />
-                  <option name="tableName" value="comment_course" />
+                  <option name="className" value="BuycourseHistory" />
+                  <option name="tableName" value="buycourse_history" />
                 </TableUIInfo>
               </list>
             </option>

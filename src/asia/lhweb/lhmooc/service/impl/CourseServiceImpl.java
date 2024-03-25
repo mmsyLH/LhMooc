@@ -6,6 +6,7 @@ import asia.lhweb.lhmooc.dao.impl.*;
 import asia.lhweb.lhmooc.factory.BeanFactory;
 import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.*;
+import asia.lhweb.lhmooc.model.vo.CommentCourseVo;
 import asia.lhweb.lhmooc.model.vo.CourseChapterVo;
 import asia.lhweb.lhmooc.model.vo.CourseVo;
 import asia.lhweb.lhmooc.service.CourseService;
@@ -25,12 +26,17 @@ import java.util.stream.Collectors;
 public class CourseServiceImpl implements CourseService {
     private CourseDAO courseDAO = new CourseDAOImpl();
     private CourseCategoryDAO courseCategoryDAO = new CourseCategoryDAOImpl();
-
+    // 用户dao
+    private MoocUserDAO moocUserDAO = new MoocUserDAOImpl();
     private CourseVideoDAO courseVideoDAO = new CourseVideoDAOImpl();
     private CourseChapterDAO courseChapterDAO = new CourseChapterDAOImpl();
     private CommentCourseDAO commentCourseDAO = new CommentCourseDAOImpl();
     private LikeCourseDAO likeCourseDAO = new LikeCourseDAOImpl();
     private FollowCourseDAO followCourseDAO = new FollowCourseDAOImpl();
+    // 购买历史记录dao
+    private BuycourseHistoryDAO buycourseHistoryDAO = new BuycourseHistoryDAOImpl();
+    //订单dao
+    private OrdersDAO ordersDAO = new OrdersDAOImpl();
 
     public CourseServiceImpl() {
 
@@ -235,6 +241,7 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public Result<CourseVo> getCourseDetail(int courseId) {
+        // 初始化课程对象并设置课程ID
         Course course = new Course();
         course.setCourseid(courseId);
 
@@ -248,11 +255,12 @@ public class CourseServiceImpl implements CourseService {
         CourseVo courseVo = new CourseVo();
         DataUtils.copyNonNullProperties(findCourse, courseVo);
 
-        // 根据课程ID查询课程章节信息
+        // 查询课程章节信息
         CourseChapter courseChapter = new CourseChapter();
         courseChapter.setCouseid(courseVo.getCourseid());
         List<CourseChapter> courseChapterList = courseChapterDAO.selectAll(courseChapter);
 
+        // 遍历章节信息，转换为视图对象
         List<CourseChapterVo> courseChapterVoList = new ArrayList<>();
         CourseChapterVo courseChapterTemp;
         for (CourseChapter chapter : courseChapterList) {
@@ -261,26 +269,56 @@ public class CourseServiceImpl implements CourseService {
             courseChapterVoList.add(courseChapterTemp);
         }
 
-        CourseVideo courseVideo;
-        List<CourseVideo> courseVideoList;
+        // 为每个章节获取其下的所有视频
         for (CourseChapterVo courseChapterVo : courseChapterVoList) {
-            courseVideo = new CourseVideo();
+            CourseVideo courseVideo = new CourseVideo();
             courseVideo.setChapterid(courseChapterVo.getChapterid());
-            // 根据课程章节去获取章节下的全部视频
-            courseVideoList = courseVideoDAO.selectAll(courseVideo);
+            List<CourseVideo> courseVideoList = courseVideoDAO.selectAll(courseVideo);
             courseChapterVo.setCourseVideoList(courseVideoList);
-
         }
+
+        // 设置课程的章节列表
         courseVo.setCourseChapterList(courseChapterVoList);
-        // 根据课程ID查询该课程的评论信息
+
+        // 查询课程评论信息
         CommentCourse commentCourse = new CommentCourse();
         commentCourse.setCourseid(courseVo.getCourseid());
         List<CommentCourse> commentCourseList = commentCourseDAO.selectAll(commentCourse);
 
-        courseVo.setCommentList(commentCourseList);
+        // 将评论信息转换为视图对象，并补充用户名和头像URL
+        List<CommentCourseVo> commentCourseVoList = new ArrayList<>();
+        CommentCourseVo commentCourseVoTemp;
+        MoocUser moocUserTemp;
+        for (CommentCourse commentCourseTemp : commentCourseList) {
+            commentCourseVoTemp = new CommentCourseVo();
+            DataUtils.copyNonNullProperties(commentCourseTemp, commentCourseVoTemp);
+            moocUserTemp = new MoocUser();
+            moocUserTemp.setId(commentCourseTemp.getUserid());
+            moocUserTemp = moocUserDAO.selectOneById(moocUserTemp);
+            if (moocUserTemp != null) {
+                commentCourseVoTemp.setImgurl(moocUserTemp.getAvatar());
+                commentCourseVoTemp.setNickname(moocUserTemp.getNickname());
+            }
+            commentCourseVoList.add(commentCourseVoTemp);
+        }
+        courseVo.setCommentCourseVoList(commentCourseVoList);
 
+        // 查询课程的点赞数
+        LikeCourse likeCourse = new LikeCourse();
+        likeCourse.setCourseid(courseVo.getCourseid());
+        int likeCount = likeCourseDAO.getTotalRowAnd(likeCourse);
+        courseVo.setLikeCount(likeCount);
+
+        // 查询课程的收藏数
+        FollowCourse followCourse = new FollowCourse();
+        followCourse.setCourseid(courseVo.getCourseid());
+        int followCount = followCourseDAO.getTotalRowAnd(followCourse);
+        courseVo.setFollowCount(followCount);
+
+        // 返回包含课程详细信息的成功结果
         return Result.success(courseVo, "获取指定课程的详细信息成功");
     }
+
 
     /**
      * 真正删除
@@ -315,6 +353,58 @@ public class CourseServiceImpl implements CourseService {
             return Result.success("更新成功");
         }
         return Result.error("更新失败");
+    }
+
+    /**
+     * 购买课程
+     *
+     * @param userId   用户id
+     * @param courseId 进程id
+     * @return {@link Result}
+     */
+    @Override
+    public Result buyCourse(int userId, int courseId) {
+        // 获取课程的金额
+        Course course = new Course();
+        course.setCourseid(courseId);
+
+        Course findCourse = courseDAO.selectOneById(course);
+        if (findCourse == null) return Result.error("您要购买的课程不存在");
+
+        // 查询用户的金额
+        MoocUser moocUser = new MoocUser();
+        moocUser.setId(userId);
+        moocUser = moocUserDAO.selectOneById(moocUser);
+        if (moocUser == null) return Result.error("用户不存在");
+
+        if (moocUser.getWallet() < findCourse.getPrice()) {
+            return Result.error("余额不足");
+        }
+        moocUser.setWallet(moocUser.getWallet() - findCourse.getPrice());
+        if (moocUserDAO.update(moocUser) != -1) {
+            // 添加到购买记录中
+            BuycourseHistory buycourseHistory = new BuycourseHistory();
+            buycourseHistory.setCourseid(courseId);
+            buycourseHistory.setUserid(userId);
+            buycourseHistory.setPaymentmethod("余额支付");
+            buycourseHistory.setMoney(findCourse.getPrice());
+            if (buycourseHistoryDAO.save(buycourseHistory) <= 0) {
+                return Result.error("购买失败(购买记录)");
+            }
+
+            // 订单记录
+            Orders orders = new Orders();
+            orders.setOrderid(DataUtils.getCode());
+            orders.setCourseid(courseId);
+            orders.setPaychannel(3);
+            orders.setOrderamount(findCourse.getPrice());
+            orders.setOrderstatus(1);//已付款
+            if (ordersDAO.save(orders) <= 0){
+                return Result.error("购买失败(订单表)");
+            }
+            return Result.success("购买成功");
+        }
+        return Result.success("购买成功");
     }
 
 }

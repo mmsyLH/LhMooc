@@ -66,12 +66,13 @@
                     window.location.href = "/"; // 跳转到首页
                 }, 1000); // 1秒后跳转
             } else {
-                 userObj = JSON.parse(user);
+                userObj = JSON.parse(user);
                 console.log("用户对象", userObj);
                 getFollowPageById();
             }
         });
-
+        
+        //获取个人收藏
         function getFollowPageById() {
             $.ajax({
                 url: "LhMooc/followServlet",
@@ -83,10 +84,11 @@
                     userId: userObj.id
                 },
                 success: function (response) {
-                    if (response === 200) {
+                    if (response.code === 200) {
                         userFollowPage = response.data;
-                        console.log("查询的分页结果", response.data);
-                    }else{
+                        console.log("查询的分页结果", userFollowPage);
+                        updateFollowCards(userFollowPage.items); // 更新收藏卡片
+                    } else {
                         alert(response.msg);
                     }
                 },
@@ -95,6 +97,28 @@
                 }
             });
         }
+
+        // 更新收藏卡片
+        function updateFollowCards(followItems) {
+            var container = document.querySelector(".container");
+            container.innerHTML = ""; // 清空容器内原有的卡片
+
+            for (var i = 0; i < followItems.length; i++) {
+                var followItem = followItems[i];
+                var cardHTML = '<div class="card">'
+                    + '<div class="content">'
+                    + '<h2>' + (i + 1) + '</h2>'
+                    + '<h3>第' + (i + 1) + '个卡片</h3>'
+                    + '<p>逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果</p>'
+                    + '<a href="#">查看详情</a>'
+                    + '<a>取消收藏</a>'
+                    + '</div>'
+                    + '</div>';
+
+                container.innerHTML += cardHTML;
+            }
+        }
+
     </script>
 </body>
 

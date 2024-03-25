@@ -1,5 +1,7 @@
 package asia.lhweb.lhmooc.dao;
 
+import asia.lhweb.lhmooc.model.bean.Orders;
+
 /**
  * 订单服务
  *
@@ -10,4 +12,11 @@ package asia.lhweb.lhmooc.dao;
  */
 public interface OrdersDAO {
 
+    /**
+     * 保存
+     *
+     * @param orders 订单
+     * @return boolean
+     */
+    int save(Orders orders);
 }

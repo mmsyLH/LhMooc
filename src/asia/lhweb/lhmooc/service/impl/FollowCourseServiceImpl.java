@@ -7,6 +7,7 @@ import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.FollowCourse;
 import asia.lhweb.lhmooc.service.FollowCourseService;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,7 +55,13 @@ public class FollowCourseServiceImpl implements FollowCourseService {
         page.setPageTotalCount(pageTotalCount);
 
         // 设置分页数据，取出指定页的收藏课程列表
-        page.setItems(followCourseList.subList((pageNo - 1) * pageSize, pageNo * pageSize));
+        int startIndex = (pageNo - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, followCourseList.size());
+        if (startIndex < followCourseList.size()) {
+            page.setItems(followCourseList.subList(startIndex, endIndex));
+        } else {
+            page.setItems(Collections.emptyList()); // 如果起始索引大于等于列表大小，返回空列表
+        }
 
         // 返回查询成功的结果，包含分页的收藏课程列表
         return Result.success(page, "查询成功");
@@ -70,7 +77,7 @@ public class FollowCourseServiceImpl implements FollowCourseService {
      */
     @Override
     public Page<FollowCourse> page(FollowCourse followCourse, int pageNo, int pageSize) {
-        return followCourseDAO.page(followCourse,pageNo,pageSize);
+        return followCourseDAO.page(followCourse, pageNo, pageSize);
     }
 
     /**
@@ -81,7 +88,33 @@ public class FollowCourseServiceImpl implements FollowCourseService {
      */
     @Override
     public boolean realDelete(FollowCourse followCourse) {
-        return followCourseDAO.realDelete(followCourse)!=-1;
+        return followCourseDAO.realDelete(followCourse) != -1;
+    }
+
+    /**
+     * 遵循添加
+     *
+     * @param userId   用户id
+     * @param courseId 进程id
+     * @return {@link Result}
+     */
+    @Override
+    public Result followAdd(int userId, int courseId) {
+        FollowCourse followCourse = new FollowCourse();
+        followCourse.setUserid(userId);
+        followCourse.setCourseid(courseId);
+        List<FollowCourse> followCourseList = followCourseDAO.selectAll(followCourse);
+        if (!followCourseList.isEmpty()) {
+            followCourseDAO.realDelete(followCourseList.get(0));
+            return Result.success("您已经收藏过了呦 这边帮您取消收藏");
+        }
+        int result = followCourseDAO.save(followCourse); // 假设 save 方法返回影响的行数
+
+        if (result == 1) {
+            return Result.success("收藏成功");
+        } else {
+            return Result.error("收藏失败");
+        }
     }
 
 }

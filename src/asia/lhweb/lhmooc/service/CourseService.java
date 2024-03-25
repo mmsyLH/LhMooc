@@ -55,5 +55,23 @@ public interface CourseService {
 
     boolean realDelete(Course course);
 
+    /**
+     * 更新
+     *
+     * @param courseId   进程id
+     * @param coursename coursename
+     * @param profile    配置文件
+     * @param price      价格
+     * @return {@link Result}
+     */
     Result update(int courseId, String coursename, String profile, String price);
+
+    /**
+     * 购买课程
+     *
+     * @param userId   用户id
+     * @param CourseId 进程id
+     * @return {@link Result}
+     */
+    Result buyCourse(int userId, int CourseId);
 }

@@ -42,4 +42,12 @@ public interface FollowCourseDAO {
      * @return int
      */
     int realDelete(FollowCourse followCourse);
+
+    /**
+     * 保存
+     *
+     * @param followCourse 遵循课程
+     * @return int
+     */
+    int save(FollowCourse followCourse);
 }

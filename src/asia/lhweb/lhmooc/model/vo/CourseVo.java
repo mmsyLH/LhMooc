@@ -1,7 +1,6 @@
 package asia.lhweb.lhmooc.model.vo;
 
 import asia.lhweb.lhmooc.annotation.Id;
-import asia.lhweb.lhmooc.model.bean.CommentCourse;
 
 import java.util.Date;
 import java.util.List;
@@ -78,22 +77,22 @@ public class CourseVo {
      * 评论列表
      */
 
-    private List<CommentCourse> commentList;
+    private List<CommentCourseVo> commentCourseVoList;
 
     public List<CourseChapterVo> getCourseChapterList() {
         return courseChapterList;
     }
 
+    public List<CommentCourseVo> getCommentCourseVoList() {
+        return commentCourseVoList;
+    }
+
+    public void setCommentCourseVoList(List<CommentCourseVo> commentCourseVoList) {
+        this.commentCourseVoList = commentCourseVoList;
+    }
+
     public void setCourseChapterList(List<CourseChapterVo> courseChapterList) {
         this.courseChapterList = courseChapterList;
-    }
-
-    public List<CommentCourse> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<CommentCourse> commentList) {
-        this.commentList = commentList;
     }
 
     public Date getCreatetime() {
@@ -229,51 +228,5 @@ public class CourseVo {
         this.imgurl = imgurl;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        CourseVo other = (CourseVo) that;
-        return (this.getCourseid() == null ? other.getCourseid() == null : this.getCourseid().equals(other.getCourseid()))
-                && (this.getCoursename() == null ? other.getCoursename() == null : this.getCoursename().equals(other.getCoursename()))
-                && (this.getCategoryid() == null ? other.getCategoryid() == null : this.getCategoryid().equals(other.getCategoryid()))
-                && (this.getProfile() == null ? other.getProfile() == null : this.getProfile().equals(other.getProfile()))
-                && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
-                && (this.getImgurl() == null ? other.getImgurl() == null : this.getImgurl().equals(other.getImgurl()));
-    }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getCourseid() == null) ? 0 : getCourseid().hashCode());
-        result = prime * result + ((getCoursename() == null) ? 0 : getCoursename().hashCode());
-        result = prime * result + ((getCategoryid() == null) ? 0 : getCategoryid().hashCode());
-        result = prime * result + ((getProfile() == null) ? 0 : getProfile().hashCode());
-        result = prime * result + ((getPrice() == null) ? 0 : getPrice().hashCode());
-        result = prime * result + ((getImgurl() == null) ? 0 : getImgurl().hashCode());
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append(", courseid=").append(courseid);
-        sb.append(", coursename=").append(coursename);
-        sb.append(", categoryid=").append(categoryid);
-        sb.append(", profile=").append(profile);
-        sb.append(", price=").append(price);
-        sb.append(", imgurl=").append(imgurl);
-        sb.append("]");
-        return sb.toString();
-    }
 }

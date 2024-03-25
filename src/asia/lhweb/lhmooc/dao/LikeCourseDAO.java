@@ -49,4 +49,22 @@ public interface LikeCourseDAO {
      * @return int
      */
     int realDelete(LikeCourse likeCourse);
+
+    /**
+     * 保存
+     *
+     * @param likeCourse 喜欢课程
+     * @return int
+     */
+    int save(LikeCourse likeCourse);
+
+    /**
+     * 按id选择一个
+     *
+     * @param likeCourse 喜欢课程
+     * @return {@link LikeCourse}
+     */
+    LikeCourse selectOneById(LikeCourse likeCourse);
+
+    int delete(LikeCourse likeCourse);
 }

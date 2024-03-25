@@ -11,102 +11,6 @@
 </head>
 
 <body>
-    <!-- 登录 -->
-    <div id="popBox" class="formBox">
-        <div class="loginMethods">
-            <span class='zhanghao denglu activeLogin'>账号登陆</span>
-            <span class="glyphicon glyphicon-remove closeBox" onclick="showLoginBox()">X</span>
-        </div>
-        <div>
-            <div class="input-items">
-                <form action="">
-                    <div class="zh">
-                        <div class="inputItem">
-                            <input type="text" id='loginusername' class="form-control loginput" placeholder="请输入登录账户"
-                                style='padding-left: 20px;'>
-                        </div>
-                        <div class="inputItem">
-                            <input type="password" id="loginpassword" class="form-control loginput yzminput pswInput"
-                                placeholder="请输入密码">
-                            <a href="" class='iconfont icon-yanjing-guan getMa see'></a>
-                        </div>
-                        <div class="inputItem autoLG">
-                            <label class='autoLogin'>
-                                <input type="checkbox" name="" class="autoLogin1">7天内自动登录</label>
-                            <a href="">找回账号</a>
-                        </div>
-                        <div class="inputItem">
-                            <input type="submit" value="登录" id='loginBtn1' class='loginBtn baseButton' />
-                        </div>
-                    </div>
-                </form>
-
-                <form action="">
-                    <div class="yz">
-                        <div class="inputItem">
-                            <span class='leftspan'>+86</span>
-                            <input type="tel" id="phoneNum" class="form-control loginput" placeholder="短信登陆仅限中国大陆用户">
-                        </div>
-                        <div class="inputItem">
-                            <input type="text" class="form-control loginput yzminput" id="yzm" placeholder="请输入短信验证码">
-                            <a href="" class='getMa'>获取验证码</a>
-                        </div>
-                        <div class="inputItem autoLG">
-                            <label class='autoLogin'>
-                                <input type="checkbox" name="" class="autoLogin1">7天内自动登录</label>
-                            <a href="">找回账号</a>
-                        </div>
-
-                        <div class="inputItem">
-                            <input type="submit" value="登录" id='loginBtn2' class='loginBtn baseButton' />
-                        </div>
-                    </div>
-                </form>
-
-                <div class="loginfooter">
-                    <p>登录即同意慕课网 <a>《隐私政策》</a></p>
-                    <div class="erweima"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 注册 -->
-    <div id="registerBox" class="formBox">
-        <div class="loginMethods">
-            <span class='denglu activeLogin'>快速注册</span>
-            <span class="glyphicon glyphicon-remove closeBox" onclick="showResBox()">X</span>
-        </div>
-        <div>
-            <div class="input-items">
-                <form action="">
-                    <div class="zh rg">
-                        <div class="inputItem">
-                            <input type="tel" id='resusername' class="form-control loginput" placeholder="请输入注册账号"
-                                style='padding-left: 20px;'>
-                        </div>
-                        <div class="inputItem">
-                            <input type="text" id='rgYzm' class="form-control loginput yzminput" placeholder="请输入邮箱验证码">
-                            <a href="" class='getMa'>获取验证码</a>
-                        </div>
-                        <div class="inputItem">
-                            <input type="password" id='respassword' class="form-control loginput yzminput pswInput"
-                                placeholder="请输入8-20位字母数字或字符至少包含两种！">
-                            <a href="" class='iconfont icon-yanjing-guan getMa see'></a>
-                        </div>
-                        <div class="inputItem autoLG">
-                            <label class='autoLogin'>
-                                <input type="checkbox" name="" class="autoLogin1">同意慕课网
-                                <a class='Rxieyi'>《慕课网注册协议》</a>&<a class='Rxieyi'>《隐私政策》</a></label>
-                        </div>
-                        <div class="inputItem">
-                            <input type="submit" value="注册" id='loginBtn3' class='loginBtn baseButton' />
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- 头部开始 -->
     <iframe src="../../component/heard.html?nav=index" width=100% height=120px marginwidth=0 marginheight=0
@@ -122,7 +26,8 @@
             <div class="course-intro">
                 <h1>课程名: 课程名称</h1>
                 <h2>课程简介: 课程的简介</h2>
-                <h3>当前播放视频名: 视频名称</h3>
+                <h3>当前播放视频名: <span id="currentVideoName">视频名称</span></h3>
+                <p style="color: red;">价格：￥</p>
                 <button class="baseButton buyButton">购买课程</button>
                 <button class="baseButton shoppingCartButton">添加到购物车</button>
             </div>
@@ -136,13 +41,13 @@
                 <!-- 课程播放开始 -->
                 <div class="course-play">
                     <!-- 视频播放器 -->
-                    <video controls width="100%" height="auto">
-                        <source src="../../download/1.mp4" type="video/mp4">
+                    <video controls width="100%" height="auto" id="videoPlayer">
+                        <source src="" type="video/mp4">
                     </video>
                     <!--点赞区域开始 -->
                     <div class="like">
-                        <div>点赞数：<span></span></div>
-                        <div>收藏数：<span></span></div>
+                        <div><button class="baseButton">点赞</button>点赞数：<span></span></div>
+                        <div><button class="baseButton">收藏</button>收藏数：<span></span></div>
                         <div>评论数：<span></span></div>
                     </div>
                     <!-- 点赞区域结束 -->
@@ -160,82 +65,7 @@
                             </a>
                         </div>
                         <div class="catalogue-box">
-                            <div class="catague-item">
-                                <div class="name-box js-control-list">
-                                    <div class="left">第1章 课程介绍
-                                    </div>
-                                    <div class="right">
-                                        <div class="time-box"> 4 节｜72分钟
-                                        </div>
-                                        <a href="javascript:;" class="">
-                                            <span class="blue">展开</span>
-                                            <i class="catalogue-icon blue imv2-chevrons-down"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <ul class="media-box" style="display: none;">
-                                    <li class="js-enter-tryMedia istrysee" data-index="0" data-type="3">
-                                        <div class="left">
-                                            <i class=" imv2-shipin3"></i>
-                                            <div class="type blue">
-                                                视频：
-                                            </div>
-                                            <div class="media-name blue">1-1 课程目标</div>
-                                        </div>
-                                        <div class="right">
-                                            <div class="media-time">20:48</div>
-                                        </div>
-                                    </li>
-                                    <li class="js-enter-tryMedia istrysee" data-index="1" data-type="3">
-                                        <div class="left">
-                                            <i class=" imv2-shipin3"></i>
-                                            <div class="type blue">
-                                                视频：
-                                            </div>
-                                            <div class="media-name blue">1-2 学习NLP对你有什么帮助</div>
-                                        </div>
-                                        <div class="right">
-                                            <div class="media-time">14:37</div>
-                                        </div>
-                                    </li>
-                                    <li class="js-enter-tryMedia istrysee" data-index="2" data-type="3">
-                                        <div class="left">
-                                            <i class=" imv2-shipin3"></i>
-                                            <div class="type blue">
-                                                视频：
-                                            </div>
-                                            <div class="media-name blue">1-3 课程重难点</div>
-                                        </div>
-                                        <div class="right">
-                                            <div class="media-time">25:04</div>
-                                        </div>
-                                    </li>
-                                    <li class="">
-                                        <div class="left">
-                                            <i class=" imv2-shipin3"></i>
-                                            <div class="type ">
-                                                视频：
-                                            </div>
-                                            <div class="media-name ">1-4 学习建议</div>
-                                        </div>
-                                        <div class="right">
-                                            <div class="media-time">10:55</div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="catague-item">
-                                <div class="name-box js-control-list">
-                                    <div class="left">第2章 如何使用机器语言
-                                    </div>
-                                    <div class="right">
-                                        <div class="time-box">内容更新中</div>
-                                    </div>
-                                </div>
-                                <ul class="media-box" style="display: none;">
-                                </ul>
-                            </div>
-
+                            <!-- 章节目录动态生成 -->
                         </div>
                         <div class="chapter-update-state"><i class="imv2-refresh"></i>本课程持续更新中</div>
                     </div>
@@ -245,9 +75,6 @@
             </div>
             <!-- 课程区域结束 -->
             <!-- 课程介绍区域结束 -->
-
-
-
             <!-- 评论区开始 -->
             <div class="comment-container">
                 <!-- 输入框区域 -->
@@ -263,24 +90,7 @@
                 </div>
                 <!-- 评论内容区域 -->
                 <div class="comment-area">
-                    <!-- 单条评论示例 -->
-                    <div class="comment">
-                        <div class="comment-info">
-                            <div class="user-avatar">
-                                <!-- 这里放评论人的头像 -->
-                                <img src="../../images/defultImg.png">
-                            </div>
-                            <div class="user-details">
-                                <div class="user-name">评论人姓名</div>
-                                <div class="comment-time">评论时间</div>
-                            </div>
-                        </div>
-                        <div class="comment-text">
-                            <!-- 这里放评论内容 -->
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        </div>
-                    </div>
-                    <!-- 其他评论条目 -->
+                    <!-- 评论列表动态生成 -->
                 </div>
             </div>
 
@@ -299,13 +109,16 @@
     <script src="../../js/login-res.js"></script>
     <script src="../../js/courseDetail.js"></script>
     <script>
+        var pageNo = 1;
+        var pageSize = 5;
+        var courseId;
         $(document).ready(function () {
             // 获取当前页面的 URL
             var url = window.location.href;
 
             // 获取 URL 中的参数部分
             var params = url.split("?")[1];
-            var courseId = params.split("=")[1];
+            courseId = params.split("=")[1];
 
             // 查询课程详情
             getCourseDetailById(courseId);
@@ -316,6 +129,7 @@
             $.ajax({
                 url: "LhMooc/courseServlet",
                 type: "GET",
+                dataType: "json",
                 data: {
                     action: "getCourseDetailById",
                     courseId: courseId,
@@ -323,14 +137,114 @@
                 success: function (response) {
                     if (response.code === 200) {
                         console.log("查询的结果", response.data);
+
+                        // 更新课程名称和简介
+                        $(".course-intro h1").text("课程名：" + response.data.coursename);
+                        $(".course-intro h2").text("课程简介：" + response.data.profile);
+                        $(".course-intro p").text("价格：" + response.data.price+"元");
+
+                        // 更新视频播放器
+                        if (response.data && response.data.courseChapterList && response.data.courseChapterList.length > 0 &&
+                            response.data.courseChapterList[0].courseVideoList && response.data.courseChapterList[0].courseVideoList.length > 0) {
+                            var videoUrl = response.data.courseChapterList[0].courseVideoList[0].videourl;
+                            $("#videoPlayer source").attr("src", "../../" + videoUrl);
+                            $("#videoPlayer")[0].load(); // 重新加载视频
+                            $("#currentVideoName").text(response.data.courseChapterList[0].courseVideoList[0].videoname);
+                        } else {
+                            console.log("未找到所需的课程视频信息！");
+                        }
+                        // 更新点赞数、收藏数、评论数
+                        $(".like div:nth-child(1) span").text(response.data.likeCount);
+                        $(".like div:nth-child(2) span").text(response.data.followCount);
+                        $(".like div:nth-child(3) span").text(response.data.commentCourseVoList.length);
+
+                        // 更新章节目录
+                        var chapters = response.data.courseChapterList;
+                        var $catalogueBox = $(".catalogue-box");
+                        $catalogueBox.empty(); // 清空之前的内容
+                        for (var i = 0; i < chapters.length; i++) {
+                            var chapter = chapters[i];
+                            var chapterName = chapter.chaptername;
+                            var $chapterItem = $('<div class="catague-item"><div class="name-box js-control-list"><div class="left">' + (i + 1) + '章 ' + chapterName + '</div><div class="right"><div class="time-box">' + chapter.courseVideoList.length + ' 节｜' + calculateTotalVideoTime(chapter.courseVideoList) + '</div><a href="javascript:;"><span class="blue">展开</span><i class="catalogue-icon blue imv2-chevrons-down"></i></a></div></div><ul class="media-box"></ul>');
+
+                            var $mediaBox = $chapterItem.find(".media-box");
+                            for (var j = 0; j < chapter.courseVideoList.length; j++) {
+                                var video = chapter.courseVideoList[j];
+                                var $videoItem = $("<li></li>");
+                                $videoItem.addClass("js-enter-tryMedia istrysee");
+                                $videoItem.attr("data-index", j);
+                                $videoItem.attr("data-type", "3");
+                                $videoItem.html('<div class="left"><i class=" imv2-shipin3"></i><div class="type blue">视频：</div><div class="media-name blue">' + video.videoname + '</div></div><div class="right"><div class="media-time">' + video.videotime + '</div></div>');
+                                $mediaBox.append($videoItem);
+                            }
+
+                            $catalogueBox.append($chapterItem);
+                        }
+
+                        // 更新评论区
+                        var comments = response.data.commentCourseVoList;
+                        var $commentArea = $(".comment-area");
+                        $commentArea.empty(); // 清空之前的评论
+                        for (var i = 0; i < comments.length; i++) {
+                            var comment = comments[i];
+                            var $comment = $("<div></div>");
+                            $comment.addClass("comment");
+                            // 检查头像和名称是否为空，如果为空则设置默认值
+                            var avatarSrc = comment.imgurl ? "../../download/" + comment.imgurl : "../../download/" + "defultImg.png";
+                            var nickname = comment.nickname ? comment.nickname : "默认名";
+                            $comment.html('<div class="comment-info"><div class="user-avatar"><img src="' + avatarSrc + '"></div><div class="user-details"><div class="user-name">' + nickname + '</div><div class="comment-time">'
+                                + formatDate(comment.createtime) + '</div></div></div><div class="comment-text">' + comment.content + '</div>');
+                            $commentArea.append($comment);
+                        }
+
+
+                        // 视频列表项点击事件
+                        $(".media-box li").click(function () {
+                            var index = $(this).attr("data-index");
+                            var chapterIndex = $(this).parents(".catague-item").index();
+                            var videos = response.data.courseChapterList[chapterIndex].courseVideoList;
+
+                            if (videos && videos.length > index) {
+                                var videoUrl = videos[index].videourl;
+                                var videoName = videos[index].videoname;
+
+                                $("#videoPlayer source").attr("src", "../../" + videoUrl);
+                                $("#videoPlayer")[0].load(); // 重新加载视频
+                                $("#currentVideoName").text(videoName);
+                            } else {
+                                console.log("该章节下没有视频！");
+                            }
+                        });
                     } else {
                         alert(response.msg);
                     }
+
                 },
                 error: function (error) {
                     alert(error.msg);
                 }
             });
+        }
+
+        // 计算视频总时长
+        function calculateTotalVideoTime(videos) {
+            var totalSeconds = 0;
+            for (var i = 0; i < videos.length; i++) {
+                var video = videos[i];
+                totalSeconds += convertVideoTimeToSeconds(video.videotime);
+            }
+            var hours = Math.floor(totalSeconds / 3600);
+            var minutes = Math.floor((totalSeconds % 3600) / 60);
+            return hours + "小时" + minutes + "分钟";
+        }
+
+        // 将视频时间转换为秒数
+        function convertVideoTimeToSeconds(time) {
+            var timeParts = time.split(":");
+            var hours = parseInt(timeParts[0]);
+            var minutes = parseInt(timeParts[1]);
+            var seconds = parseInt(timeParts[2]);
+            return hours * 3600 + minutes * 60 + seconds;
         }
     </script>
 </body>
