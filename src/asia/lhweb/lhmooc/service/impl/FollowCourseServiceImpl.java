@@ -7,7 +7,6 @@ import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.FollowCourse;
 import asia.lhweb.lhmooc.service.FollowCourseService;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,27 +40,8 @@ public class FollowCourseServiceImpl implements FollowCourseService {
         // 对查询结果按照收藏时间进行降序排序
         followCourseList.sort((o1, o2) -> o2.getCreatetime().compareTo(o1.getCreatetime()));
 
-        // 初始化分页对象，并设置分页参数及总行数
         Page<FollowCourse> page = new Page<>();
-        page.setPageNo(pageNo);
-        page.setPageSize(pageSize);
-        page.setTotalRow(followCourseList.size());
-
-        // 计算总页数
-        int pageTotalCount = followCourseList.size() / pageSize;
-        if (followCourseList.size() % pageSize > 0) {
-            pageTotalCount = pageTotalCount + 1;
-        }
-        page.setPageTotalCount(pageTotalCount);
-
-        // 设置分页数据，取出指定页的收藏课程列表
-        int startIndex = (pageNo - 1) * pageSize;
-        int endIndex = Math.min(startIndex + pageSize, followCourseList.size());
-        if (startIndex < followCourseList.size()) {
-            page.setItems(followCourseList.subList(startIndex, endIndex));
-        } else {
-            page.setItems(Collections.emptyList()); // 如果起始索引大于等于列表大小，返回空列表
-        }
+        page=page.getPageByList(pageNo, pageSize, followCourseList);
 
         // 返回查询成功的结果，包含分页的收藏课程列表
         return Result.success(page, "查询成功");
@@ -106,7 +86,7 @@ public class FollowCourseServiceImpl implements FollowCourseService {
         List<FollowCourse> followCourseList = followCourseDAO.selectAll(followCourse);
         if (!followCourseList.isEmpty()) {
             followCourseDAO.realDelete(followCourseList.get(0));
-            return Result.success("您已经收藏过了呦 这边帮您取消收藏");
+            return Result.success("这边帮您取消收藏啦");
         }
         int result = followCourseDAO.save(followCourse); // 假设 save 方法返回影响的行数
 

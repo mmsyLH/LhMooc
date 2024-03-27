@@ -58,6 +58,16 @@ public class Orders{
      * 0表示还没删除 1表示删除
      */
     private Integer isdelete;
+    private Integer userid;
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
     /**
      * 0表示还没删除 1表示删除
      */

@@ -84,6 +84,7 @@ public class CourseCategoryServiceImpl implements CourseCategoryService {
     @Override
     public List<CourseCategory> getAll() {
         return courseDAO.selectAll(BeanFactory.getInstance().getCourseCategory());
+        // return courseDAO.selectAll(new CourseCategory());
     }
 
 

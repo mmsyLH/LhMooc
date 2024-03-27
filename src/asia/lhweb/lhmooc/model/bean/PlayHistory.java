@@ -33,23 +33,6 @@ public class PlayHistory {
      */
     private Date playprogress;
 
-    /**
-     * 0表示还没删除 1表示删除
-     */
-    private Integer isdelete;
-    /**
-     * 0表示还没删除 1表示删除
-     */
-    public Integer getIsdelete() {
-        return isdelete;
-    }
-
-    /**
-     * 0表示还没删除 1表示删除
-     */
-    public void setIsdelete(Integer isdelete) {
-        this.isdelete = isdelete;
-    }
 
     /**
      * 播放表的id

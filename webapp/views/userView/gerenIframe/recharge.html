@@ -144,6 +144,8 @@
                     console.log("充值结果", response);
                     document.getElementById('loading').style.display = 'none'; // 隐藏加载动画
                     alert('充值成功：' + amount + '元'); // 充值成功提示
+                    location.reload();
+
                 },
                 error: function (xhr, status, error) {
                     document.getElementById('loading').style.display = 'none'; // 隐藏加载动画

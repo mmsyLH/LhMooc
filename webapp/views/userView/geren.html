@@ -286,13 +286,39 @@
                 }, 1000); // 1秒后跳转
             } else {
                 userObj = JSON.parse(user);
-                console.log("userObj", userObj)
-                // 设置用户头像
-                $('#avatar').attr('src', "../../download/"+userObj.avatar);
-                // 设置用户名
-                $('#username').text('欢迎您！' + userObj.username);
-                // 设置用户昵称
-                $('#nickname').text('尊敬的  "' + userObj.nickname + '"');
+                //发起ajax请求根据用户id重新获取用户信息 然后存在session中
+                $.ajax({
+                    url: 'LhMooc/userServlet',
+                    type: 'get',
+                    data: {
+                        action: "getUserById",
+                        id: JSON.parse(user).id,
+                    },
+                    success: function (response) {
+                        console.log("获取用户信息结果", response);
+                        if (response.code === 200) {
+                            var user = response.data;
+                            // console.log("user", user)
+                            // 将用户信息存储在sessionStorage中
+                            sessionStorage.setItem("LoginMoocUser", JSON.stringify(user));
+                            userObj = JSON.parse(sessionStorage.getItem("LoginMoocUser"));
+                            // 获取用户信息
+                            displayUserInfo(user);
+                            // 设置用户头像
+                            $('#avatar').attr('src', "../../download/" + userObj.avatar);
+                            // 设置用户名
+                            $('#username').text('欢迎您！' + userObj.username);
+                            // 设置用户昵称
+                            $('#nickname').text('尊敬的  "' + userObj.nickname + '"');
+                        } else {
+                            alert(response.msg);
+                        }
+                    },
+                    error: function (error) {
+                        alert("获取用户信息失败！", error);
+                    }
+                });
+
             }
         });
 

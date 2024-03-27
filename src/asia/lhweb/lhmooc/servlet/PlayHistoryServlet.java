@@ -42,9 +42,8 @@ public class PlayHistoryServlet extends LhHttpServlet {
      * @param req  要求事情
      * @param resp 分别地
      */
-    public void getByUserIdAndVideoName(LhRequest req, LhResponse resp) {
+    public void getByUserId(LhRequest req, LhResponse resp) {
         String userId = req.getParameter("userId");
-        String videoName = req.getParameter("videoName");
 
         // 请求参数为空
         if (!DataUtils.handleNullOrEmpty(resp, gson, userId)) {
@@ -55,9 +54,31 @@ public class PlayHistoryServlet extends LhHttpServlet {
         if (userService.isNoMeOrAdmin(req, resp, userId, gson)) return;
 
         // 调用userService，根据ID获取用户信息
-        Result result = playHistoryService.getByUserIdAndVideoName(Integer.parseInt(userId), videoName);
+        Result result = playHistoryService.getByUserId(Integer.parseInt(userId));
 
         // 将查询结果转换为JSON，并通过response返回
+        resp.writeToJson(gson.toJson(result));
+    }
+
+    /**
+     * 添加视频播放记录
+     *
+     * @param req  请求
+     * @param resp 响应
+     */
+    public void addPlayHistory(LhRequest req, LhResponse resp) {
+        String videoId = req.getParameter("videoId");
+        String userId = req.getParameter("userId");
+
+        // 请求参数为空
+        if (!DataUtils.handleNullOrEmpty(resp, gson, videoId, userId)) {
+            return;
+        }
+
+        // 将视频播放记录添加到数据库
+        Result result = playHistoryService.addPlayHistory(Integer.parseInt(videoId), Integer.parseInt(userId));
+
+        // 将结果转换为JSON，并通过response返回
         resp.writeToJson(gson.toJson(result));
     }
 

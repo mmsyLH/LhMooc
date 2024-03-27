@@ -25,7 +25,29 @@ public interface CommentCourseDAO{
      */
     List<CommentCourse> selectAll(CommentCourse commentCourse);
 
+    /**
+     * 页面
+     *
+     * @param commentCourse 评论课程
+     * @param pageNo        页面没有
+     * @param pageSize      页面大小
+     * @return {@link Page}<{@link CommentCourse}>
+     */
     Page<CommentCourse> page(CommentCourse commentCourse, int pageNo, int pageSize);
 
+    /**
+     * 真正删除
+     *
+     * @param commentCourse 评论课程
+     * @return int
+     */
     int realDelete(CommentCourse commentCourse);
+
+    /**
+     * 保存
+     *
+     * @param commentCourse 评论课程
+     * @return int
+     */
+    int save(CommentCourse commentCourse);
 }

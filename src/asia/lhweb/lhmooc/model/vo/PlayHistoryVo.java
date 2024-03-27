@@ -65,6 +65,26 @@ public class PlayHistoryVo {
      * 视频时间
      */
     private Date videoTime;
+    //课程id
+    private Integer courseId;
+    //章节id
+    private Integer chapterId;
+
+    public Integer getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
+    public Integer getChapterId() {
+        return chapterId;
+    }
+
+    public void setChapterId(Integer chapterId) {
+        this.chapterId = chapterId;
+    }
 
     public String getVideoName() {
         return videoName;

@@ -20,8 +20,9 @@ public class ThreadPoolManager {
          threadPoolExecutor=
                 // new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory,         handler);
                 //                        核心线程数      最大线程数         激活时间       时间单位  排队的集合   创建线程的方式:默认工厂   拒绝策略
-                new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
-                        new ArrayBlockingQueue<>(20), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
+                // new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
+                new ThreadPoolExecutor(16, 24, 20, TimeUnit.SECONDS,
+                        new ArrayBlockingQueue<>(20), Executors.defaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
 

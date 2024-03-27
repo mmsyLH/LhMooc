@@ -2,6 +2,8 @@ package asia.lhweb.lhmooc.dao;
 
 import asia.lhweb.lhmooc.model.bean.Orders;
 
+import java.util.List;
+
 /**
  * 订单服务
  *
@@ -19,4 +21,6 @@ public interface OrdersDAO {
      * @return boolean
      */
     int save(Orders orders);
+
+    List<Orders> selectAll(Orders orders);
 }

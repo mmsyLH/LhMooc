@@ -91,9 +91,10 @@ public class BasicDAO<T> {
                 // 将实体类对象添加到结果集合中
                 list.add(e);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            JDBCUtils.close(conn, pstat, res);
         }
         return list;
     }
@@ -128,6 +129,8 @@ public class BasicDAO<T> {
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        }finally {
+            JDBCUtils.close(conn, pstat, res);
         }
 
         return DML(stringBuilder.toString());
@@ -161,6 +164,8 @@ public class BasicDAO<T> {
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        }finally {
+            JDBCUtils.close(conn, pstat, res);
         }
 
         return DML(stringBuilder.toString());
@@ -263,6 +268,8 @@ public class BasicDAO<T> {
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            }finally {
+                JDBCUtils.close(conn, pstat, res);
             }
         }
 
@@ -309,6 +316,8 @@ public class BasicDAO<T> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            JDBCUtils.close(conn, pstat, res);
         }
         return 0;
     }
@@ -342,6 +351,8 @@ public class BasicDAO<T> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            JDBCUtils.close(conn, pstat, res);
         }
         return 0;
     }
@@ -409,6 +420,8 @@ public class BasicDAO<T> {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            JDBCUtils.close(conn, pstat, res);
         }
         // 返回从数据库中分页获取的数据
         return list;
@@ -477,6 +490,8 @@ public class BasicDAO<T> {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            JDBCUtils.close(conn, pstat, res);
         }
         // 返回从数据库中分页获取的数据
         return list;
@@ -598,6 +613,8 @@ public class BasicDAO<T> {
         } catch (IllegalAccessException | SQLException | InstantiationException | IntrospectionException |
                  InvocationTargetException e) {
             throw new RuntimeException(e);
+        }finally {
+            JDBCUtils.close(conn, pstat, res);
         }
         return null;
     }

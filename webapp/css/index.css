@@ -388,7 +388,7 @@ a {
     position: absolute;
     width: 24px;
     height: 3px;
-    background-color: #f20d0d;
+    /* background-color: #f20d0d; */
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -407,6 +407,7 @@ a {
 
 .course li img {
     width: 270px;
+    height: 130px;
     border-radius: 8px 8px 0px 0px;
 }
 
@@ -442,8 +443,20 @@ a {
 }
 
 .course-data {
+    display: flex;
     width: 250px;
     margin-left: 8px;
+}
+.course-data span{
+    margin-left: 8px;
+}
+.course-comment {
+    display: block;
+    white-space: nowrap; /* 禁止换行 */
+    overflow: hidden; /* 溢出隐藏 */
+    text-overflow: ellipsis; /* 添加省略号 */
+    line-height: 1.2em; /* 行高 */
+    max-width: 250px; /* 最大宽度，超过300px显示省略号 */
 }
 
 /* 新上好课结束 */

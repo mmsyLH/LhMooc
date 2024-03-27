@@ -150,7 +150,7 @@
                 success: function (response) {
                     if (response.code === 200) {
                         alert("更新用户信息成功！");
-                        location.reload();
+                        parent.location.reload(); // 刷新父容器页面
                     }
                 },
                 error: function (error) {

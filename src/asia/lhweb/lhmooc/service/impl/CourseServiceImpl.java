@@ -35,8 +35,10 @@ public class CourseServiceImpl implements CourseService {
     private FollowCourseDAO followCourseDAO = new FollowCourseDAOImpl();
     // 购买历史记录dao
     private BuycourseHistoryDAO buycourseHistoryDAO = new BuycourseHistoryDAOImpl();
-    //订单dao
+    // 订单dao
     private OrdersDAO ordersDAO = new OrdersDAOImpl();
+    // 流水表dao
+    private TransactionDAO transactionDAO =new TransactionDAOImpl();
 
     public CourseServiceImpl() {
 
@@ -234,13 +236,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     /**
+     * 获取课程细节
      * 获取指定课程的详细信息
      *
      * @param courseId 课程的ID标识
+     * @param pageNo   页面没有
+     * @param pageSize 页面大小
      * @return 返回一个结果对象，其中包含课程的详细信息。如果课程不存在，则返回错误信息。
      */
     @Override
-    public Result<CourseVo> getCourseDetail(int courseId) {
+    public Result<CourseVo> getCourseDetail(int courseId, int pageNo, int pageSize) {
         // 初始化课程对象并设置课程ID
         Course course = new Course();
         course.setCourseid(courseId);
@@ -301,7 +306,11 @@ public class CourseServiceImpl implements CourseService {
             }
             commentCourseVoList.add(commentCourseVoTemp);
         }
-        courseVo.setCommentCourseVoList(commentCourseVoList);
+        // 按照的时间排序 最晚评论的排在越上面
+        commentCourseVoList.sort((o1, o2) -> Long.compare(o2.getCreatetime().getTime(), o1.getCreatetime().getTime()));
+        Page<CommentCourseVo> page = new Page<>();
+        page = page.getPageByList(pageNo, pageSize, commentCourseVoList);
+        courseVo.setCommentCourseVoPage(page);
 
         // 查询课程的点赞数
         LikeCourse likeCourse = new LikeCourse();
@@ -391,15 +400,27 @@ public class CourseServiceImpl implements CourseService {
             if (buycourseHistoryDAO.save(buycourseHistory) <= 0) {
                 return Result.error("购买失败(购买记录)");
             }
+            // 流水记录
+            Transaction transaction = new Transaction();
+            transaction.setTransactionid(moocUser.getUsername() + DataUtils.getCode());
+            transaction.setUserid(userId);
+            transaction.setTransactionstatus(1);// 1 成功 2失败 3进行中
+            transaction.setAmount(findCourse.getPrice());
+            transaction.setTransactiontype(2);// 1 充值 2消费
+            transaction.setInfo("用户消费金额购买课程");
+            if (transactionDAO.save(transaction) <=0) {
+                return Result.error("购买失败(流水表)");
+            }
 
             // 订单记录
             Orders orders = new Orders();
+            orders.setUserid(userId);
             orders.setOrderid(DataUtils.getCode());
             orders.setCourseid(courseId);
             orders.setPaychannel(3);
             orders.setOrderamount(findCourse.getPrice());
-            orders.setOrderstatus(1);//已付款
-            if (ordersDAO.save(orders) <= 0){
+            orders.setOrderstatus(1);// 已付款
+            if (ordersDAO.save(orders) <= 0) {
                 return Result.error("购买失败(订单表)");
             }
             return Result.success("购买成功");

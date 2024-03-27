@@ -1,5 +1,8 @@
 package asia.lhweb.lhmooc.model;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,7 +36,31 @@ public class Page<T> {
 
 	public Page() {
 	}
+	@NotNull
+	public Page<T> getPageByList(int pageNo, int pageSize, List<T> followCourseList) {
+		// 初始化分页对象，并设置分页参数及总行数
+		Page<T> page = new Page<>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setTotalRow(followCourseList.size());
 
+		// 计算总页数
+		int pageTotalCount = followCourseList.size() / pageSize;
+		if (followCourseList.size() % pageSize > 0) {
+			pageTotalCount = pageTotalCount + 1;
+		}
+		page.setPageTotalCount(pageTotalCount);
+
+		// 设置分页数据，取出指定页的收藏课程列表
+		int startIndex = (pageNo - 1) * pageSize;
+		int endIndex = Math.min(startIndex + pageSize, followCourseList.size());
+		if (startIndex < followCourseList.size()) {
+			page.setItems(followCourseList.subList(startIndex, endIndex));
+		} else {
+			page.setItems(Collections.emptyList()); // 如果起始索引大于等于列表大小，返回空列表
+		}
+		return page;
+	}
 	public Integer getPageNo() {
 		return pageNo;
 	}

@@ -67,26 +67,3 @@ doms.carousel.addEventListener('mouseleave', function () {
 // 轮播图区域结束
 
 // 好课区域开始
-//切换课程
-var courseul = document.getElementById("course-info").getElementsByTagName("ul");
-var menu = document.getElementsByClassName("menu")[0].getElementsByTagName("li");
-//切换横线
-for (var i = 0; i < menu.length; i++) {
-  menu[i].setAttribute("sub", i);//给一个标识
-  menu[i].onclick = function () {
-    //没有点击到的全部关闭
-    for (var i = 0; i < menu.length; i++) {
-      courseul[i].style.display = "none";
-      menu[i].classList.remove("curr");
-
-    }
-    //点击到的显示
-    var sub = this.getAttribute("sub");
-    menu[sub].classList.add("curr");
-    courseul[sub].style.display = "block";
-    //点击停止后把index=现在点击的位置
-    index = sub;
-  }
-
-}
-

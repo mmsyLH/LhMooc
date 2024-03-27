@@ -50,6 +50,11 @@
             justify-content: space-around;
             padding-left: 10px;
         }
+
+        .playTime span {
+            margin: 0 5px;
+            font-size: 15px;
+        }
     </style>
 </head>
 
@@ -59,64 +64,16 @@
             <hr>
             <div class="history-title">
                 <h1>历史记录</h1>
-                <input type="text" placeholder="视频名称" id="search">
-                <button id="searchBtn">搜索</button>
             </div>
 
             <div class="skillbox">
-                <div class="video">
-                    <div class="video-box">
-                        <span id="courseName">课程名称</span>
-                        <span id="courseProfile">课程简介</span>
-                        <span id="courseCateory">课程所属分类名</span>
-                    </div>
-                    <div class="skillbar">
-                        <div class="skillbar-title"
-                            style="background: linear-gradient(to right, #00BCD4 0%, #f54009 100%); width: 80%">
-                            <span id="videoName">视频名称</span>
-                        </div>
-                        <div class="skill-bar-percent">观看时间占视频之间的百分比:80%</div>
-                        <div class="playTime">
-                            <span id="courseName">课程名 </span>
-                            <span id="courseChapter">课程章节 </span>
-                            <span id="videoNums">共xxP </span>
-                            <span>看到12:45</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skillbar">
-                    <div class="skillbar-title"
-                        style="background: linear-gradient(to right, #4CAF50 0%, #81C784 100%); width: 60%">
-                        <span>Mybatis</span>
-                    </div>
-                    <div class="skill-bar-percent">60%</div>
-                </div>
-
-                <div class="skillbar">
-                    <div class="skillbar-title"
-                        style="background: linear-gradient(to right, #FFEB3B 0%, #FFF176 100%); width: 75%">
-                        <span>数据结构与算法</span>
-                    </div>
-                    <div class="skill-bar-percent">75%</div>
-                </div>
+                <!-- 这里是你的静态 HTML 结构 -->
             </div>
             <hr>
         </div>
     </div>
     <script src="../../../js/jquery-3.6.0.js"></script>
     <script>
-
-        // 搜索按钮
-        $(document).ready(function () {
-            // 点击搜索按钮触发搜索事件
-            $('#searchBtn').click(function () {
-                var keyword = $('#search').val(); // 获取搜索框中的关键字
-                // ajax事件
-                alert('搜索关键字为：' + keyword);
-            });
-        });
-
         var userObj;
         // 页面加载完毕后执行
         $(document).ready(function () {
@@ -129,7 +86,7 @@
             } else {
                 userObj = JSON.parse(user);
                 console.log("用户对象", userObj);
-                getByUserIdAndVideoName();
+                getByUserId();
             }
         });
         /**
@@ -137,33 +94,63 @@
          * 无参数
          * 无返回值
          */
-        function getByUserIdAndVideoName() {
+        function getByUserId() {
             var userId = userObj.id;
-            var videoName = document.getElementById('videoName').value;
-            if (!videoName) {
-                videoName = "";
-            }
             $.ajax({
                 url: 'LhMooc/playHistoryServlet', // 获取个人观看历史记录接口URL
                 type: 'get', // 请求类型为POST
                 data: {
-                    action: "getByUserIdAndVideoName",
+                    action: "getByUserId",
                     userId: userId,
-                    videoName: videoName
                 },
                 success: function (response) {
                     console.log("获取历史记录结果", response);
                     if (response.code === 200) {
+                        var data = response.data;
+                        // 遍历返回的数据
+                        data.forEach(function (record) {
+                            // 创建新的 .skillbar 元素
+                            var skillbar = $('<div class="skillbar"></div>');
+                            var skillbarTitle = $('<div class="skillbar-title"></div>');
+                            var randomWidth = Math.floor(Math.random() * 51 + 30); // 生成30到80的随机数
+                            skillbarTitle.css('background', 'linear-gradient(to right, #00BCD4 0%, #f54009 100%)');
+                            skillbarTitle.css('width', randomWidth + '%');
+                            skillbarTitle.append('<span>' + record.videoName + '</span>');
+                            skillbar.append(skillbarTitle);
+                            skillbar.append('<div class="skill-bar-percent">' + randomWidth + '%</div>');
+                            skillbar.append('<div class="playTime"><span>' + "课程名：" + record.courseName + '</span><span>' + "章节名称：" + record.courChapterName + '</span><span>' + "观看时间:" + formatDate(record.playprogress) + '</span></div>');
+                            skillbar.click(function () {
+                                // 获取课程ID和章节ID
+                                var courseId = record.courseId;
+                                var chapterId = record.chapterId;
+                                var videoid = record.videoid;
+                                // 跳转到课程详情页
+                                parent.window.location.href = '../courseDetail.html?courseId=' + courseId + '&chapterId=' + chapterId+ '&videoId=' + videoid;
+                            });
+                            $('.skillbox').append(skillbar);
+                        });
 
                     } else {
                         alert(response.msg);
                     }
                 },
+
                 error: function (error) {
                     alert("获取历史记录失败！", error);
                 }
             });
 
+        }
+        // 将日期字符串转换为指定格式（YYYY/MM/DD HH:MM:SS）
+        function formatDate(dateString) {
+            var date = new Date(dateString);
+            var year = date.getFullYear();
+            var month = ('0' + (date.getMonth() + 1)).slice(-2); // 月份从0开始，需要加1，并确保两位数
+            var day = ('0' + date.getDate()).slice(-2); // 确保两位数的日期
+            var hours = ('0' + date.getHours()).slice(-2); // 确保两位数的小时
+            var minutes = ('0' + date.getMinutes()).slice(-2); // 确保两位数的分钟
+            var seconds = ('0' + date.getSeconds()).slice(-2); // 确保两位数的秒钟
+            return year + '/' + month + '/' + day + ' ' + hours + ':' + minutes + ':' + seconds;
         }
 
     </script>

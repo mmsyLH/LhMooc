@@ -9,8 +9,10 @@ import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.CommentCourse;
 import asia.lhweb.lhmooc.service.CommentCourseService;
 import asia.lhweb.lhmooc.service.CourseCategoryService;
+import asia.lhweb.lhmooc.service.MoocUserService;
 import asia.lhweb.lhmooc.service.impl.CommentCourseServiceImpl;
 import asia.lhweb.lhmooc.service.impl.CourseCategoryServiceImpl;
+import asia.lhweb.lhmooc.service.impl.MoocUserServiceImpl;
 import asia.lhweb.lhmooc.utils.DataUtils;
 import com.google.gson.Gson;
 
@@ -26,6 +28,8 @@ public class CommentServlet extends LhHttpServlet {
     private CourseCategoryService courseCategoryService = new CourseCategoryServiceImpl(); // 课程分类服务类
     //课程评论服务类
     private CommentCourseService commentCourseService = new CommentCourseServiceImpl();
+    //用户服务
+    private MoocUserService userService = new MoocUserServiceImpl();
     private Gson gson = new Gson(); // Google的解析json的工具类
 
     @Override
@@ -34,6 +38,31 @@ public class CommentServlet extends LhHttpServlet {
     }
 
     public CommentServlet() {
+
+    }
+
+    /**
+     * 添加
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    public void commentAdd(LhRequest request, LhResponse response) {
+        String userId = request.getParameter("userId");
+        String courseId = request.getParameter("courseId");
+        String content = request.getParameter("content");
+
+        // 判空
+        if (!DataUtils.handleNullOrEmpty(response, gson, userId, courseId, content)) {
+            return;
+        }
+
+        // 鉴权
+        if (userService.isNoMeOrAdmin(request, response, userId, gson)) return;
+
+        Result result = commentCourseService.commentAdd(Integer.parseInt(userId), Integer.parseInt(courseId),content);
+
+        response.writeToJson(gson.toJson(result));
 
     }
 

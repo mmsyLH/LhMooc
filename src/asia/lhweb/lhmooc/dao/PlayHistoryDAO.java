@@ -21,4 +21,8 @@ public interface PlayHistoryDAO {
      * @return {@link List}<{@link PlayHistory}>
      */
     List<PlayHistory> selectAll(PlayHistory playHistory);
+
+    int save(PlayHistory playHistory);
+
+    int realDelete(PlayHistory history);
 }

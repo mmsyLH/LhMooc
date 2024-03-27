@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 获取用户名和密码
         var username = document.getElementById('loginusername').value;
         var password = document.getElementById('loginpassword').value;
-
+            
         // 调用ajaxLogin方法进行登录
         ajaxLogin(username, password);
     });

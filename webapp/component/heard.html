@@ -58,20 +58,12 @@
                 aria-expanded="true" aria-haspopup="true" aria-controls="megamenu-3">课程
             </a>
         </li>
-        <li role="menuitem" class="nav-item "><a
-                onclick="window.parent.location.href = '../views/userView/courseDetail.html';" target="_parent"
-                class="nav-hd" aria-haspopup="true" aria-controls="megamenu-7">课程详情测试
+        <li role="menuitem" class="nav-item"><a onclick="window.parent.location.href = '../admin.html';"
+                target="_parent" class="nav-hd admin-menu" aria-expanded="true" aria-haspopup="true"
+                aria-controls="megamenu-9" style="display: none;">后台管理
             </a>
         </li>
-        <li role="menuitem" class="nav-item "><a href="javascript:void(0) " class="nav-hd " aria-expanded="true"
-                aria-haspopup="true" aria-controls="megamenu-8">出行指南
-            </a>
-        </li>
-        <li role="menuitem" class="nav-item "><a onclick="window.parent.location.href = '../admin.html';"
-                target="_parent" class="nav-hd " aria-expanded="true" aria-haspopup="true"
-                aria-controls="megamenu-9">后台管理
-            </a>
-        </li>
+
 
     </ul>
     <div id="esd_createCrossNavNode"></div>
@@ -184,7 +176,7 @@
         checkLoginStatus();
     });
 
-    // 检查用户登录状态
+    // 检查用户登录状态 并且判断用户端权限是否是1（管理员） 如果是的话就显示后台管理
     function checkLoginStatus() {
         var user = sessionStorage.getItem("LoginMoocUser");
         if (user) {
@@ -193,6 +185,13 @@
             document.getElementById("J-header-login").style.display = "none";
             document.getElementById("J-header-logout").style.display = "block";
             document.getElementById("username").innerText = userData.username;
+            // 检查用户角色，如果是管理员则显示后台管理菜单
+            console.log("userData",userData)
+            if (userData.userrole === 1) {
+                document.querySelector('.admin-menu').style.display = "block";
+            } else {
+                document.querySelector('.admin-menu').style.display = "none";
+            }
         } else {
             // 未登录状态，显示登录和注册按钮
             document.getElementById("J-header-login").style.display = "block";
@@ -205,7 +204,7 @@
         sessionStorage.removeItem("LoginMoocUser"); // 清除用户信息
         // 清除cookies中的用户信息
         document.cookie = "LoginMoocUser=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-        window.location.reload(); // 重新加载页面
+        parent.window.location.reload(); // 重新加载页面
     }
 
 

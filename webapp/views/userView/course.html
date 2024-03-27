@@ -117,9 +117,19 @@
 
     <div class="contatiner" style="padding-top: 130px;">
         <div class="main" style="min-height: 600px;">
+
+
             <!--筛选栏-->
             <div id="filter">
-
+                <!-- 按关键字查询 -->
+                <div id="filter-keyword">
+                    <span>
+                        <h4>关键字查询</h4>
+                    </span>
+                    <input type="text" id="keywordInput" placeholder="请输入关键字">
+                    <button onclick="searchByKeyword()">查询</button>
+                </div>
+                
                 <!--按类别筛选-->
                 <div id="filter-class">
 
@@ -142,6 +152,7 @@
             <div id="course-list" style="padding-bottom: 100px;">
                 <!--课程-->
             </div>
+            <!-- 导航条 -->
             <div class="pagination" id="pagination">
 
             </div>
@@ -163,10 +174,10 @@
         var pageNo = 1; //默认第一页
         var pageSize = 3; //默认分页2
         var sortType = 0; //默认排序查询
-        var categoryIdVar = 1;//默认按分类一个去查询
+        var categoryId = 1;//默认按分类一个去查询 0表示全部查询
         window.onload = function () {
             loadCategories(); // 在页面加载时加载全部课程分类
-            searchCourseByCategory(categoryIdVar); // 在页面加载时查询全部课程
+            search(pageNo); // 在页面加载时查询全部课程
         };
 
         // 查询全部课程分类
@@ -200,6 +211,12 @@
 
             // 添加新的类别按钮
             filterClass.append('<span><h4>类别</h4></span>');
+
+            // 添加默认选项
+            var defaultCategoryButton = $('<input type="button" class="category-button active" value="全部">');
+            defaultCategoryButton.data("category-id", 0); // 使用 0 代表默认选项
+            filterClass.append(defaultCategoryButton);
+
             $.each(categoryList, function (index, category) {
                 var button = $('<input type="button" class="category-button" value="' + category.categoryname + '">');
                 button.data("category-id", category.categoryid); // 使用 data() 方法来存储 categoryid
@@ -208,26 +225,20 @@
 
             // 添加点击事件监听器
             $(".category-button").click(function () {
-                var categoryId = $(this).data("category-id"); // 获取存储的 categoryid
+                categoryId = $(this).data("category-id"); // 获取存储的 categoryid
+                console.log("   我点击了按钮，categoryId为：", categoryId)
                 // 处理点击事件
-                searchCourseByCategory(categoryId);
+                search();
 
                 // 移除其他按钮的激活样式
                 $(".category-button").removeClass("active");
                 // 添加当前点击按钮的激活样式
                 $(this).addClass("active");
             });
-
-            // 设置第一个分类按钮为 active
-            $(".category-button").first().addClass("active");
         }
 
-
-
-        // 根据课程分类查询课程
-        function searchCourseByCategory(categoryId) {
-            console.log("根据课程分类查询课程的categoryId" + categoryId)
-            categoryIdVar = categoryId;
+        // 组合查询课程
+        function search(pageNo) {
             $.ajax({
                 url: 'LhMooc/courseServlet',
                 type: 'get',
@@ -236,7 +247,7 @@
                     sortType: sortType,
                     pageNo: pageNo,
                     pageSize: pageSize,
-                    categoryId: categoryIdVar // 发送所选的分类 ID
+                    categoryId: categoryId // 发送所选的分类 ID 0表示查询全部
                 },
                 dataType: "JSON",
                 success: function (res) {
@@ -262,7 +273,7 @@
             // 遍历课程数据并填充到页面中
             $.each(data, function (index, course) {
                 var courseItem = $('<div class="course" onclick="showCourseDetail(' + course.courseid + ')">');
-                courseItem.append('<img class="course-photo" src="../../images/' + course.imgurl + '">');
+                courseItem.append('<img class="course-photo" src="../../' + course.imgurl + '">');
                 var courseDetails = $('<ul class="course-details">');
                 courseDetails.append('<li><h4>' + course.coursename + '</h4></li>');
                 courseDetails.append('<li>' + course.profile + '</li>');
@@ -298,7 +309,7 @@
         // 根据排序类型查询课程
         function searchBySortType(type) {
             sortType = type; // 更新排序类型
-            searchCourseByCategory(categoryIdVar); // 传递当前选定的分类 categoryId
+            search(); // 传递当前选定的分类 categoryId
         }
 
         // 改变排序按钮样式
@@ -310,199 +321,5 @@
         }
     </script>
 </body>
-
-<style>
-    * {
-        margin: 0px;
-        padding: 0px;
-    }
-
-    body {
-        background-color: #ecf0f4;
-    }
-
-    /* 遮障层 */
-    .overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-    }
-
-    /* 筛选栏 */
-    #filter {
-        width: 1200px;
-        overflow: hidden;
-        margin: 0 auto;
-    }
-
-    /* 类别筛选栏 */
-    #filter-class {
-        height: 38px;
-        background-color: white;
-        border-radius: 10px 10px 0 0;
-    }
-
-    /* 排序筛选栏 */
-    #filter-sort {
-        margin-top: 1.5px;
-        height: 38px;
-        background-color: white;
-    }
-
-    span {
-        font-size: 15px;
-        margin-top: 8px;
-        margin-left: 20px;
-        display: inline-block;
-    }
-
-    .contatiner input {
-        font-size: 13px;
-        margin-left: 30px;
-        height: 25px;
-        padding-top: 3px;
-        padding-bottom: 5px;
-        padding-left: 8px;
-        padding-right: 8px;
-        border: 0px;
-        cursor: pointer;
-        border-radius: 12px;
-        color: grey;
-        background-color: white;
-    }
-
-    /* 课程列表栏 */
-    #course-list {
-        width: 1200px;
-        overflow: hidden;
-        margin: 0 auto;
-        margin-top: 1px;
-        background-color: white;
-        border-radius: 0 0 10px 10px;
-    }
-
-    /* 课程 */
-    .course {
-        margin-top: 40px;
-        margin-left: 50px;
-        height: 200px;
-        width: 1100px;
-        border: 1px solid lightgray;
-        border-radius: 10px;
-    }
-
-    .course:hover {
-        /* 设置阴影效果 */
-        box-shadow: 0px 5px 8px 1px rgb(128, 128, 128);
-        margin-left: 45px;
-    }
-
-    .course-photo {
-        margin-left: 15px;
-        margin-top: 15px;
-        float: left;
-        width: 302px;
-        height: 169px;
-        border-radius: 7px;
-    }
-
-    /* 课程详情 */
-    .course-details {
-        float: left;
-        /* margin-top: 10px; */
-        margin-left: 40px;
-        list-style-type: none;
-    }
-
-    .course-details>li {
-        /* 设置悬停指针样式 */
-        cursor: pointer;
-        margin-top: 15px;
-        width: 650px;
-    }
-
-    .course-details>li:nth-child(1):hover {
-        color: red;
-    }
-
-    .course-details>li:nth-child(2) {
-        margin-top: 15px;
-        width: 650px;
-        height: 95px;
-    }
-
-    .course-details>li:nth-child(3) {
-        margin-top: 15px;
-        width: 650px;
-    }
-
-    /* 课程发布时间 */
-    .videostatus>input {
-        border: 0px;
-        font-size: 15px;
-        color: black;
-    }
-
-    .videostatus>span {
-        margin-right: 20px;
-        font-size: 15px;
-        color: black;
-    }
-
-    /* 激活状态样式 */
-    .active {
-        background-color: rgba(240, 20, 20, 0.8);
-        color: white;
-    }
-
-    .active:hover {
-        background-color: rgba(240, 20, 20, 0.4);
-
-    }
-
-    /* 分页 */
-    .pagination {
-        margin: 20px 0;
-        text-align: center;
-    }
-
-    .pagination ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .pagination ul li {
-        display: inline-block;
-        margin: 0 5px;
-    }
-
-    .pagination ul li a {
-        padding: 5px 10px;
-        border: 1px solid #ccc;
-        color: #333;
-    }
-
-    .pagination ul li a.active {
-        background-color: #007bff;
-        color: #fff;
-        border-color: #007bff;
-    }
-
-    .pagination ul li a:hover {
-        background-color: #f0f0f0;
-    }
-
-    .pagination ul li a.active {
-        background-color: #007bff;
-        color: #fff;
-        border-color: #007bff;
-    }
-</style>
 
 </html>

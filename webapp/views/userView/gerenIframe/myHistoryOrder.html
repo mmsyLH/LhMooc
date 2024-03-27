@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery.fancybox@2.1.5/source/jquery.fancybox.css">
+    <link rel="stylesheet" href="../../../css/gerenIframe.css">
+    <link rel="stylesheet" href="../../../css/manages.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .article-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        .order-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .order-title input[type="text"] {
+            height: 30px;
+            width: 200px;
+            margin-left: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 0 10px;
+        }
+
+        .order-title button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .order-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .order-item {
+            background-color: #fff;
+            display: flex;
+            padding: 20px;
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-item-details {
+            width: 100%;
+        }
+
+        .order-info,
+        .order-percent,
+        .order-details {
+            text-align: center;
+            flex: 1;
+
+        }
+
+        .order-info {
+            padding-right: 0px;
+            text-align: center;
+            max-width: 82px;
+        }
+
+        .order-info span:first-child {
+            padding-right: 0px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .order-percent span:first-child {
+
+            font-size: 11px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .order-details span:first-child {
+            font-weight: bold;
+        }
+
+        .order-orderid {
+            max-width: 144px;
+            /* 设置最大宽度 */
+            word-wrap: break-word;
+            /* 当单词过长时自动换行 */
+            word-break: break-all;
+            /* 在单词内部断开 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page">
+        <div class="article-container">
+            <hr>
+            <div class="order-box">
+                <!-- 订单信息框 -->
+                <!-- 表格头 -->
+                <div class="order-info">
+                    <span id="courseName">课程Id</span>
+                </div>
+                <div class="order-percent">
+                    <span id="orderStatus">状态(0未付款1已付款)</span>
+                </div>
+                <div class="order-details">
+                    <span>订单编号</span>
+                </div>
+                <div class="order-details">
+                    <span>订单金额</span>
+                </div>
+                <div class="order-details">
+                    <span>支付方式</span>
+                </div>
+                <div class="order-details">
+                    <span>下单时间</span>
+                </div>
+                <div class="order-item-details">
+                    <!-- 具体的数据内容  每个订单都是一个-->
+                    <!-- 例如编号 金额 支付方式 下单时间 -->
+                </div>
+            </div>
+            <hr>
+        </div>
+        <!-- 导航条 -->
+        <div class="pagination" id="pagination">
+
+        </div>
+    </div>
+    <script src="../../../js/jquery-3.6.0.js"></script>
+    <script src="../../../js/manages.js"></script>
+    <script>
+        var pageNo = 1;
+        var pageSize = 3;
+        // 搜索按钮
+        $(document).ready(function () {
+            // 点击搜索按钮触发搜索事件
+            $('#searchBtn').click(function () {
+                var keyword = $('#search').val(); // 获取搜索框中的关键字
+                // ajax事件
+                alert('搜索关键字为：' + keyword);
+            });
+        });
+
+        var userObj;
+        // 页面加载完毕后执行
+        $(document).ready(function () {
+            var user = sessionStorage.getItem("LoginMoocUser");
+            if (!user) {
+                alert("您未登录，请先登录！");
+                setTimeout(function () {
+                    window.location.href = "/"; // 跳转到首页
+                }, 1000); // 1秒后跳转
+            } else {
+                userObj = JSON.parse(user);
+                console.log("用户对象", userObj);
+                search(1);
+            }
+        });
+
+        /**
+         * 根据用户ID获取我的订单
+         */
+        function search(pageNo) {
+            var userId = userObj.id;
+            $.ajax({
+                url: 'LhMooc/ordersServlet', // 获取我的订单接口URL
+                type: 'get', // 请求类型为GET
+                data: {
+                    action: "getOrdersPageByUserId",
+                    pageNo: pageNo,
+                    pageSize: pageSize,
+                    userId: userId
+                },
+                success: function (response) {
+                    console.log("获取订单结果", response);
+                    if (response.code === 200) {
+                        displayOrders(response.data.items); // 显示订单信息，传入订单数据数组
+                        pageNo = response.data.pageNo;
+                        updatePagination(response.data.pageNo, response.data.pageTotalCount, response.data.totalRow);
+                    } else {
+                        alert(response.msg);
+                    }
+                },
+                error: function (error) {
+                    alert("获取订单失败！", error);
+                }
+            });
+        }
+
+
+        // 显示订单信息
+        function displayOrders(orders) {
+            if (!orders || orders.length === 0) {
+                alert("暂无订单数据！");
+                return;
+            }
+
+            // 获取订单信息容器
+            var orderDetailsContainer = $('.order-item-details');
+
+            // 清空订单信息容器
+            orderDetailsContainer.empty();
+
+            // 遍历订单列表，创建订单信息元素并添加到容器中
+            orders.forEach(function (order) {
+                // 创建订单信息元素
+                var orderItem = $('<div class="order-item"></div>');
+
+                // 添加订单信息到订单元素中
+                orderItem.append('<div class="order-info"><span>' + order.courseid + '</span></div>');
+
+                // 添加订单状态信息到订单元素中
+                orderItem.append('<div class="order-percent"><span>' + order.orderstatus + '</span></div>');
+
+                // 添加订单编号、订单金额、支付方式、下单时间信息到订单元素中
+                orderItem.append('<div class="order-orderid"><span>' + order.orderid + '</span></div>');
+                orderItem.append('<div class="order-details"><span>' + order.orderamount + '</span></div>');
+                orderItem.append('<div class="order-details"><span>' + order.paychannel + '</span></div>');
+                orderItem.append('<div class="order-details"><span>' + formatDate(order.createtime) + '</span></div>');
+
+                // 将订单元素添加到订单信息容器中
+                orderDetailsContainer.append(orderItem);
+            });
+        }
+    </script>
+</body>
+
+</html>

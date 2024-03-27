@@ -1,6 +1,7 @@
 package asia.lhweb.lhmooc.service;
 
 
+import asia.lhweb.lhmooc.common.Result;
 import asia.lhweb.lhmooc.model.Page;
 import asia.lhweb.lhmooc.model.bean.CommentCourse;
 
@@ -20,4 +21,14 @@ public interface CommentCourseService {
      * @return boolean
      */
     boolean realDelete(CommentCourse commentCourse);
+
+    /**
+     * 添加评论
+     *
+     * @param parseInt  解析int
+     * @param parseInt1 解析int1
+     * @param content   内容
+     * @return {@link Result}
+     */
+    Result commentAdd(int parseInt, int parseInt1, String content);
 }

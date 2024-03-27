@@ -16,9 +16,17 @@ public interface PlayHistoryService {
      * 通过用户id和视频名称获取
      * 通过用户id和视频名称获取个人历史播放记录
      *
-     * @param userId    用户id
-     * @param videoName
+     * @param userId 用户id
      * @return {@link Result}
      */
-    Result getByUserIdAndVideoName(int userId, String videoName);
+    Result getByUserId(int userId);
+
+    /**
+     * 添加游戏记录
+     *
+     * @param parseInt  解析int
+     * @param parseInt1 解析int1
+     * @return {@link Result}
+     */
+    Result addPlayHistory(int parseInt, int parseInt1);
 }

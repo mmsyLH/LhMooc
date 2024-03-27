@@ -18,15 +18,19 @@ body {
     justify-content: space-between;
     align-items: center;
     position: relative;
-    background-color: #f9f9f9; /* 添加背景色 */
-    border-radius: 5px; /* 添加圆角 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+    background-color: #f9f9f9;
+    /* 添加背景色 */
+    border-radius: 5px;
+    /* 添加圆角 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* 添加阴影 */
 }
 
 /* 课程名称样式 */
 .course-intro h1 {
     font-size: 20px;
-    color: #333; /* 修改颜色 */
+    color: #333;
+    /* 修改颜色 */
 }
 
 /* 课程简介样式 */
@@ -35,16 +39,20 @@ body {
     /* 将文本设置为多行显示 */
     white-space: normal;
     /* 设置最大宽度 */
-    max-width: 500px; /* 根据需要调整 */
-    font-size: 16px; /* 调整字体大小 */
-    color: #555; /* 修改颜色 */
+    max-width: 500px;
+    /* 根据需要调整 */
+    font-size: 16px;
+    /* 调整字体大小 */
+    color: #555;
+    /* 修改颜色 */
 }
 
 /* 当前播放视频名称样式 */
 .course-intro h3 {
     margin-top: 10px;
     font-size: 12px;
-    color: #777; /* 修改颜色 */
+    color: #777;
+    /* 修改颜色 */
 }
 
 
@@ -208,12 +216,74 @@ video {
 /* 视频播放区域结束 */
 /* 点赞区域开始 */
 .like {
-    height: 60px;
+    height: 70px;
     width: 100%;
-    background-color: aquamarine;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.like div {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.baseButton {
+    margin-right: 10px;
+    background-color: #3498db;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.baseButton:hover {
+    background-color: #2980b9;
+}
+
+span {
+    margin-left: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 点赞按钮动画 */
+@keyframes heartBeat {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.like .baseButton:first-child {
+    animation: heartBeat 1s infinite;
+}
+
+/* 收藏按钮动画 */
+@keyframes rotateIn {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.like .baseButton:nth-child(2) {
+    animation: rotateIn 2s infinite linear;
 }
 
 /* 评论区开始 */
@@ -255,6 +325,7 @@ video {
 .input-area button {
     min-width: 40px;
 }
+
 /* 评论容器样式 */
 .comment {
     padding: 10px;
@@ -295,5 +366,43 @@ video {
     color: #555;
 }
 
+/* 分页 */
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination ul li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.pagination ul li a {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.pagination ul li a.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination ul li a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination ul li a.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
 
 /* 评论区结束 */

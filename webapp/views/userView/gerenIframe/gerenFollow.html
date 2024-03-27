@@ -8,6 +8,7 @@
     <title>逼真的玻璃卡片悬停效果</title>
     <link rel="stylesheet" href="../../../css/gerenFollow.css">
     <link rel="stylesheet" href="../../../css/gerenIframe.css">
+    <link rel="stylesheet" href="../../../css/manages.css">
 </head>
 
 <body>
@@ -40,9 +41,13 @@
             </div>
         </div>
     </div>
-    <!-- 导航条区域 -->
+    <!-- 导航条 -->
+    <div class="pagination" id="pagination">
+
+    </div>
     <script src="../../../js/vanilla-tilt.js"></script>
     <script src="../../../js/jquery-3.6.0.js"></script>
+    <script src="../../../js/manages.js"></script>
     <script>
         // vanilla-tilt.js是一个平滑的3D倾斜JS库，具体参数配置度娘可查到
         VanillaTilt.init(document.querySelectorAll(".card"), {
@@ -68,12 +73,12 @@
             } else {
                 userObj = JSON.parse(user);
                 console.log("用户对象", userObj);
-                getFollowPageById();
+                search(1);
             }
         });
-        
+
         //获取个人收藏
-        function getFollowPageById() {
+        function search(pageNo) {
             $.ajax({
                 url: "LhMooc/followServlet",
                 type: "GET",
@@ -87,7 +92,9 @@
                     if (response.code === 200) {
                         userFollowPage = response.data;
                         console.log("查询的分页结果", userFollowPage);
-                        updateFollowCards(userFollowPage.items); // 更新收藏卡片
+                        updateFollowCards(userFollowPage); // 更新收藏卡片
+                        pageNo = response.data.pageNo;
+                        updatePagination(response.data.pageNo, response.data.pageTotalCount, response.data.totalRow);
                     } else {
                         alert(response.msg);
                     }
@@ -97,9 +104,9 @@
                 }
             });
         }
-
         // 更新收藏卡片
-        function updateFollowCards(followItems) {
+        function updateFollowCards(userFollowPage) {
+            var followItems = userFollowPage.items;
             var container = document.querySelector(".container");
             container.innerHTML = ""; // 清空容器内原有的卡片
 
@@ -107,11 +114,12 @@
                 var followItem = followItems[i];
                 var cardHTML = '<div class="card">'
                     + '<div class="content">'
-                    + '<h2>' + (i + 1) + '</h2>'
-                    + '<h3>第' + (i + 1) + '个卡片</h3>'
-                    + '<p>逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果,逼真的玻璃卡片悬停效果</p>'
-                    + '<a href="#">查看详情</a>'
-                    + '<a>取消收藏</a>'
+                    + '<h2>' + ((userFollowPage.pageNo - 1) * userFollowPage.pageSize + i + 1)+ '</h2>'
+                    + '<h3>第' + ((userFollowPage.pageNo - 1) * userFollowPage.pageSize + i + 1) + '个收藏</h3>'
+                    + '<p>收藏的课程id:' + followItem.courseid + '</p>'
+                    + '<p>收藏的时间:' + formatDate(followItem.createtime) + '</p>'
+                    + '<a onclick="courseDetail(' + followItem.courseid + ')">查看详情</a>'
+                    + '<a onclick="cancelFollow(' + followItem.courseid + ')">取消收藏</a>'
                     + '</div>'
                     + '</div>';
 
@@ -119,6 +127,44 @@
             }
         }
 
+
+
+
+
+        //页面跳转
+        function courseDetail(courseId) {
+            parent.location.href = "../../userView/courseDetail.html?courseId=" + courseId;
+        }
+
+        //取消收藏
+        function cancelFollow(courseId) {
+            console.log("取消收藏：", courseId);
+            console.log("用户id ", userObj.id);
+            // 发起取消收藏的ajax请求
+            $.ajax({
+                url: "LhMooc/followServlet",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    userId: userObj.id,
+                    courseId: courseId, // 使用已有的courseId
+                    action: "followAdd"
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        alert(response.msg);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 0);
+                    } else {
+                        alert(response.msg);
+                    }
+                },
+                error: function (error) {
+                    alert(error.msg);
+                }
+            });
+        }
     </script>
 </body>
 

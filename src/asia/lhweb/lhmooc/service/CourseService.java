@@ -48,10 +48,12 @@ public interface CourseService {
     /**
      * 获取课程细节
      *
-     * @param parseInt 解析int
+     * @param courseId 进程id
+     * @param pageNo   页面没有
+     * @param pageSize 页面大小
      * @return {@link Result}<{@link CourseVo}>
      */
-    Result<CourseVo> getCourseDetail(int parseInt);
+    Result<CourseVo> getCourseDetail(int courseId, int pageNo, int pageSize);
 
     boolean realDelete(Course course);
 

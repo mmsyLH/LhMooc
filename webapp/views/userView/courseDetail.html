@@ -92,6 +92,11 @@
                 <div class="comment-area">
                     <!-- 评论列表动态生成 -->
                 </div>
+
+                <!-- 导航条 -->
+                <div class="pagination" id="pagination">
+
+                </div>
             </div>
 
             <!-- 评论区结束 -->
@@ -108,29 +113,58 @@
     <!-- <script src="../../js/manages.js"></script> -->
     <script src="../../js/login-res.js"></script>
     <script src="../../js/courseDetail.js"></script>
+    <script src="../../js/manages.js"></script>
     <script>
         var pageNo = 1;
         var pageSize = 5;
         var courseId;
+        var chapterId;
+        var videoId;
         $(document).ready(function () {
             // 获取当前页面的 URL
             var url = window.location.href;
 
             // 获取 URL 中的参数部分
             var params = url.split("?")[1];
-            courseId = params.split("=")[1];
+            if (params) {
+                var paramList = params.split("&");
+                for (var i = 0; i < paramList.length; i++) {
+                    var keyValue = paramList[i].split("=");
+                    if (keyValue[0] === "courseid" || keyValue[0] === "courseId") {
+                        courseId = keyValue[1];
+                    } else if (keyValue[0] === "chapterId") {
+                        chapterId = keyValue[1];
+                    } else if (keyValue[0] === "videoId") {
+                        videoId = keyValue[1];
+                    }
+                }
+            }
 
             // 查询课程详情
-            getCourseDetailById(courseId);
+            search(1);
+
+
+            // 如果传过来的章节id有值，则模拟点击对应章节id的元素
+            if (chapterId) {
+                console.log("模拟点击了第" + chapterId + "个章节")
+            }
+
+            // 如果传过来的视频id有值，则模拟点击对应视频id的元素
+            if (videoId) {
+                console.log("模拟点击了第" + videoId + "个视频")
+            }
         });
 
+
         //查询课程详情
-        function getCourseDetailById(courseId) {
+        function search(pageNo) {
             $.ajax({
                 url: "LhMooc/courseServlet",
                 type: "GET",
                 dataType: "json",
                 data: {
+                    pageNo: pageNo,
+                    pageSize: pageSize,
                     action: "getCourseDetailById",
                     courseId: courseId,
                 },
@@ -141,7 +175,7 @@
                         // 更新课程名称和简介
                         $(".course-intro h1").text("课程名：" + response.data.coursename);
                         $(".course-intro h2").text("课程简介：" + response.data.profile);
-                        $(".course-intro p").text("价格：" + response.data.price+"元");
+                        $(".course-intro p").text("价格：" + response.data.price + "元");
 
                         // 更新视频播放器
                         if (response.data && response.data.courseChapterList && response.data.courseChapterList.length > 0 &&
@@ -156,7 +190,7 @@
                         // 更新点赞数、收藏数、评论数
                         $(".like div:nth-child(1) span").text(response.data.likeCount);
                         $(".like div:nth-child(2) span").text(response.data.followCount);
-                        $(".like div:nth-child(3) span").text(response.data.commentCourseVoList.length);
+                        $(".like div:nth-child(3) span").text(response.data.commentCourseVoPage.totalRow);
 
                         // 更新章节目录
                         var chapters = response.data.courseChapterList;
@@ -182,7 +216,7 @@
                         }
 
                         // 更新评论区
-                        var comments = response.data.commentCourseVoList;
+                        var comments = response.data.commentCourseVoPage.items;
                         var $commentArea = $(".comment-area");
                         $commentArea.empty(); // 清空之前的评论
                         for (var i = 0; i < comments.length; i++) {
@@ -197,17 +231,24 @@
                             $commentArea.append($comment);
                         }
 
+                        //显示导航条
+                        pageNo = response.data.commentCourseVoPage.pageNo;
+                        updatePagination(response.data.commentCourseVoPage.pageNo, response.data.commentCourseVoPage.pageTotalCount, response.data.commentCourseVoPage.totalRow);
 
                         // 视频列表项点击事件
-                        $(".media-box li").click(function () {
+                        $(".catalogue-box").on("click", ".media-box li", function () {
                             var index = $(this).attr("data-index");
                             var chapterIndex = $(this).parents(".catague-item").index();
                             var videos = response.data.courseChapterList[chapterIndex].courseVideoList;
+                            console.log("视频点击事件", videos)
+                            console.log("视频点击事件的index", index)
+                            //发起请求 添加视频播放记录
+                            addPlayHistory(videos[index].videoid);
 
+                            //渲染视频
                             if (videos && videos.length > index) {
                                 var videoUrl = videos[index].videourl;
                                 var videoName = videos[index].videoname;
-
                                 $("#videoPlayer source").attr("src", "../../" + videoUrl);
                                 $("#videoPlayer")[0].load(); // 重新加载视频
                                 $("#currentVideoName").text(videoName);
@@ -215,6 +256,8 @@
                                 console.log("该章节下没有视频！");
                             }
                         });
+
+
                     } else {
                         alert(response.msg);
                     }
@@ -222,6 +265,31 @@
                 },
                 error: function (error) {
                     alert(error.msg);
+                }
+            });
+        }
+
+        //添加视频播放记录
+        function addPlayHistory(videoId) {
+            var loginMoocUser = JSON.parse(localStorage.getItem("LoginMoocUser"));
+            $.ajax({
+                url: "LhMooc/playHistoryServlet",
+                type: "post",
+                data: {
+                    action: "addPlayHistory",
+                    videoId: videoId,
+                    userId: userObj.id
+                },
+                dataType: "json",
+                success: function (response) {
+                    if (response.code === 200) {
+                        console.log("添加视频播放记录成功！");
+                    } else {
+                        console.log("添加视频播放记录失败！");
+                    }
+                },
+                error: function (error) {
+                    console.log("error", error);
                 }
             });
         }

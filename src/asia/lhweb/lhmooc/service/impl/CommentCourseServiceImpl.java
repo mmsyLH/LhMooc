@@ -1,5 +1,6 @@
 package asia.lhweb.lhmooc.service.impl;
 
+import asia.lhweb.lhmooc.common.Result;
 import asia.lhweb.lhmooc.dao.CommentCourseDAO;
 import asia.lhweb.lhmooc.factory.BeanFactory;
 import asia.lhweb.lhmooc.model.Page;
@@ -27,5 +28,26 @@ public class CommentCourseServiceImpl implements CommentCourseService {
     @Override
     public boolean realDelete(CommentCourse commentCourse) {
         return commentCourseDAO.realDelete(commentCourse)!=-1;
+    }
+
+    /**
+     * 添加评论
+     *
+     * @param content  内容
+     * @param userId   用户id
+     * @param courseId 进程id
+     * @return {@link Result}
+     */
+    @Override
+    public Result commentAdd(int userId, int courseId, String content) {
+        CommentCourse commentCourse = new CommentCourse();
+        commentCourse.setUserid(userId);
+        commentCourse.setCourseid(courseId);
+        commentCourse.setContent(content);
+        if (commentCourseDAO.save(commentCourse) > 0) {
+            return Result.success("添加评论成功！");
+        }else {
+            return Result.error("添加评论失败！");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package asia.lhweb.lhmooc.model.vo;
 
 import asia.lhweb.lhmooc.annotation.Id;
+import asia.lhweb.lhmooc.model.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -77,19 +78,22 @@ public class CourseVo {
      * 评论列表
      */
 
-    private List<CommentCourseVo> commentCourseVoList;
+    // private List<CommentCourseVo> commentCourseVoList;
+    private Page<CommentCourseVo> commentCourseVoPage;
+
+    public Page<CommentCourseVo> getCommentCourseVoPage() {
+        return commentCourseVoPage;
+    }
+
+    public void setCommentCourseVoPage(Page<CommentCourseVo> commentCourseVoPage) {
+        this.commentCourseVoPage = commentCourseVoPage;
+    }
 
     public List<CourseChapterVo> getCourseChapterList() {
         return courseChapterList;
     }
 
-    public List<CommentCourseVo> getCommentCourseVoList() {
-        return commentCourseVoList;
-    }
 
-    public void setCommentCourseVoList(List<CommentCourseVo> commentCourseVoList) {
-        this.commentCourseVoList = commentCourseVoList;
-    }
 
     public void setCourseChapterList(List<CourseChapterVo> courseChapterList) {
         this.courseChapterList = courseChapterList;

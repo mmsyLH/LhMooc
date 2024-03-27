@@ -101,14 +101,16 @@ public class CourseServlet extends LhHttpServlet {
     public void getCourseDetailById(LhRequest request, LhResponse response) {
         // 获取课程ID
         String courseId = request.getParameter("courseId");
+        String pageNo = request.getParameter("pageNo");
+        String pageSize = request.getParameter("pageSize");
         // 检查课程ID是否为空
-        if (!DataUtils.handleNullOrEmpty(response, gson, courseId)) {
+        if (!DataUtils.handleNullOrEmpty(response, gson, courseId,pageNo,pageSize)) {
             // 如果课程ID为空，则直接返回，不执行下面的逻辑
             return;
         }
 
         // 根据课程ID获取课程详情
-        Result<CourseVo> jsonResponse = courseService.getCourseDetail(Integer.parseInt(courseId));
+        Result<CourseVo> jsonResponse = courseService.getCourseDetail(Integer.parseInt(courseId),Integer.parseInt(pageNo),Integer.parseInt(pageSize));
 
         // 返回json对象
         response.writeToJson(gson.toJson(jsonResponse));
@@ -151,7 +153,7 @@ public class CourseServlet extends LhHttpServlet {
      */
     public void getSortCoursesTop8(LhRequest request, LhResponse response) {
         String sortType = request.getParameter("sortType");//"0"表示默认不排序，"1"表示按收藏量排序，"2"表示按点赞量排序，"3"表示按评论量排序
-        System.out.println("\"0\"表示默认不排序，\"1\"表示按收藏量排序，\"2\"表示按点赞量排序，\"3\"表示按评论量排序 sortType:" + sortType);
+        // System.out.println("\"0\"表示默认不排序，\"1\"表示按收藏量排序，\"2\"表示按点赞量排序，\"3\"表示按评论量排序 sortType:" + sortType);
         List<CourseVo> sortCoursesTop8 = courseService.getSortCoursesTop8(sortType);
         String jsonResponse = !sortCoursesTop8.isEmpty() ? gson.toJson(Result.success(sortCoursesTop8, "查询成功")) : gson.toJson(Result.error("查询失败"));
         // 将响应信息写回客户端
